@@ -4,6 +4,16 @@ After a storm, five mobile sensor packages (30 min flight, 3 h charge, charging 
 
 ![Operator view](docs/screenshot.png)
 
+## Quick start
+
+Needs [uv](https://docs.astral.sh/uv/) and Node 20+. From the repo root:
+
+```bash
+make dev   # backend on :8000 + frontend on :5173, prefixed logs; Ctrl-C stops both
+```
+
+Then open http://localhost:5173. Also: `make install`, `make backend`, `make frontend`, `make test`. Without make: `./dev.sh`. Other ports: `BACKEND_PORT=8001 FRONTEND_PORT=5174 make dev`.
+
 ## Run
 
 Backend (Python, [uv](https://docs.astral.sh/uv/)):
