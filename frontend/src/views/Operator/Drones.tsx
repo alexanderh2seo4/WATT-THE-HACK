@@ -75,7 +75,7 @@ export function Drones({ state }: { state: State | null }) {
       if (!a) {
         const el = document.createElement('div')
         el.style.cssText = 'position:relative;width:38px;height:38px;pointer-events:none'
-        const marker = new MlMarker({ element: el }).setLngLat(d.position).addTo(map)
+        const marker = new MlMarker({ element: el, subpixelPositioning: true }).setLngLat(d.position).addTo(map)
         a = { marker, el, from: d.position, to: d.position, t0: now, dur, trail: [], html: '', atRest: true }
         anims.current.set(d.drone_id, a)
         dirty.current = true
