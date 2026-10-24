@@ -75,6 +75,7 @@ const mockState: State = mockFile('state', {
   inputs: emptyInputs,
   start_positions: [],
   events: [],
+  progress: { total: 0, found: [] },
 })
 let mockConfig: SimConfig | null = mockFile<SimConfig | null>('sim_config', null)
 let mockLastTick = performance.now()

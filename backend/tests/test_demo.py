@@ -11,6 +11,9 @@ def test_demo_story_three_hours():
     eng.plan_start_positions()
     eng.control("start")
     eng.step_n(3 * 3600)
+    assert eng.status == "paused"  # auto-paused when all faults were found; play on to see the confirmations
+    eng.control("resume")
+    eng.step_n(3 * 3600 - int(eng.t))
     ev = eng.events
 
     # every fault is found (a finding event of the right type on its cell)

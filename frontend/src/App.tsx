@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { AllFoundBanner } from './components/AllFoundBanner'
 import { TopBar } from './components/TopBar/TopBar'
 import { StoreProvider } from './store'
 import { Operator } from './views/Operator/Operator'
@@ -14,6 +15,7 @@ export default function App() {
             <Route path="/" element={<Operator />} />
             <Route path="/setup" element={<SimSetup />} />
           </Routes>
+          <AllFoundBanner />
         </div>
       </BrowserRouter>
     </StoreProvider>

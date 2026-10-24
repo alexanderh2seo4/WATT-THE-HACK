@@ -1,14 +1,10 @@
 import { NavLink } from 'react-router'
 import { MOCK, postSimControl } from '../../api'
+import { formatClock } from '../../format'
 import { useStore } from '../../store'
 
 const SPEEDS = [1, 10, 60, 300]
 
-function formatClock(t: number) {
-  const s = Math.floor(t)
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`
-}
 
 export function TopBar() {
   const { state } = useStore()

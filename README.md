@@ -32,7 +32,7 @@ npm install && npm run dev
 
 ## Two views
 
-- **Operator** (`/`): three steps. ① Inputs: load the default reports or upload GeoJSON, click lines to mark them known dead. ② Find start positions: hover a marker to see why it was chosen. ③ Start mission: drones fly live; the sidebar shows what each drone is doing, the recommendations to act on and the event log (click to fly the map there). Top bar: clock, play/pause, speed 1×–300×, reset.
+- **Operator** (`/`): three steps. ① Inputs: load the default reports or upload GeoJSON, click lines to mark them known dead. ② Find start positions: hover a marker to see why it was chosen. ③ Start mission: drones fly live; the sidebar shows what each drone is doing, the recommendations to act on and the event log (click to fly the map there). Top bar: clock, play/pause, speed 1×–300×, reset. Benchmark: when every ground-truth fault has been found (first logged finding of its type on its cell) the sim pauses once and a banner shows the sim time plus a per-fault breakdown; press play to continue.
 - **Simulation** (`/setup`): the hidden ground truth. Click a line to make it dead or add a fault, tune sensor detection probabilities and drone parameters, load/save scenario presets as JSON.
 
 ## Architecture

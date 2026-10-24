@@ -425,7 +425,8 @@
        "finding",
        "line_dead",
        "recommendation",
-       "stranded"
+       "stranded",
+       "all_found"
       ],
       "title": "Type"
      },
@@ -558,6 +559,69 @@
     ],
     "title": "Fault"
    },
+   "FaultFound": {
+    "properties": {
+     "fault_id": {
+      "type": "string",
+      "title": "Fault Id"
+     },
+     "fault_type": {
+      "type": "string",
+      "enum": [
+       "vegetation",
+       "sag",
+       "ice",
+       "galloping",
+       "hotspot",
+       "broken_conductor"
+      ],
+      "title": "Fault Type"
+     },
+     "segment_id": {
+      "type": "string",
+      "title": "Segment Id"
+     },
+     "cell_id": {
+      "type": "string",
+      "title": "Cell Id"
+     },
+     "km": {
+      "type": "number",
+      "title": "Km"
+     },
+     "t_found": {
+      "type": "number",
+      "title": "T Found"
+     },
+     "drone_id": {
+      "type": "string",
+      "title": "Drone Id"
+     },
+     "t_confirmed": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "T Confirmed"
+     }
+    },
+    "type": "object",
+    "required": [
+     "fault_id",
+     "fault_type",
+     "segment_id",
+     "cell_id",
+     "km",
+     "t_found",
+     "drone_id"
+    ],
+    "title": "FaultFound",
+    "description": "Benchmark (sim ground truth, not seen by the planner): when a true fault was first found / confirmed."
+   },
    "HTTPValidationError": {
     "properties": {
      "detail": {
@@ -592,6 +656,48 @@
     },
     "type": "object",
     "title": "OperatorInputs"
+   },
+   "Progress": {
+    "properties": {
+     "total": {
+      "type": "integer",
+      "title": "Total",
+      "default": 0
+     },
+     "found": {
+      "items": {
+       "$ref": "#/components/schemas/FaultFound"
+      },
+      "type": "array",
+      "title": "Found",
+      "default": []
+     },
+     "all_found_t": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "All Found T"
+     },
+     "all_confirmed_t": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "All Confirmed T"
+     }
+    },
+    "type": "object",
+    "title": "Progress",
+    "description": "How many ground-truth faults have been found; all_found_t is set once (and the sim pauses) when all are."
    },
    "Report": {
     "properties": {
@@ -869,6 +975,13 @@
       },
       "type": "array",
       "title": "Events"
+     },
+     "progress": {
+      "$ref": "#/components/schemas/Progress",
+      "default": {
+       "total": 0,
+       "found": []
+      }
      }
     },
     "type": "object",

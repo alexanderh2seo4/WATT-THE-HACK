@@ -17,7 +17,7 @@ FaultType = Literal["vegetation", "sag", "ice", "galloping", "hotspot", "broken_
 SimStatus = Literal["setup", "running", "paused"]
 DroneStatus = Literal["charging", "flying", "landing", "stranded"]
 Inspected = Literal["none", "air", "landed"]
-EventType = Literal["takeoff", "landing", "finding", "line_dead", "recommendation", "stranded"]
+EventType = Literal["takeoff", "landing", "finding", "line_dead", "recommendation", "stranded", "all_found"]
 
 
 # ---------- operator inputs ----------
@@ -90,6 +90,26 @@ class Event(BaseModel):
     message: str
 
 
+class FaultFound(BaseModel):
+    """Benchmark (sim ground truth, not seen by the planner): when a true fault was first found / confirmed."""
+    fault_id: str
+    fault_type: FaultType
+    segment_id: str
+    cell_id: str
+    km: float  # position along the line, as in the log messages
+    t_found: float  # sim seconds of the first logged finding of this type on the fault's cell
+    drone_id: str
+    t_confirmed: float | None = None
+
+
+class Progress(BaseModel):
+    """How many ground-truth faults have been found; all_found_t is set once (and the sim pauses) when all are."""
+    total: int = 0
+    found: list[FaultFound] = []
+    all_found_t: float | None = None
+    all_confirmed_t: float | None = None
+
+
 class State(BaseModel):
     t: float  # sim seconds since start
     speed: float
@@ -100,6 +120,7 @@ class State(BaseModel):
     inputs: OperatorInputs
     start_positions: list[StartPosition]
     events: list[Event]  # full log, newest last
+    progress: Progress = Progress()
 
 
 # ---------- simulation ground truth + params ----------

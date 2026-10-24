@@ -12,7 +12,8 @@ from typing import Callable
 from shapely.geometry import Point, shape
 
 from app.geo import dist_m, heading_deg, lerp, project, to_xy
-from app.models import (DroneState, Event, Fault, OperatorInputs, SimConfig, StartPosition, State, Static, Waypoint)
+from app.models import (DroneState, Event, Fault, FaultFound, OperatorInputs, Progress, SimConfig, StartPosition, State,
+                        Static, Waypoint)
 from app.planner import Planner
 from app.planner.recommend import CONFIRM_CONF, recommendations
 from app.sim.sensors import inspect
@@ -86,6 +87,9 @@ class Engine:
         self.cell_faults: dict[str, list[Fault]] = {}
         for f in self.config.faults:
             self.cell_faults.setdefault(self._cell_of(f.segment_id, f.position), []).append(f)
+        self.found: dict[str, FaultFound] = {}  # fault_id -> first finding (benchmark, see _track_found)
+        self.all_found_t: float | None = None
+        self.all_confirmed_t: float | None = None
         self._report_cells()
         self._place_drones()
         self._last_wall: float | None = None
@@ -140,9 +144,14 @@ class Engine:
         n = min(int(self._carry / DT), MAX_STEPS_PER_CALL)
         self._carry -= n * DT
         self.step_n(n)
+        if self.status == "paused":  # auto-paused (all faults found): drop the rest of this poll's time
+            self._carry = 0.0
 
     def step_n(self, n: int) -> None:
+        """Step n sim seconds; stops early if the sim pauses itself (all faults found)."""
         for _ in range(n):
+            if self.status == "paused":
+                break
             self._step()
 
     def _step(self) -> None:
@@ -264,7 +273,32 @@ class Engine:
             self._emit("finding", d, f"{d.id}: {what} ({sp.sensor or 'sensor'}, {how}, confidence {det.confidence:.0%})",
                        cell_id=cell, fault_type=det.fault_type, confidence=det.confidence,
                        position=list(true.position) if true else list(d.position))
+            self._track_found(d, cell, det.fault_type, faults)
         self._recommend()
+
+    def _track_found(self, d: Drone, cell: str, fault_type: str, faults: list[Fault]) -> None:
+        """Benchmark: a true fault counts as found at its first logged finding of its type on its cell (the
+        same rule as test_demo / compare_planners). Pauses the sim once, when the last fault is found."""
+        for f in faults:
+            if f.fault_type != fault_type:
+                continue
+            if f.fault_id not in self.found:
+                self.found[f.fault_id] = FaultFound(fault_id=f.fault_id, fault_type=f.fault_type,
+                                                    segment_id=f.segment_id, cell_id=cell, km=self.cell_km[cell],
+                                                    t_found=self.t, drone_id=d.id)
+            if (cell, fault_type) in self.confirmed and self.found[f.fault_id].t_confirmed is None:
+                self.found[f.fault_id].t_confirmed = self.t
+        n = len(self.config.faults)
+        if len(self.found) < n:
+            return
+        if self.all_found_t is None:
+            self.all_found_t = self.t
+            self.status = "paused"  # benchmark stop; play continues and it does not fire again until reset
+            self._log(Event(t=self.t, type="all_found", message=f"All {n} faults found in {clock(self.t)} sim time"
+                            " - simulation paused, press play to continue"))
+        if self.all_confirmed_t is None and all(f.t_confirmed is not None for f in self.found.values()):
+            self.all_confirmed_t = self.t
+            self._log(Event(t=self.t, type="all_found", message=f"All {n} faults confirmed in {clock(self.t)} sim time"))
 
     def _recommend(self) -> None:
         for _, cell, seg, msg in recommendations(self.planner.cell_states(), self.planner.segment_states(),
@@ -309,4 +343,12 @@ class Engine:
     def state(self) -> State:
         return State(t=self.t, speed=self.speed, status=self.status, drones=[d.state() for d in self.drones],
                      cells=self.planner.cell_states(), segments=self.planner.segment_states(),
-                     inputs=self.inputs, start_positions=self.start_positions, events=self.events)
+                     inputs=self.inputs, start_positions=self.start_positions, events=self.events,
+                     progress=Progress(total=len(self.config.faults),
+                                       found=sorted(self.found.values(), key=lambda f: f.t_found),
+                                       all_found_t=self.all_found_t, all_confirmed_t=self.all_confirmed_t))
+
+
+def clock(t: float) -> str:
+    s = int(t)
+    return f"{s // 3600:02d}:{s % 3600 // 60:02d}:{s % 60:02d}"

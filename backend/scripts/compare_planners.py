@@ -24,6 +24,9 @@ def run(planner: str, seed: int, hours: float) -> dict:
     eng.plan_start_positions()
     eng.control("start")
     eng.step_n(int(hours * 3600))
+    if eng.status == "paused":  # auto-pause when all faults are found: run the full window anyway
+        eng.control("resume")
+        eng.step_n(int(hours * 3600) - int(eng.t))
     wall = time.perf_counter() - t0
     first = {}
     for f in cfg.faults:
