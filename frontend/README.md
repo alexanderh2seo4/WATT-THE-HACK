@@ -28,4 +28,5 @@ If the basemap can't be fetched (offline), the map falls back to a blank backgro
 - `src/store.tsx`: one shared store (static data + latest state) for both views
 - `src/components/Map/`: shared map fitted to the study bounds; layers go in as children (`NetworkLayer` draws grid + storm)
 - `src/components/TopBar/`: sim clock, play/pause, speed (1×, 10×, 60×, 300×), reset
-- `src/views/Operator/`, `src/views/SimSetup/`: sidebar + map pages (skeletons for now)
+- `src/views/Operator/`: stepper (inputs → start positions → run), stats, log (click → fly to), risk layers (cell risk via feature-state), drones (rAF-interpolated markers + client-side trails), legend
+- `src/views/SimSetup/`: simulation setup page
