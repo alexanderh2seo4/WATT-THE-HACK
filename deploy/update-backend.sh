@@ -31,18 +31,18 @@ if [[ "$previous" == "$revision" ]] && systemctl --user is-active --quiet watt-t
   exit 0
 fi
 
-# Documentation/frontend-only pushes must not reset the shared simulation.
+# Documentation/frontend-only pushes must not reset visitor simulations.
 if [[ -n "$previous" ]] && systemctl --user is-active --quiet watt-the-hack \
   && git diff --quiet "$previous" "$revision" -- backend resources \
     deploy/update-backend.sh 'deploy/*.service' 'deploy/*.timer'; then
   printf '%s\n' "$revision" > "$root/deployed-revision"
-  echo "No backend changes in $revision; keeping the running simulation."
+  echo "No backend changes in $revision; keeping visitor simulations running."
   exit 0
 fi
 
 cd backend
 uv sync --locked
-uv run pytest tests/test_smoke.py -k 'static_loads or drones_move_after_start' -q
+uv run pytest tests/test_smoke.py::test_static_loads tests/test_smoke.py::test_drones_move_after_start tests/test_sessions.py -q
 
 units="$HOME/.config/systemd/user"
 mkdir -p "$units"

@@ -6,16 +6,29 @@ FastAPI app: API (PLAN.md §3), on-demand simulation, planner. Everything in mem
 
 ```bash
 cd backend
-uv run uvicorn app.main:app --reload --port 8000
+uv run uvicorn app.gateway:app --reload --port 8000
 ```
 
-API docs: http://localhost:8000/docs. Quick try:
+Quick try (reuse the same ID for your session):
 
 ```bash
-curl -X POST localhost:8000/api/plan/start-positions
-curl -X POST localhost:8000/api/sim/control -H 'content-type: application/json' -d '{"action":"start","speed":60}'
-curl localhost:8000/api/state
+SESSION_ID=$(uv run python -c 'from uuid import uuid4; print(uuid4())')
+curl -X POST localhost:8000/api/plan/start-positions -H "X-Session-ID: $SESSION_ID"
+curl -X POST localhost:8000/api/sim/control -H "X-Session-ID: $SESSION_ID" -H 'content-type: application/json' -d '{"action":"start","speed":60}'
+curl localhost:8000/api/state -H "X-Session-ID: $SESSION_ID"
 ```
+
+The gateway runs with **one gateway worker** and starts up to **8 separate Python/uvicorn
+processes**, each running the original `app.main:app` with its own Engine/config/inputs.
+Sessions idle for 120 seconds (no API requests) are terminated; cleanup runs every 15 seconds.
+The ninth visitor receives HTTP 503 with a retry message, never another visitor's simulation.
+`GET /api/health` and `GET /api/sim/presets` need no session and consume no slot.
+The frontend keeps its random session ID in `sessionStorage`, so refreshing resumes it.
+IDs are unguessable bearer tokens, not authenticated user accounts; tabs can consume separate slots.
+Restarting the gateway clears all sessions. Keep it bound to loopback behind the HTTPS Funnel.
+
+For single-simulation debugging and the detailed original API schema, run
+`uv run uvicorn app.main:app --port 8000` and open http://localhost:8000/docs.
 
 ## Tests
 
@@ -85,4 +98,5 @@ uv run python scripts/export_mocks.py   # -> frontend/src/mocks/{static,state}.j
 - `app/sim/engine.py` sim stepping (1 s steps, wall time x speed, seeded), cell inspection, findings
 - `app/sim/sensors.py` sensor model: ground truth -> noisy `Observation` (air per cell, landed per cell, magnetometer)
 - `app/main.py` endpoints
+- `app/gateway.py` session routing, eight-process cap, idle cleanup; `app/cors.py` shared CORS settings
 - `scenarios/*.json` `SimConfig` presets (ground truth + sensor/drone params); `demo.json` (scripted story) is loaded at start, `default.json` is the older preset. Listed by `GET /api/sim/presets`, fetched by `GET /api/sim/presets/{name}` (sim-setup view)

@@ -101,14 +101,23 @@ function mockControl(c: SimControl): State {
 // ---------- fetch helpers ----------
 
 const API_URL = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '')
+// A browser-tab session survives refresh, but a different visitor never gets the same worker.
+const SESSION_ID = sessionStorage.getItem('storm-patrol-session') ?? crypto.randomUUID()
+sessionStorage.setItem('storm-patrol-session', SESSION_ID)
 
 async function req<T>(method: string, path: string, body?: unknown): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     method,
-    headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
+    headers: {
+      'X-Session-ID': SESSION_ID,
+      ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+    },
     body: body === undefined ? undefined : JSON.stringify(body),
   })
-  if (!res.ok) throw new Error(`${method} ${path}: ${res.status}`)
+  if (!res.ok) {
+    const error = await res.json().catch(() => null)
+    throw new Error(typeof error?.detail === 'string' ? error.detail : `${method} ${path}: ${res.status}`)
+  }
   return res.json() as Promise<T>
 }
 
@@ -141,19 +150,25 @@ export const postSimControl = (control: SimControl) =>
 // ---------- hooks ----------
 
 /** Polls GET /api/state every `intervalMs`; returns the latest snapshot (null until the first one). */
-export function usePolling(intervalMs = 500): State | null {
+export function usePolling(intervalMs = 500): { state: State | null; error: string | null } {
   const [state, setState] = useState<State | null>(null)
+  const [error, setError] = useState<string | null>(null)
   useEffect(() => {
     let alive = true
     let timer: number
     const tick = async () => {
+      let delay = intervalMs
       try {
         const s = await getState()
-        if (alive) setState(s)
-      } catch {
-        // backend not up yet; keep last snapshot and retry
+        if (alive) {
+          setState(s)
+          setError(null)
+        }
+      } catch (e) {
+        delay = 5000
+        if (alive) setError(e instanceof Error ? e.message : 'Cannot connect to your private session.')
       }
-      if (alive) timer = window.setTimeout(tick, intervalMs)
+      if (alive) timer = window.setTimeout(tick, delay)
     }
     tick()
     return () => {
@@ -161,14 +176,29 @@ export function usePolling(intervalMs = 500): State | null {
       clearTimeout(timer)
     }
   }, [intervalMs])
-  return state
+  return { state, error }
 }
 
 /** Fetches GET /api/static once. */
 export function useStatic(): Static | null {
   const [data, setData] = useState<Static | null>(null)
   useEffect(() => {
-    getStatic().then(setData).catch(() => setData(null))
+    let alive = true
+    let timer: number
+    const load = async () => {
+      try {
+        const data = await getStatic()
+        if (alive) setData(data)
+      } catch {
+        // Capacity may be full at first. Load the map once a private slot becomes available.
+        if (alive) timer = window.setTimeout(load, 5000)
+      }
+    }
+    load()
+    return () => {
+      alive = false
+      clearTimeout(timer)
+    }
   }, [])
   return data
 }

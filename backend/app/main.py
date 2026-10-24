@@ -6,8 +6,8 @@ Planner: SmartPlanner by default; `PLANNER=dumb uv run uvicorn ...` runs the M1 
 import os
 
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
 
+from app.cors import add_cors
 from app.data import SCENARIOS, load_static
 from app.models import OperatorInputs, SimConfig, SimControl, StartPosition, State, Static
 from app.planner import PLANNERS
@@ -26,12 +26,7 @@ def make_engine() -> Engine:
 
 
 app = FastAPI(title="Drone grid inspection")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[origin.strip() for origin in os.environ.get("CORS_ORIGINS", "").split(",") if origin.strip()],
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
-    allow_methods=["*"], allow_headers=["*"],
-)
+add_cors(app)
 engine = make_engine()
 
 

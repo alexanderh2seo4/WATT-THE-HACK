@@ -23,7 +23,7 @@ Backend (Python, [uv](https://docs.astral.sh/uv/)):
 
 ```bash
 cd backend
-uv run uvicorn app.main:app --port 8000
+uv run uvicorn app.gateway:app --port 8000
 ```
 
 Frontend (Node 20+), then open http://localhost:5173:
@@ -42,7 +42,7 @@ npm install && npm run dev
 
 Details in [PLAN.md](PLAN.md).
 
-- One FastAPI process, everything in memory. The frontend fetches `GET /api/static` once and polls `GET /api/state` every 500 ms; it only renders and interpolates drone positions.
+- A FastAPI gateway starts a separate Python simulation process for each browser-tab session, capped at 8 visitors. Refresh keeps the session; 2 minutes without API requests releases its worker. The frontend fetches `GET /api/static` once and polls `GET /api/state` every 500 ms, sending a random `X-Session-ID` on every request. No simulation state is shared between visitors.
 - The sim advances on demand (each poll steps it by wall time × speed, 1 s steps), seeded so the same scenario gives the same run.
 - `backend/app/planner/` never imports `sim/`: it only receives observations (events), like real drones would send them.
 - Planner: per-cell, per-fault-type belief (reports + OSM vegetation + storm footprint + dead lines), greedy start positions and routes by expected detections per flight time, battery and live-line landing constraints.

@@ -15,15 +15,18 @@ Local development still uses `/api` via Vite's proxy.
 
 ## Backend on `alex-linux` / `kimai`
 
-The backend runs as a user systemd service, bound only to `127.0.0.1:8787`.
+The backend runs as a single-worker FastAPI gateway user service, bound only to `127.0.0.1:8787`.
 Tailscale Funnel publishes it on HTTPS port 8443; the existing port 443 service is unchanged.
-The machine, WSL and Tailscale must stay running. The demo has one shared, public,
-unauthenticated simulation; all visitors can change it, and a restart resets it.
-Use only the fictional supplied data.
+The machine, WSL and Tailscale must stay running. Each visitor gets a separate Python
+worker/simulation, capped at 8 active browser sessions. A random `X-Session-ID` stored
+in the browser tab selects its worker and survives refresh. Two minutes without API
+requests frees that slot (cleanup every 15 seconds). Visitor 9 sees a capacity message
+and automatically retries. There are no authenticated user accounts; only fictional data is used.
+`GET /api/health` shows the active session count/capacity without allocating a session.
 
 The managed checkout is `~/apps/watt-the-hack/repo`. Do not edit it directly:
 the updater refuses to overwrite local tracked changes. Frontend/documentation-only
-pushes do not restart the backend. Backend deployments reset the shared simulation.
+pushes do not restart the backend. Backend deployments reset all visitor simulations.
 
 To install the updater on a new server (run locally with this checkout):
 

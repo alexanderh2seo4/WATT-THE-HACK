@@ -3,8 +3,9 @@
 Draft values (see PLAN.md). Change them here when the team decides.
 
 ## Hosted demo
-- The public demo uses one shared in-memory simulation, not a separate session per visitor. Anyone can operate/reset it; restarting the backend clears its state. Only the supplied fictional data is used.
-- Every push/merge to `main` redeploys the GitHub Pages frontend. Python runs on `alex-linux` / `kimai` behind Tailscale Funnel on port 8443 and checks `main` every minute, automatically testing/deploying backend, resource and deployment changes. Backend deployments reset the shared simulation. The PC/WSL and Tailscale must remain online (see `deploy/README.md`).
+- Each browser-tab session gets its own Python process and in-memory simulation, up to 8 simultaneous sessions. Random IDs in `sessionStorage` survive refresh; these are anonymous sessions, not authenticated accounts. Visitors cannot change each other's state using their own session IDs. Only the supplied fictional data is used.
+- A worker expires after 120 seconds without API requests; a 15-second cleanup loop releases abandoned slots. A ninth session gets a capacity message and retries every 5 seconds. Refresh after expiry starts a fresh simulation. Restarting the gateway clears all sessions.
+- Every push/merge to `main` redeploys the GitHub Pages frontend. Python runs on `alex-linux` / `kimai` behind Tailscale Funnel on port 8443 and checks `main` every minute, automatically testing/deploying backend, resource and deployment changes. Backend deployments reset all visitor simulations. The PC/WSL and Tailscale must remain online (see `deploy/README.md`).
 
 ## Drone
 - Transit speed 16 m/s (Nomad website). Inspection speed along a line: 10 m/s (assumed, so the camera can see).
