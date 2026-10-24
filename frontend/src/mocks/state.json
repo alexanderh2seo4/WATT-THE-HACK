@@ -1,0 +1,3693 @@
+{
+ "t": 480.0,
+ "speed": 60.0,
+ "status": "running",
+ "drones": [
+  {
+   "drone_id": "D1",
+   "position": [
+    10.773288485871838,
+    48.14010451439631
+   ],
+   "heading": 193.8,
+   "status": "flying",
+   "battery_min": 22.02,
+   "segment_id": "LINE_004",
+   "route": [
+    [
+     10.773288485871838,
+     48.14010451439631
+    ],
+    [
+     10.772333991029683,
+     48.13751664731538
+    ],
+    [
+     10.770934045561631,
+     48.133721070101345
+    ],
+    [
+     10.76985537844223,
+     48.130796288807964
+    ],
+    [
+     10.768540425472366,
+     48.12714705962328
+    ],
+    [
+     10.767450191326587,
+     48.12391172881736
+    ],
+    [
+     10.766295667983485,
+     48.12061487484212
+    ],
+    [
+     10.765282463527853,
+     48.118151768775554
+    ],
+    [
+     10.764036828897247,
+     48.11482951763369
+    ],
+    [
+     10.762896051875318,
+     48.111572645336594
+    ],
+    [
+     10.76166793542234,
+     48.10808485160706
+    ],
+    [
+     10.760276371857486,
+     48.10422163243437
+    ],
+    [
+     10.760276371857486,
+     48.10422163243437
+    ],
+    [
+     10.758943565433867,
+     48.1005249616778
+    ],
+    [
+     10.757644789537126,
+     48.09692627536926
+    ],
+    [
+     10.756505521257766,
+     48.093801334228104
+    ],
+    [
+     10.755425932129015,
+     48.09083975637981
+    ],
+    [
+     10.755704758226484,
+     48.09
+    ]
+   ]
+  },
+  {
+   "drone_id": "D2",
+   "position": [
+    10.501280650163963,
+    48.27130708406567
+   ],
+   "heading": 223.8,
+   "status": "flying",
+   "battery_min": 22.02,
+   "segment_id": "LINE_035",
+   "route": [
+    [
+     10.501280650163963,
+     48.27130708406567
+    ],
+    [
+     10.499997575019023,
+     48.27041666745432
+    ],
+    [
+     10.496912447917934,
+     48.268275677926695
+    ],
+    [
+     10.493952881726413,
+     48.26622169255404
+    ],
+    [
+     10.491566553892909,
+     48.26456559612504
+    ],
+    [
+     10.488949220807939,
+     48.26274898625026
+    ],
+    [
+     10.486850056977177,
+     48.26129196002155
+    ],
+    [
+     10.484396254823137,
+     48.259610885521106
+    ],
+    [
+     10.482806794524322,
+     48.25817188038426
+    ],
+    [
+     10.48088566231695,
+     48.25634395494016
+    ],
+    [
+     10.478849530398067,
+     48.25450898869744
+    ],
+    [
+     10.478849530398067,
+     48.25450898869744
+    ],
+    [
+     10.481258824646263,
+     48.2531909344234
+    ],
+    [
+     10.484695321128358,
+     48.25132017745411
+    ],
+    [
+     10.48853959719986,
+     48.24919209605739
+    ],
+    [
+     10.492159154447279,
+     48.24723089835285
+    ],
+    [
+     10.493306217896562,
+     48.24710332578655
+    ],
+    [
+     10.493304625334956,
+     48.24760942510018
+    ],
+    [
+     10.492001993762784,
+     48.24766323691852
+    ],
+    [
+     10.492001993762784,
+     48.24766323691852
+    ],
+    [
+     10.488807985739472,
+     48.24942528060367
+    ],
+    [
+     10.485393366024653,
+     48.251290421697846
+    ],
+    [
+     10.481745980858703,
+     48.25327978259704
+    ],
+    [
+     10.478824552326586,
+     48.25487158982872
+    ],
+    [
+     10.47497046942837,
+     48.25528724840711
+    ],
+    [
+     10.47136843035861,
+     48.25567642017145
+    ],
+    [
+     10.467524824839359,
+     48.25608897744565
+    ],
+    [
+     10.463952038611637,
+     48.25647831684807
+    ],
+    [
+     10.460078090602908,
+     48.25690394989121
+    ],
+    [
+     10.456087969416188,
+     48.25733008584856
+    ],
+    [
+     10.452120227910937,
+     48.25777139305062
+    ],
+    [
+     10.45,
+     48.25799825451803
+    ]
+   ]
+  },
+  {
+   "drone_id": "D3",
+   "position": [
+    10.849347957444172,
+    48.257643205725856
+   ],
+   "heading": 203.0,
+   "status": "flying",
+   "battery_min": 22.02,
+   "segment_id": "LINE_054",
+   "route": [
+    [
+     10.849347957444172,
+     48.257643205725856
+    ],
+    [
+     10.84845114339578,
+     48.256237588588924
+    ],
+    [
+     10.846449964013091,
+     48.253092866156265
+    ],
+    [
+     10.844463033865821,
+     48.24996725446289
+    ],
+    [
+     10.8424435,
+     48.24678140000001
+    ],
+    [
+     10.840595875198659,
+     48.243859696896436
+    ],
+    [
+     10.838589331397941,
+     48.24072008742476
+    ],
+    [
+     10.840031354019915,
+     48.239565731719686
+    ],
+    [
+     10.840031354019915,
+     48.239565731719686
+    ],
+    [
+     10.842405276636725,
+     48.239332295716295
+    ],
+    [
+     10.838015254849582,
+     48.23699692985409
+    ],
+    [
+     10.838529987523458,
+     48.235660016297935
+    ],
+    [
+     10.838529987523458,
+     48.235660016297935
+    ],
+    [
+     10.840293120856018,
+     48.233559092267505
+    ],
+    [
+     10.840293120856018,
+     48.233559092267505
+    ],
+    [
+     10.84238298077426,
+     48.23588481894106
+    ],
+    [
+     10.843430467213865,
+     48.23734695813063
+    ],
+    [
+     10.843430467213865,
+     48.23734695813063
+    ],
+    [
+     10.84241374235893,
+     48.23756228922317
+    ],
+    [
+     10.842106461788573,
+     48.23763705579946
+    ],
+    [
+     10.84200269382728,
+     48.23766228532803
+    ],
+    [
+     10.841895237828595,
+     48.23769162198915
+    ],
+    [
+     10.838379448542469,
+     48.23812806768737
+    ],
+    [
+     10.839188469836786,
+     48.238540541142555
+    ],
+    [
+     10.8355602792291,
+     48.23829159861831
+    ],
+    [
+     10.8355602792291,
+     48.23829159861831
+    ],
+    [
+     10.832883099355483,
+     48.23775473772003
+    ],
+    [
+     10.828809578232182,
+     48.23708435310421
+    ],
+    [
+     10.823681948965772,
+     48.236245240777514
+    ],
+    [
+     10.821559734901285,
+     48.23355682915364
+    ],
+    [
+     10.819079948847389,
+     48.23047924576541
+    ],
+    [
+     10.816596893851283,
+     48.227325387058315
+    ],
+    [
+     10.81402742143342,
+     48.224061473962564
+    ],
+    [
+     10.81143288712511,
+     48.220765541996634
+    ],
+    [
+     10.80887783158073,
+     48.2175615595086
+    ],
+    [
+     10.80698603603446,
+     48.215115971619646
+    ],
+    [
+     10.804843118669114,
+     48.21240735960912
+    ]
+   ]
+  },
+  {
+   "drone_id": "D4",
+   "position": [
+    10.654509164004553,
+    48.11836084998031
+   ],
+   "heading": 215.7,
+   "status": "flying",
+   "battery_min": 22.02,
+   "segment_id": "LINE_015",
+   "route": [
+    [
+     10.654509164004553,
+     48.11836084998031
+    ],
+    [
+     10.6537439750837,
+     48.11765103387998
+    ],
+    [
+     10.651261339182755,
+     48.115293623612395
+    ],
+    [
+     10.648197921210881,
+     48.1124279347364
+    ],
+    [
+     10.648197921210881,
+     48.1124279347364
+    ],
+    [
+     10.650917345876508,
+     48.112024932831844
+    ],
+    [
+     10.654320566203012,
+     48.11150684739669
+    ],
+    [
+     10.657671064358565,
+     48.111001753911445
+    ],
+    [
+     10.661141842824662,
+     48.11047771732503
+    ]
+   ]
+  },
+  {
+   "drone_id": "D5",
+   "position": [
+    10.72195202990327,
+    48.19288087485669
+   ],
+   "heading": 95.7,
+   "status": "flying",
+   "battery_min": 22.02,
+   "segment_id": "LINE_026",
+   "route": [
+    [
+     10.72195202990327,
+     48.19288087485669
+    ],
+    [
+     10.722278354924867,
+     48.19285908502787
+    ],
+    [
+     10.725519900000002,
+     48.19264670000002
+    ],
+    [
+     10.72897306480857,
+     48.19243009922345
+    ],
+    [
+     10.732042685388791,
+     48.19222952028051
+    ],
+    [
+     10.732816921784918,
+     48.19231845227318
+    ],
+    [
+     10.733162591471798,
+     48.191963478673784
+    ],
+    [
+     10.734486345439988,
+     48.19214553361069
+    ],
+    [
+     10.734486345439988,
+     48.19214553361069
+    ],
+    [
+     10.737361422047544,
+     48.19278456990868
+    ],
+    [
+     10.737361422047544,
+     48.19278456990868
+    ],
+    [
+     10.735078778356296,
+     48.19089067888661
+    ],
+    [
+     10.731888793646505,
+     48.18828264971415
+    ],
+    [
+     10.728657318516042,
+     48.18562508349396
+    ],
+    [
+     10.725717868892103,
+     48.18320388694326
+    ],
+    [
+     10.722238959979935,
+     48.18032688249797
+    ],
+    [
+     10.71968373679749,
+     48.17826795180243
+    ],
+    [
+     10.716972358758936,
+     48.17580409136459
+    ],
+    [
+     10.7142880542676,
+     48.173355737447594
+    ],
+    [
+     10.711777087533932,
+     48.17109597635203
+    ],
+    [
+     10.70949117490045,
+     48.16902472425882
+    ],
+    [
+     10.706916589521654,
+     48.16686101977362
+    ],
+    [
+     10.70438818842936,
+     48.16443932030872
+    ],
+    [
+     10.70150766358475,
+     48.161863477644474
+    ],
+    [
+     10.698644573098761,
+     48.15920658197652
+    ],
+    [
+     10.69566589616798,
+     48.15655337434598
+    ],
+    [
+     10.692012895126908,
+     48.15322718370963
+    ],
+    [
+     10.689309982810528,
+     48.15080665771118
+    ],
+    [
+     10.686535489041063,
+     48.1482872252553
+    ],
+    [
+     10.68366275936643,
+     48.14569587607015
+    ],
+    [
+     10.681514142306924,
+     48.14366636585474
+    ],
+    [
+     10.678680388482007,
+     48.141008631996485
+    ]
+   ]
+  }
+ ],
+ "cells": [
+  {
+   "cell_id": "LINE_001#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#03",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#04",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#05",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#06",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_002#07",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#07",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#08",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#09",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#10",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#11",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#12",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_003#13",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#01",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#02",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#03",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#04",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#05",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#06",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#07",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#08",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#09",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#10",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#11",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#12",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#13",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#14",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#15",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#16",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#17",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#18",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#19",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#20",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#21",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#22",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#23",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#24",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#25",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#26",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#27",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#28",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#29",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#30",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#31",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_004#32",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_005#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_006#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_007#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_008#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_009#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_009#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_009#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_010#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_010#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_011#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_011#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_011#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_012#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_013#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_014#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#10",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#11",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#12",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#13",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#14",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#15",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#16",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#17",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#18",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#19",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#20",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_015#21",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_016#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_016#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_016#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_017#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_018#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_019#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_019#01",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_019#02",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_019#03",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_019#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_020#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_021#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_021#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_021#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_021#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_021#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_021#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_022#11",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_023#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#01",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#02",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#03",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#04",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#05",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#06",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#07",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#11",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#12",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#13",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#14",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#15",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#16",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#17",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#18",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#19",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#20",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#21",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#22",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#23",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#24",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#25",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#26",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#27",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#28",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#29",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#30",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#31",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#32",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#33",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#34",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#35",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#36",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#37",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#38",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#39",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#40",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#41",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#42",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#43",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#44",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#45",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#46",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#47",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#48",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#49",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#50",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#51",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#52",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_024#53",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_025#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#00",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#01",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#02",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#03",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#04",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#05",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#06",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#07",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#08",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#09",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#10",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#11",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#12",
+   "risk": 0.332,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#13",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#14",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#15",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#16",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#17",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#18",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#19",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#20",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_026#21",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_027#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#00",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#01",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#02",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#03",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_028#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_029#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_029#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_029#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_029#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_029#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_029#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_029#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_030#00",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#11",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#12",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#13",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#14",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_031#15",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_032#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_032#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_032#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_033#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_034#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_034#01",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#11",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#12",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#13",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#14",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#15",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#16",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#17",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#18",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#19",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#20",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#21",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#22",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#23",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#24",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#25",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#26",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_035#27",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#00",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#01",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#02",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#03",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#04",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#05",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#06",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#07",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#08",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#09",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#10",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#11",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#12",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_036#13",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#04",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#05",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#06",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_037#07",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_038#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_038#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_038#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_038#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_038#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#00",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#01",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#02",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#03",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#04",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#05",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#06",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#07",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#08",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#11",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_039#12",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_040#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_041#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_041#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_041#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_042#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_043#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_044#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_045#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_046#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_047#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_048#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_049#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_050#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_051#00",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_052#00",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_053#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#11",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#12",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#13",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#14",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#15",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#16",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#17",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#18",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#19",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#20",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#21",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#22",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#23",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#24",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#25",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_054#26",
+   "risk": 0.19,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_055#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_056#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_057#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_057#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_058#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_059#00",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_060#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_061#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_062#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_062#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_062#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_062#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_062#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_062#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_062#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_063#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_063#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_063#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_063#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_063#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_063#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#00",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#01",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#02",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#03",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#04",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#05",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#06",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#07",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#08",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#09",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#10",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#11",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#12",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#13",
+   "risk": 0.1,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#14",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#15",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#16",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#17",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#18",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  },
+  {
+   "cell_id": "LINE_064#19",
+   "risk": 0.258,
+   "inspected": "none",
+   "top_fault": null
+  }
+ ],
+ "segments": [
+  {
+   "segment_id": "LINE_001",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_002",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_003",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_004",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_005",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_006",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_007",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_008",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_009",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_010",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_011",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_012",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_013",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_014",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_015",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_016",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_017",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_018",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_019",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_020",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_021",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_022",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_023",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_024",
+   "p_live": 0.0
+  },
+  {
+   "segment_id": "LINE_025",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_026",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_027",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_028",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_029",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_030",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_031",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_032",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_033",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_034",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_035",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_036",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_037",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_038",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_039",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_040",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_041",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_042",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_043",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_044",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_045",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_046",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_047",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_048",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_049",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_050",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_051",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_052",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_053",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_054",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_055",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_056",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_057",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_058",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_059",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_060",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_061",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_062",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_063",
+   "p_live": 0.9
+  },
+  {
+   "segment_id": "LINE_064",
+   "p_live": 0.9
+  }
+ ],
+ "inputs": {
+  "reports": [
+   {
+    "report_id": "SYN_REPORT_01",
+    "polygon": {
+     "type": "Polygon",
+     "coordinates": [
+      [
+       [
+        10.45,
+        48.09
+       ],
+       [
+        10.88,
+        48.09
+       ],
+       [
+        10.88,
+        48.38
+       ],
+       [
+        10.45,
+        48.38
+       ],
+       [
+        10.45,
+        48.09
+       ]
+      ]
+     ]
+    },
+    "fault_types": [
+     "vegetation",
+     "galloping",
+     "broken_conductor"
+    ],
+    "confidence": 0.2,
+    "text": "SYNTHETIC exercise weather desk estimates strong, gusty winds across much of the study area. The estimate is broad and does not identify damaged infrastructure."
+   },
+   {
+    "report_id": "SYN_REPORT_02",
+    "polygon": {
+     "type": "Polygon",
+     "coordinates": [
+      [
+       [
+        10.56,
+        48.18
+       ],
+       [
+        10.68,
+        48.18
+       ],
+       [
+        10.68,
+        48.24
+       ],
+       [
+        10.56,
+        48.24
+       ],
+       [
+        10.56,
+        48.18
+       ]
+      ]
+     ]
+    },
+    "fault_types": [
+     "vegetation"
+    ],
+    "confidence": 0.35,
+    "text": "SYNTHETIC caller reports a fallen branch across a rural access track and says nearby trees are brushing an overhead route somewhere in a broad area. No photograph, line identifier, or confirmed contact with a conductor is available; the report could refer to non-grid vegetation or any of several nearby corridors."
+   },
+   {
+    "report_id": "SYN_REPORT_03",
+    "polygon": {
+     "type": "Polygon",
+     "coordinates": [
+      [
+       [
+        10.6,
+        48.15
+       ],
+       [
+        10.75,
+        48.15
+       ],
+       [
+        10.75,
+        48.23
+       ],
+       [
+        10.6,
+        48.23
+       ],
+       [
+        10.6,
+        48.15
+       ]
+      ]
+     ]
+    },
+    "fault_types": [
+     "broken_conductor",
+     "vegetation"
+    ],
+    "confidence": 0.2,
+    "text": "SYNTHETIC dispatch summary records one automatic protection event and attempted reclose somewhere in a broad service sector. A separate status check confirms LINE_024 was precautionarily switched to de-energized; its status is known, but the reason for the protection event and any relationship to that switching action are not. Telemetry is delayed, and this report does not establish customer or asset connectivity."
+   },
+   {
+    "report_id": "SYN_REPORT_04",
+    "polygon": {
+     "type": "Polygon",
+     "coordinates": [
+      [
+       [
+        10.85,
+        48.13
+       ],
+       [
+        10.88,
+        48.13
+       ],
+       [
+        10.88,
+        48.18
+       ],
+       [
+        10.85,
+        48.18
+       ],
+       [
+        10.85,
+        48.13
+       ]
+      ]
+     ]
+    },
+    "fault_types": [
+     "hotspot",
+     "broken_conductor"
+    ],
+    "confidence": 0.35,
+    "text": "SYNTHETIC resident reports a brief orange flash near a private industrial site during a gust. A site attendant mentions a backup-generator test around the same time, but the log has not yet been checked. The distant view cannot distinguish that activity from lightning, a vehicle, or a grid event."
+   },
+   {
+    "report_id": "SYN_REPORT_05",
+    "polygon": {
+     "type": "Polygon",
+     "coordinates": [
+      [
+       [
+        10.75,
+        48.18
+       ],
+       [
+        10.84,
+        48.18
+       ],
+       [
+        10.84,
+        48.24
+       ],
+       [
+        10.75,
+        48.24
+       ],
+       [
+        10.75,
+        48.18
+       ]
+      ]
+     ]
+    },
+    "fault_types": [
+     "hotspot"
+    ],
+    "confidence": 0.35,
+    "text": "SYNTHETIC field observer reports intermittent ticking and a handheld thermal contrast somewhere in a broad east-central area containing multiple overhead corridors. Wind, sun-warmed surfaces, load, distance, and viewing angle were not controlled; no calibrated reading or asset match exists."
+   },
+   {
+    "report_id": "SYN_REPORT_06",
+    "polygon": {
+     "type": "Polygon",
+     "coordinates": [
+      [
+       [
+        10.79,
+        48.29
+       ],
+       [
+        10.87,
+        48.29
+       ],
+       [
+        10.87,
+        48.36
+       ],
+       [
+        10.79,
+        48.36
+       ],
+       [
+        10.79,
+        48.29
+       ]
+      ]
+     ]
+    },
+    "fault_types": [
+     "galloping",
+     "sag"
+    ],
+    "confidence": 0.2,
+    "text": "SYNTHETIC observer says a span somewhere in a broad northeast area appeared to move more than nearby spans during a gust. Several mapped lines cross the area. No baseline video, measured clearance, support inspection, or confirmed conductor identity is available."
+   }
+  ],
+  "known_dead_segments": [
+   "LINE_024"
+  ]
+ },
+ "start_positions": [
+  {
+   "drone_id": "D1",
+   "segment_id": "LINE_004",
+   "position": [
+    10.787604634350327,
+    48.17948317322666
+   ],
+   "reason": "placeholder: midpoint of long line LINE_004 (16.4 km)"
+  },
+  {
+   "drone_id": "D2",
+   "segment_id": "LINE_035",
+   "position": [
+    10.539403499035759,
+    48.30227740606573
+   ],
+   "reason": "placeholder: midpoint of long line LINE_035 (14.1 km)"
+  },
+  {
+   "drone_id": "D3",
+   "segment_id": "LINE_054",
+   "position": [
+    10.867833379774751,
+    48.29504020104399
+   ],
+   "reason": "placeholder: midpoint of long line LINE_054 (13.3 km)"
+  },
+  {
+   "drone_id": "D4",
+   "segment_id": "LINE_015",
+   "position": [
+    10.692133579678199,
+    48.15333707139374
+   ],
+   "reason": "placeholder: midpoint of long line LINE_015 (11.1 km)"
+  },
+  {
+   "drone_id": "D5",
+   "segment_id": "LINE_026",
+   "position": [
+    10.66833884048355,
+    48.215061343060505
+   ],
+   "reason": "placeholder: midpoint of long line LINE_026 (10.8 km)"
+  }
+ ],
+ "events": [
+  {
+   "t": 1.0,
+   "type": "takeoff",
+   "drone_id": "D1",
+   "cell_id": null,
+   "segment_id": "LINE_004",
+   "fault_type": null,
+   "confidence": null,
+   "position": [
+    10.787604634350327,
+    48.17948317322666
+   ],
+   "message": "D1 takes off from LINE_004"
+  },
+  {
+   "t": 1.0,
+   "type": "takeoff",
+   "drone_id": "D2",
+   "cell_id": null,
+   "segment_id": "LINE_035",
+   "fault_type": null,
+   "confidence": null,
+   "position": [
+    10.539403499035759,
+    48.30227740606573
+   ],
+   "message": "D2 takes off from LINE_035"
+  },
+  {
+   "t": 1.0,
+   "type": "takeoff",
+   "drone_id": "D3",
+   "cell_id": null,
+   "segment_id": "LINE_054",
+   "fault_type": null,
+   "confidence": null,
+   "position": [
+    10.867833379774751,
+    48.29504020104399
+   ],
+   "message": "D3 takes off from LINE_054"
+  },
+  {
+   "t": 1.0,
+   "type": "takeoff",
+   "drone_id": "D4",
+   "cell_id": null,
+   "segment_id": "LINE_015",
+   "fault_type": null,
+   "confidence": null,
+   "position": [
+    10.692133579678199,
+    48.15333707139374
+   ],
+   "message": "D4 takes off from LINE_015"
+  },
+  {
+   "t": 1.0,
+   "type": "takeoff",
+   "drone_id": "D5",
+   "cell_id": null,
+   "segment_id": "LINE_026",
+   "fault_type": null,
+   "confidence": null,
+   "position": [
+    10.66833884048355,
+    48.215061343060505
+   ],
+   "message": "D5 takes off from LINE_026"
+  }
+ ]
+}
