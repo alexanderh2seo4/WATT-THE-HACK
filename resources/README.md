@@ -14,7 +14,6 @@ This package shows mapped power lines in Bavaria and adds a fictional windstorm 
 - `initial_information.csv` — six fictional reports. `information_id` identifies a report; `information_type` describes what kind of report it is.
 - `scenario_context.geojson` — the fictional storm area and broad report areas. These areas are not exact event locations.
 - `scenario_public_config.json` — public scenario settings and report text used to create the context files.
-- `outage_location_examples/` — dated point snapshots from two British electricity network operators' live outage feeds. These are external comparison data, not Bavaria observations; see the folder README for coverage, timestamps, attribution, and limits.
 
 The network has seven `component_id` groups. A component is simply a group of lines joined in this mapped dataset; it does not show which homes receive electricity.
 
@@ -38,10 +37,6 @@ Other limits to keep in mind:
 - Lines cut off at the edge of this study area may continue beyond it; the cut point is not a real line end.
 - The seven mapped components are not known outage areas or separate electricity systems.
 - The files do not show power flow or which customers are supplied by a line. Real electricity routes and customer supply are unknown.
-
-## Comparative outage data with mapped locations
-
-`outage_location_examples/` contains 24 October 2026 snapshots from SSEN Distribution and Northern Powergrid. Their feeds publish outage points and affected postcode or area information, which is more localized than the German Bundesnetzagentur records in this package. Both feeds cover parts of Great Britain and are current-outage feeds, not historical series. Their points are operator-published map locations; they are not verified coordinates of damaged equipment or affected homes, and they cannot be joined to the Bavaria network. See the folder README before using or redistributing the snapshots.
 
 ## A few field notes
 
