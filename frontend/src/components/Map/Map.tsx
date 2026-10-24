@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import MapGL, { NavigationControl, type ErrorEvent, type StyleSpecification } from 'react-map-gl/maplibre'
+import MapGL, { NavigationControl, type ErrorEvent, type MapProps, type StyleSpecification } from 'react-map-gl/maplibre'
 
 // Study area [west, south, east, north]
 export const STUDY_BOUNDS: [number, number, number, number] = [10.45, 48.09, 10.88, 48.38]
@@ -11,8 +11,9 @@ const BLANK: StyleSpecification = {
   layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#f1f5f9' } }],
 }
 
-/** Shared MapLibre map (both views). Pass <Source>/<Layer> elements as children. */
-export function Map({ children }: { children?: ReactNode }) {
+/** Shared MapLibre map (both views). Pass <Source>/<Layer> elements as children; other MapProps
+ * (id, onClick, interactiveLayerIds, cursor, ...) are passed through. */
+export function Map({ children, ...props }: { children?: ReactNode } & Partial<MapProps>) {
   const [style, setStyle] = useState<string | StyleSpecification>(BASEMAP)
   const onError = (e: ErrorEvent) => {
     const url = (e.error as { url?: string } | undefined)?.url
@@ -25,6 +26,8 @@ export function Map({ children }: { children?: ReactNode }) {
       onError={onError}
       style={{ width: '100%', height: '100%' }}
       attributionControl={{ compact: true }}
+      dragRotate={false}
+      {...props}
     >
       <NavigationControl position="bottom-right" showCompass={false} />
       {children}
