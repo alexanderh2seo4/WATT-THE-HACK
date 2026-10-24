@@ -2,11 +2,14 @@
 
 What the real product ("Nomad" by Nomadic Drones, Munich) is advertised with, taken from the company website. These are **marketing claims, not verified data sheets**. The hackathon rules (30 min flight, 3 h charge, charging only on live lines) take precedence over anything here.
 
+We assume linear charging speed. Drones don't necessarily need to recharge fully.
+
 ## Hardware
 
 | Spec | Value |
 |---|---|
 | Total weight | 3.8 kg |
+| speed | 16 m/s |
 | Wingspan | < 1 m |
 | Operating temperature | −25 °C to 50 °C |
 | Wind resistance (flight) | 36 km/h |

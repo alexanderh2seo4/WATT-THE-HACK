@@ -21,6 +21,13 @@ In short: after a storm, five mobile sensor packages (30 min flight, 3 h charge,
 
 A detailed version can be found here if required: [`TASK.md`](./TASK.md).
 
+## Evaluation criteria
+* creativity - don't necessarily stick only to the sensors the drone already has
+* good positioning and flying strategy
+  * good initial positioning of the drones
+  * good strategy for flying to identify issues quickly
+* good sensor choice
+
 ## Resources
 
 All provided data is in [`resources/`](./resources). Start with `resources/README.md`, which explains the files and what the data can and cannot tell you.
