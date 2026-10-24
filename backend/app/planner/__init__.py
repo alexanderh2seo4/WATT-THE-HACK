@@ -268,3 +268,8 @@ class DumbPlanner(Planner):
 
     def segment_states(self) -> list[SegmentState]:
         return [SegmentState(segment_id=s, p_live=round(self.p_live[s], 3)) for s in self.segs]
+
+
+from app.planner.smart import SmartPlanner  # noqa: E402  (needs Planner defined above)
+
+PLANNERS = {"smart": SmartPlanner, "dumb": DumbPlanner}

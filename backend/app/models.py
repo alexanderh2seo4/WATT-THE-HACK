@@ -61,6 +61,7 @@ class DroneState(BaseModel):
     heading: float = 0  # degrees, 0 = north, clockwise
     status: DroneStatus
     battery_min: float  # 0..max_flight_min
+    max_flight_min: float = 30  # full battery (for the UI's battery ring)
     segment_id: str | None = None
     route: list[LonLat] = []  # planned path of the current flight (for drawing)
 

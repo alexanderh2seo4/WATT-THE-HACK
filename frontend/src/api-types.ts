@@ -177,6 +177,11 @@ export interface components {
             status: "charging" | "flying" | "landing" | "stranded";
             /** Battery Min */
             battery_min: number;
+            /**
+             * Max Flight Min
+             * @default 30
+             */
+            max_flight_min: number;
             /** Segment Id */
             segment_id?: string | null;
             /**

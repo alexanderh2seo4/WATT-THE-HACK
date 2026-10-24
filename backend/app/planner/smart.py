@@ -1,0 +1,263 @@
+"""SmartPlanner (M2): risk prior per fault type, Bayes updates, greedy start positions and risk-driven routes.
+
+Belief = P[cell, fault type]. The planner values a cell by the expected number of detections a pass would
+give (sum over types of p_t · p_detect_t, using the published sensor specs), so it automatically prefers
+- cells with high prior (reports, forest, storm, dead lines),
+- uncertain findings (0.4-0.8: a second look is worth a lot),
+- LANDINGS where landed-only sensors matter (galloping, sag; or hotspots when the air sensor is weak).
+Cells already above the crew threshold are worth nothing more (we know enough there).
+"""
+
+import numpy as np
+from shapely.geometry import shape
+
+from app.geo import to_lonlat, to_xy
+from app.models import (CellState, DroneParams, DroneState, Event, FaultType, Observation, OperatorInputs,
+                        SegmentState, SensorParams, StartPosition, Static, Waypoint)
+from app.planner import Planner
+from app.planner import missions, start_positions
+from app.planner.missions import Network
+from app.planner.risk import (ALL_TYPES, DEAD_LINE_MIN, DEAD_LINE_P, NEIGHBOUR_P, prior, report_cells,
+                              update_finding, update_live, update_no_finding, vegetation_shares)
+
+P_LIVE_PRIOR = 0.9
+P_LIVE_NEAR_DEAD = 0.8  # a line sharing a node with a dead line is a bit more likely dead too
+LANDABLE_P_LIVE = 0.6  # one "dead" magnetometer reading (acc. 0.9) drops 0.9 -> 0.5: not landable any more
+RESERVE_MIN = 5
+TAKEOFF_MIN = 20  # charge to this before a normal flight ...
+CONFIRM_TAKEOFF_MIN = 10  # ... but go earlier for a landing that confirms / checks a landed-only fault
+# landing targets, in landed-only expected detections per battery minute (an air flight makes ~0.03-0.2/min)
+TARGET_RATE = 0.02  # while charging: worth a short hop (e.g. galloping / sag check in a report area)
+CONFIRM_RATE = 0.04  # when charged: worth forcing the flight to end there (uncertain finding to confirm)
+MIN_FLIGHT_VALUE = 0.03
+CREW = 0.8  # above this a fault is confirmed: no more value in looking again
+CLEAR_TOP = 0.1  # a finding whose belief dropped below this is no longer shown as top fault
+INSPECTED_RANK = {"none": 0, "air": 1, "landed": 2}
+N_NET: dict[int, Network] = {}  # Network is pure geometry: build once per Static
+
+
+class SmartPlanner(Planner):
+    def __init__(self, static: Static):
+        self.static = static
+        if id(static) not in N_NET:
+            N_NET[id(static)] = Network(static)
+        self.net = net = N_NET[id(static)]
+        self.n = len(net.cell_ids)
+        self.cell_seg_of = dict(zip(net.cell_ids, net.cell_seg))
+        self.segs = net.seg_ids
+        self.veg = vegetation_shares(static)
+        storm = shape(static.storm["geometry"])
+        self.cell_geoms = {c["properties"]["cell_id"]: shape(c["geometry"]) for c in static.cells["features"]}
+        self.in_storm = {cid: storm.contains(g.interpolate(0.5, normalized=True)) for cid, g in self.cell_geoms.items()}
+        node_segs: dict[str, set[str]] = {}
+        for f in static.segments["features"]:
+            pr = f["properties"]
+            for node in (pr["from_node"], pr["to_node"]):
+                node_segs.setdefault(node, set()).add(pr["segment_id"])
+        self.neighbours: dict[str, set[str]] = {s: set() for s in self.segs}
+        for group in node_segs.values():
+            for s in group:
+                self.neighbours[s] |= group - {s}
+        self.cell_seg_idx = np.array([self.segs.index(s) for s in net.cell_seg])
+        self.sensors: dict[str, SensorParams] = {}
+        self.drone = DroneParams()
+        self._pd()
+        self.set_inputs(static.default_inputs)
+
+    # ---------- belief ----------
+
+    def set_params(self, sensors: dict[FaultType, SensorParams], drone: DroneParams) -> None:
+        self.sensors, self.drone = sensors, drone
+        self._pd()
+
+    def _pd(self) -> None:
+        def arr(key):
+            return np.array([getattr(self.sensors[t], key) if t in self.sensors else 0.0 for t in ALL_TYPES])
+        self.pd_air, self.pd_land, self.pfp = arr("p_detect_air"), arr("p_detect_landed"), arr("p_false_positive")
+
+    def set_inputs(self, inputs: OperatorInputs) -> None:
+        self.inputs = inputs
+        self.dead = set(inputs.known_dead_segments)
+        near = set().union(*(self.neighbours.get(s, set()) for s in self.dead)) if self.dead else set()
+        self.report_cells = report_cells(self.cell_geoms, inputs.reports)
+        # a protection event (trip / reclose) in a sector: some line there may be de-energised
+        tripped = {self.cell_seg_of[c] for r in inputs.reports if "protection" in r.text.lower()
+                   for c in self.report_cells[r.report_id]}
+        self.p_live = {s: 0.0 if s in self.dead else P_LIVE_NEAR_DEAD if s in near | tripped else P_LIVE_PRIOR
+                       for s in self.segs}
+        self.certain_live: set[str] = set(self.dead)
+        pr = prior(self.net.cell_ids, self.cell_seg_of, self.report_cells, inputs.reports, self.veg,
+                   self.in_storm, self.dead, self.neighbours)
+        self.P = np.array([[pr[cid][t] for t in ALL_TYPES] for cid in self.net.cell_ids])
+        self.inspected = ["none"] * self.n
+        self.detected: list[set[int]] = [set() for _ in range(self.n)]
+        self.claim_cells: dict[str, set[int]] = {}
+        self.claim_land: dict[str, int] = {}
+        self.first_plans: dict = {}  # drone_id -> FlightPlan from start_positions
+        self._cache = None
+
+    def on_event(self, event: Event) -> None:
+        if event.type in ("landing", "stranded") and event.drone_id:
+            self.claim_cells.pop(event.drone_id, None)
+            self.claim_land.pop(event.drone_id, None)
+        if event.type == "line_dead" and event.segment_id and event.segment_id not in self.dead:
+            self._mark_dead(event.segment_id)
+
+    def _mark_dead(self, sid: str) -> None:
+        """Dead line: no charging there for anyone; its cells and (modestly) its neighbours get riskier."""
+        self.dead.add(sid)
+        self.p_live[sid] = 0.0
+        self.certain_live.add(sid)
+        bc = ALL_TYPES.index("broken_conductor")
+        idx = self.net.seg_cells.get(sid, [])
+        bump = max(DEAD_LINE_MIN, DEAD_LINE_P / max(1, len(idx)))
+        self.P[idx, bc] = 1 - (1 - self.P[idx, bc]) * (1 - bump)
+        for nb in self.neighbours.get(sid, set()) - self.dead:
+            nidx = self.net.seg_cells.get(nb, [])
+            self.P[nidx, bc] = 1 - (1 - self.P[nidx, bc]) * (1 - NEIGHBOUR_P)
+            if nb not in self.certain_live:
+                self.p_live[nb] = min(self.p_live[nb], P_LIVE_NEAR_DEAD)
+        self._cache = None
+
+    def on_observation(self, obs: Observation) -> None:
+        i = self.net.cell_idx.get(obs.cell_id)
+        if i is None:
+            return
+        if INSPECTED_RANK[obs.mode] > INSPECTED_RANK[self.inspected[i]]:
+            self.inspected[i] = obs.mode
+        pd = self.pd_air if obs.mode == "air" else self.pd_land
+        det = {d.fault_type: d.confidence for d in obs.detections}
+        for k, t in enumerate(ALL_TYPES):
+            if t in det:
+                self.P[i, k] = update_finding(self.P[i, k], pd[k], self.pfp[k], det[t])
+                self.detected[i].add(k)
+            elif pd[k] > 0:
+                self.P[i, k] = update_no_finding(self.P[i, k], pd[k])
+        sid = obs.segment_id
+        if obs.reads_live is not None and sid not in self.certain_live:
+            if obs.live_accuracy >= 1:
+                self.certain_live.add(sid)
+                if obs.reads_live:
+                    self.p_live[sid] = 1.0
+                else:
+                    self._mark_dead(sid)
+            else:
+                self.p_live[sid] = update_live(self.p_live[sid], obs.reads_live, obs.live_accuracy)
+        self._cache = None
+
+    # ---------- values (expected detections) ----------
+
+    def _values(self):
+        P = self.P
+        open_ = P < CREW
+        air = (P * self.pd_air * open_).sum(axis=1)
+        land = (P * self.pd_land * open_).sum(axis=1)
+        after = P * (1 - self.pd_air) / (1 - P * self.pd_air)  # belief after an air pass without finding
+        land_after = (after * self.pd_land * open_).sum(axis=1)
+        p_live_cell = np.array([self.p_live[s] for s in self.segs])[self.cell_seg_idx]
+        landable = (p_live_cell >= LANDABLE_P_LIVE) & np.array([s not in self.dead for s in self.net.cell_seg])
+        return air, land, land_after, p_live_cell, landable
+
+    def _landable(self, sid: str | None) -> bool:
+        return sid in self.p_live and sid not in self.dead and self.p_live[sid] >= LANDABLE_P_LIVE
+
+    # ---------- start positions ----------
+
+    def start_positions(self, n: int = 5) -> list[StartPosition]:
+        p = self.drone
+        air, land, land_after, p_live_cell, landable = self._values()
+        budget = (p.max_flight_min - p.landing_min - RESERVE_MIN) * 60
+        ok = landable & (p_live_cell >= start_positions.P_LIVE_START)
+        chosen = start_positions.choose(self.net, n, budget, air, land, land_after, p_live_cell, ok,
+                                        p.speed_inspect_mps, p.speed_transit_mps)
+        risk = 1 - np.prod(1 - self.P, axis=1)
+        big = len(self.net.cell_ids) / 2  # reports covering half the grid say nothing about where to go
+        out = []
+        for k, (c, plan) in enumerate(chosen):
+            cells = plan.cells if plan else set()
+            ids = {self.net.cell_ids[i] for i in cells}
+            reps = sorted(((len(ids & set(cs)), rid) for rid, cs in self.report_cells.items()
+                           if len(cs) < big and ids & set(cs)), reverse=True)
+            forest_km = sum(self.veg[self.net.cell_ids[i]] * self.net.cell_len[i] for i in cells) / 1000
+            parts = [f"covers {', '.join(r.replace('SYN_REPORT_', 'report ') for _, r in reps[:2])} area"] if reps else []
+            if forest_km >= 0.1:
+                parts.append(f"{forest_km:.1f} km forest")
+            parts.append(f"{len(cells) * 0.5:.0f} km line in first flight")
+            reason = " + ".join(parts) + f", exp. risk {risk[list(cells)].sum():.2f}" if cells else "fallback"
+            sid = self.net.cell_seg[c]
+            out.append(StartPosition(drone_id=f"D{k + 1}", segment_id=sid,
+                                     position=list(to_lonlat(*self.net.cell_mid[c])), reason=reason))
+            if plan:  # fly exactly the coordinated first flight the positions were chosen for
+                self.first_plans[f"D{k + 1}"] = plan
+        return out
+
+    # ---------- routes ----------
+
+    def next_route(self, drone: DroneState, speed_mps: float = 10, landing_min: float = 3) -> list[Waypoint] | None:
+        p = self.drone
+        first = self.first_plans.pop(drone.drone_id, None)
+        if first and drone.position == first.route[0].position and drone.battery_min >= p.max_flight_min - 0.1:
+            return self._take(drone, first)
+        air, land, land_after, p_live_cell, landable = self._values()
+        others_land = [c for d, c in self.claim_land.items() if d != drone.drone_id]
+        landable[others_land] = False
+        if drone.status != "charging" and not self._landable(drone.segment_id):
+            # landed on a dead line: hop to a live one using the reserve
+            plan = missions.hop(self.net, drone.position, (drone.battery_min - p.landing_min) * 60 - 5, landable,
+                                land, p_live_cell, p.speed_transit_mps)
+            return self._take(drone, plan)
+        if drone.battery_min < p.landing_min + RESERVE_MIN + 2:
+            return None
+        budget = (drone.battery_min - p.landing_min - RESERVE_MIN) * 60
+        for d, cells in self.claim_cells.items():  # don't fly what another drone is flying right now
+            if d != drone.drone_id:
+                air[list(cells)] = 0
+        here = to_xy(*drone.position)
+        d_cells = self.net.dist_to_cells(here)
+        full = drone.battery_min >= min(TAKEOFF_MIN, p.max_flight_min)
+        # charged: a normal inspection flight, forced to land on a target only for a strong confirmation.
+        # still charging: a short hop to a landing target (confirmation / landed-only check) uses the wait.
+        target = self._target(land_after, landable, d_cells, budget, CONFIRM_RATE if full else TARGET_RATE)
+        if not full and (target is None or drone.battery_min < CONFIRM_TAKEOFF_MIN):
+            return None
+        plan = missions.plan_flight(self.net, drone.position, drone.segment_id, budget, air, land, land_after,
+                                    landable, p_live_cell, p.speed_inspect_mps, p.speed_transit_mps, dest=target)
+        if not plan or plan.value < MIN_FLIGHT_VALUE:
+            return None
+        return self._take(drone, plan)
+
+    def _target(self, land: np.ndarray, landable: np.ndarray, d_cells: np.ndarray, budget: float,
+                min_rate: float) -> int | None:
+        """Best landing for confirmation / landed-only sensors, if one is worth it and reachable.
+        `land` = what a landing would still find after an air pass, i.e. what only landed sensors can add."""
+        cost_min = d_cells / self.drone.speed_transit_mps / 60 + self.drone.landing_min
+        rate = land / cost_min  # expected detections per battery minute spent on this landing
+        ok = landable & (rate >= min_rate) & (d_cells / self.drone.speed_transit_mps <= budget) & (d_cells > 100)
+        if not ok.any():
+            return None
+        return int(np.where(ok, rate, -1).argmax())
+
+    def _take(self, drone: DroneState, plan) -> list[Waypoint] | None:
+        if not plan:
+            return None
+        self.claim_cells[drone.drone_id] = plan.cells
+        self.claim_land[drone.drone_id] = plan.land_cell
+        return plan.route
+
+    # ---------- output ----------
+
+    def cell_states(self) -> list[CellState]:
+        if self._cache is None:
+            risk = 1 - np.prod(1 - self.P, axis=1)
+            out = []
+            for i, cid in enumerate(self.net.cell_ids):
+                top = max(self.detected[i], key=lambda k: self.P[i, k], default=None)
+                if top is not None and self.P[i, top] < CLEAR_TOP:
+                    top = None
+                out.append(CellState(cell_id=cid, risk=round(float(min(1.0, max(0.0, risk[i]))), 3),
+                                     inspected=self.inspected[i], top_fault=ALL_TYPES[top] if top is not None else None))
+            self._cache = out
+        return self._cache
+
+    def segment_states(self) -> list[SegmentState]:
+        return [SegmentState(segment_id=s, p_live=round(self.p_live[s], 3)) for s in self.segs]

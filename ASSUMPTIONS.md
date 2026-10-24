@@ -46,9 +46,31 @@ Report polygon = `location_area_coordinates`. Report text = `description`. Textu
 - Sim time advances in 1 s steps; one HTTP poll advances `wall time × speed` (default speed 60×). Same `seed` ⇒ same run.
 - Charging drones ask the planner for a route every 60 sim-s. Placeholder rule: take off once battery ≥ min(20 min, what the next full route needs incl. landing + 5 min reserve).
 - M1 routing (DumbPlanner): transit to the nearest line with uninspected cells (or a finding that needs confirmation), fly along it, repeat while the battery allows; end on a line not known to be dead (`p_live ≥ 0.5`), else add a hop to the nearest such line. Drones don't take lines another drone is currently flying.
-- A dead line (landing or operator) adds 0.2 risk to each of its cells (placeholder).
+- A dead line (landing or operator) adds 0.2 risk to each of its cells (DumbPlanner only; SmartPlanner: see below).
 - Recommendations (§4.5) are emitted once per cell / segment / report: risk > 0.8 with a finding → send crew; 0.4–0.8 with a finding → needs confirmation; dead line fully inspected without finding → inspect from ground; all cells of a report area inspected and < 0.4 → area cleared.
 - Default ground truth (`backend/scenarios/default.json`): hidden dead line LINE_036; faults: vegetation on LINE_026 (report 02 area), hotspot on LINE_002 (report 05 area), galloping on LINE_039 (report 06 area), vegetation on LINE_035 (outside the specific report areas 02–06; report 01 covers the whole region; picked without the vegetation layer, which is not in the repo yet). Galloping is landed-only (`p_detect_air = 0`). Sensor probabilities there are guesses; hotspot assumes the extra thermal camera.
+
+## Smart planner (M2, `backend/app/planner/`)
+Belief = P(fault of type t in cell), with cell risk = 1 − Π(1 − p_t). All weights are hand-calibrated guesses.
+
+**Risk prior** (`risk.py`):
+- Reports: p = confidence × w(type) × min(1, 10 / n_cells), where n_cells = cells touching the polygon. w = vegetation 1.0, galloping 1.0, hotspot 0.9, sag 0.7, ice 0.5, broken_conductor 0.6. Report 01 covers all 418 cells, so it adds only ~0.005 per cell.
+- Vegetation: 0.6 × (share of the cell's 30 m buffer covered by OSM forest/wood/tree rows).
+- Background per cell: 0.4 % vegetation and broken conductor, 0.2 % sag and hotspot, 0.1 % galloping.
+- Storm footprint: background and vegetation of wind-driven types × 1.0 inside, × 0.4 outside. Reports and operator knowledge are direct observations and are not damped.
+- Dead line (operator or found by landing): p_live = 0, never a landing/charging spot. Broken-conductor p += max(0.02, 0.3 / n_cells of the line). Lines sharing a node with it get +0.03 and p_live ≤ 0.8. Node sharing does not prove electrical connection, so the effect is kept modest.
+- Protection event report (text contains "protection", report 03): lines touching its polygon get p_live 0.8 (some line there may have tripped). Start positions need p_live ≥ 0.85.
+- Result on the default inputs: cell risk from 0.02 to 0.62, median 0.05.
+
+**Belief update**: per fault type, using the published p_detect_air / p_detect_landed / p_false_positive. Per type: no detection → p·(1−pd)/(p·(1−pd)+1−p); detection → confidence-softened Bayes, as in M1. A top fault whose belief drops below 0.1 is no longer shown. A line is landable if p_live ≥ 0.6, so a single "dead" magnetometer reading rules it out.
+
+**Planning**:
+- Value of a look = expected detections = Σ_t p_t·pd_t. Types with p_t ≥ 0.8 (already "send crew") count 0.
+- Routes (`missions.py`): greedy runs between cell boundaries along a line, scored by value / (4 × transit s + inspect s + 60 s). A run is allowed only if the drone can still reach a landable cell afterwards with landing time and the 5 min reserve kept.
+- Landing score = 3 × landed value + 0.4 × air value within 4 km + 1 × station value + 0.3 × p_live. Station value = the landed-only value of the 6 best cells within 3 km.
+- Take-off: normal flights at ≥ 20 min battery. If an uncertain finding is worth ≥ 0.04 detections per battery-minute, the flight is forced to land on it. While charging (battery ≥ 10 min), a drone hops to a landing target worth ≥ 0.02 per battery-minute. A flight worth < 0.03 expected detections is not flown. Drones don't value cells another drone is flying and don't share landing cells.
+- Start positions (`start_positions.py`): greedy over drones, one per line, ≥ 3 km apart, p_live ≥ 0.85. Each candidate is scored by the value of its real first flight plus its station value. Cells already covered by an earlier drone keep 15 % of their value. The first flights are then flown exactly as planned.
+- The 5 min reserve is kept even when landing on a line known to be live (simple, conservative).
 
 ## Bundesnetzagentur historical data
 
