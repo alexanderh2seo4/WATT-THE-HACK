@@ -9,6 +9,7 @@ Routes: `/` operator view, `/setup` simulation setup.
 ```bash
 npm install
 npm run dev            # http://localhost:5173, proxies /api -> http://localhost:8000
+API_URL=http://localhost:8017 npm run dev  # proxy to a backend on another port
 VITE_MOCK=1 npm run dev  # no backend: serves src/mocks/static.json + state.json
 npm run build          # type-check + production build
 ```
@@ -29,4 +30,4 @@ If the basemap can't be fetched (offline), the map falls back to a blank backgro
 - `src/components/Map/`: shared map fitted to the study bounds; layers go in as children (`NetworkLayer` draws grid + storm)
 - `src/components/TopBar/`: sim clock, play/pause, speed (1×, 10×, 60×, 300×), reset
 - `src/views/Operator/`: stepper (inputs → start positions → run), stats, log (click → fly to), risk layers (cell risk via feature-state), drones (rAF-interpolated markers + client-side trails), legend
-- `src/views/SimSetup/`: simulation setup page
+- `src/views/SimSetup/`: simulation setup: click a line -> mark dead (hidden) / add fault (snapped to the line); sensor + drone params; presets (GET /api/sim/presets) + JSON download/upload. Edits are a local draft until "Save" (PUT /api/sim/config, resets the sim)

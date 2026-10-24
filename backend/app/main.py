@@ -1,6 +1,6 @@
 """FastAPI app: all endpoints of PLAN.md §3.1. One in-memory Engine, stepped on every GET /api/state."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.data import SCENARIOS, load_static
@@ -54,6 +54,19 @@ def get_sim_config():
 def put_sim_config(config: SimConfig):
     engine.set_config(config)  # resets the sim
     return engine.config
+
+
+@app.get("/api/sim/presets", response_model=list[str])
+def list_presets():
+    return sorted(p.stem for p in SCENARIOS.glob("*.json"))
+
+
+@app.get("/api/sim/presets/{name}", response_model=SimConfig)
+def get_preset(name: str):
+    path = SCENARIOS / f"{name}.json"
+    if path.parent != SCENARIOS or not path.is_file():
+        raise HTTPException(404, f"no preset {name}")
+    return SimConfig.model_validate_json(path.read_text())
 
 
 @app.post("/api/sim/control", response_model=State)
