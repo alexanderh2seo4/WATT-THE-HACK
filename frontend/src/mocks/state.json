@@ -3933,5 +3933,32 @@
    ],
    "message": "Needs confirmation: possible vegetation at LINE_026 km 4.2 (risk 71%), second look scheduled"
   }
- ]
+ ],
+ "progress": {
+  "total": 4,
+  "found": [
+   {
+    "fault_id": "F4",
+    "fault_type": "vegetation",
+    "segment_id": "LINE_035",
+    "cell_id": "LINE_035#23",
+    "km": 11.8,
+    "t_found": 68.0,
+    "drone_id": "D4",
+    "t_confirmed": null
+   },
+   {
+    "fault_id": "F1",
+    "fault_type": "vegetation",
+    "segment_id": "LINE_026",
+    "cell_id": "LINE_026#08",
+    "km": 4.2,
+    "t_found": 397.0,
+    "drone_id": "D2",
+    "t_confirmed": null
+   }
+  ],
+  "all_found_t": null,
+  "all_confirmed_t": null
+ }
 }

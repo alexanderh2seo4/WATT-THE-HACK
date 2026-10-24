@@ -232,7 +232,7 @@ export interface components {
              * Type
              * @enum {string}
              */
-            type: "takeoff" | "landing" | "finding" | "line_dead" | "recommendation" | "stranded";
+            type: "takeoff" | "landing" | "finding" | "line_dead" | "recommendation" | "stranded" | "all_found";
             /** Drone Id */
             drone_id?: string | null;
             /** Cell Id */
@@ -262,6 +262,31 @@ export interface components {
              */
             fault_type: "vegetation" | "sag" | "ice" | "galloping" | "hotspot" | "broken_conductor";
         };
+        /**
+         * FaultFound
+         * @description Benchmark (sim ground truth, not seen by the planner): when a true fault was first found / confirmed.
+         */
+        FaultFound: {
+            /** Fault Id */
+            fault_id: string;
+            /**
+             * Fault Type
+             * @enum {string}
+             */
+            fault_type: "vegetation" | "sag" | "ice" | "galloping" | "hotspot" | "broken_conductor";
+            /** Segment Id */
+            segment_id: string;
+            /** Cell Id */
+            cell_id: string;
+            /** Km */
+            km: number;
+            /** T Found */
+            t_found: number;
+            /** Drone Id */
+            drone_id: string;
+            /** T Confirmed */
+            t_confirmed?: number | null;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -279,6 +304,26 @@ export interface components {
              * @default []
              */
             known_dead_segments: string[];
+        };
+        /**
+         * Progress
+         * @description How many ground-truth faults have been found; all_found_t is set once (and the sim pauses) when all are.
+         */
+        Progress: {
+            /**
+             * Total
+             * @default 0
+             */
+            total: number;
+            /**
+             * Found
+             * @default []
+             */
+            found: components["schemas"]["FaultFound"][];
+            /** All Found T */
+            all_found_t?: number | null;
+            /** All Confirmed T */
+            all_confirmed_t?: number | null;
         };
         /** Report */
         Report: {
@@ -395,6 +440,13 @@ export interface components {
             start_positions: components["schemas"]["StartPosition"][];
             /** Events */
             events: components["schemas"]["Event"][];
+            /**
+             * @default {
+             *       "total": 0,
+             *       "found": []
+             *     }
+             */
+            progress: components["schemas"]["Progress"];
         };
         /** Static */
         Static: {

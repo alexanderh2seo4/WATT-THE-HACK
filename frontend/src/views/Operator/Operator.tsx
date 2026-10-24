@@ -318,6 +318,7 @@ const EVENT_STYLE: Partial<Record<SimEvent['type'], string>> = {
   recommendation: 'bg-rose-50 text-rose-950 ring-1 ring-rose-200 font-medium',
   line_dead: 'bg-slate-100 text-slate-900 font-medium',
   stranded: 'bg-rose-100 text-rose-900 font-medium',
+  all_found: 'bg-emerald-50 text-emerald-950 ring-1 ring-emerald-200 font-medium',
 }
 /** routine flight events stay quiet so findings and recommendations stand out */
 const ROUTINE = 'text-xs text-slate-400 hover:bg-slate-50'
