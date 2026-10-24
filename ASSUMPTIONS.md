@@ -16,6 +16,11 @@ Draft values (see PLAN.md). Change them here when the team decides.
 - Camera, thermal, acoustic: work during flight along the line (per cell, probabilistic).
 - Current, sag (IMU), vibration, conductor temperature: only when landed, only for the span where the drone sits.
 - Current ≈ 0 on landing ⇒ line is dead ⇒ no charging.
+- Sim model (`backend/app/sim/sensors.py`): every cell a drone enters while flying along a line is one air pass; landing inspects only the cell under the drone. Per pass and fault type: a true fault is detected with `p_detect_air` / `p_detect_landed`, otherwise a false positive appears with `p_false_positive`. A fault type with `p_detect_air = 0` is landed-only (galloping in the default scenario).
+- The sensor reports its own confidence: true detections 0.6–0.95 from the air, 0.85–0.99 landed; false positives 0.3–0.7. The planner's Bayes update mixes posterior and prior by this confidence, so a shaky single detection lands in "needs confirmation" (0.4–0.8) rather than "send crew".
+- Proposed 50 Hz magnetometer: one live/dead reading per segment per flight, correct with p = 0.9. The current sensor on landing always gives the truth.
+- Sensor and drone specs (`SimConfig.sensors`, `SimConfig.drone`) are treated as known to the planner (calibration data). Fault locations and dead lines are not.
+- False-positive rates in the default scenario are low (0.2–0.5 % per cell pass and fault type) so the log is not flooded.
 
 ## Grid / data
 - Lines are split into ~500 m cells. Risk and coverage are tracked per cell.
@@ -37,10 +42,13 @@ Report polygon = `location_area_coordinates`. Report text = `description`. Textu
 | 05 | sound_and_warmth_report | hotspot | 0.35 |
 | 06 | conductor_motion_report | galloping, sag | 0.2 |
 
-## Simulation (M0)
+## Simulation (M1)
 - Sim time advances in 1 s steps; one HTTP poll advances `wall time × speed` (default speed 60×). Same `seed` ⇒ same run.
-- Charging drones ask the planner for a route every 60 sim-s; the planner decides whether flying is worth it (placeholder planner: battery ≥ 20 min).
-- Default ground truth (`backend/scenarios/default.json`): hidden dead line LINE_036; faults: vegetation on LINE_026 (report 02 area), hotspot on LINE_002 (report 05 area), galloping on LINE_039 (report 06 area), vegetation on LINE_035 (outside all report areas). Sensor probabilities there are guesses; hotspot assumes the extra thermal camera.
+- Charging drones ask the planner for a route every 60 sim-s. Placeholder rule: take off once battery ≥ min(20 min, what the next full route needs incl. landing + 5 min reserve).
+- M1 routing (DumbPlanner): transit to the nearest line with uninspected cells (or a finding that needs confirmation), fly along it, repeat while the battery allows; end on a line not known to be dead (`p_live ≥ 0.5`), else add a hop to the nearest such line. Drones don't take lines another drone is currently flying.
+- A dead line (landing or operator) adds 0.2 risk to each of its cells (placeholder).
+- Recommendations (§4.5) are emitted once per cell / segment / report: risk > 0.8 with a finding → send crew; 0.4–0.8 with a finding → needs confirmation; dead line fully inspected without finding → inspect from ground; all cells of a report area inspected and < 0.4 → area cleared.
+- Default ground truth (`backend/scenarios/default.json`): hidden dead line LINE_036; faults: vegetation on LINE_026 (report 02 area), hotspot on LINE_002 (report 05 area), galloping on LINE_039 (report 06 area), vegetation on LINE_035 (outside the specific report areas 02–06; report 01 covers the whole region; picked without the vegetation layer, which is not in the repo yet). Galloping is landed-only (`p_detect_air = 0`). Sensor probabilities there are guesses; hotspot assumes the extra thermal camera.
 
 ## Bundesnetzagentur historical data
 

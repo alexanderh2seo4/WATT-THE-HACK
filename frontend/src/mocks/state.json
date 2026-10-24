@@ -6,8 +6,8 @@
   {
    "drone_id": "D1",
    "position": [
-    10.773288485871838,
-    48.14010451439631
+    10.772388696828747,
+    48.137664968008465
    ],
    "heading": 193.8,
    "status": "flying",
@@ -15,8 +15,8 @@
    "segment_id": "LINE_004",
    "route": [
     [
-     10.773288485871838,
-     48.14010451439631
+     10.772388696828747,
+     48.137664968008465
     ],
     [
      10.772333991029683,
@@ -63,10 +63,6 @@
      48.10422163243437
     ],
     [
-     10.760276371857486,
-     48.10422163243437
-    ],
-    [
      10.758943565433867,
      48.1005249616778
     ],
@@ -85,14 +81,42 @@
     [
      10.755704758226484,
      48.09
+    ],
+    [
+     10.760276371857486,
+     48.10422163243437
+    ],
+    [
+     10.75581887574981,
+     48.10434543314425
+    ],
+    [
+     10.752194624636616,
+     48.10445708009453
+    ],
+    [
+     10.748412961381803,
+     48.10456772121642
+    ],
+    [
+     10.743446348475373,
+     48.104716835273884
+    ],
+    [
+     10.7379468,
+     48.10487619999999
+    ],
+    [
+     10.734138278566839,
+     48.10498716930994
     ]
    ]
   },
   {
    "drone_id": "D2",
    "position": [
-    10.501280650163963,
-    48.27130708406567
+    10.500001920207604,
+    48.27041968288807
    ],
    "heading": 223.8,
    "status": "flying",
@@ -100,8 +124,8 @@
    "segment_id": "LINE_035",
    "route": [
     [
-     10.501280650163963,
-     48.27130708406567
+     10.500001920207604,
+     48.27041968288807
     ],
     [
      10.499997575019023,
@@ -144,10 +168,6 @@
      48.25450898869744
     ],
     [
-     10.478849530398067,
-     48.25450898869744
-    ],
-    [
      10.481258824646263,
      48.2531909344234
     ],
@@ -168,72 +188,100 @@
      48.24710332578655
     ],
     [
-     10.493304625334956,
-     48.24760942510018
+     10.493988169538767,
+     48.24726727581261
     ],
     [
-     10.492001993762784,
-     48.24766323691852
+     10.495512334811849,
+     48.247375737639686
     ],
     [
-     10.492001993762784,
-     48.24766323691852
+     10.498607268739619,
+     48.24669034941717
     ],
     [
-     10.488807985739472,
-     48.24942528060367
+     10.50148812886036,
+     48.24607017240137
     ],
     [
-     10.485393366024653,
-     48.251290421697846
+     10.504326325093956,
+     48.24544253549174
     ],
     [
-     10.481745980858703,
-     48.25327978259704
+     10.507139627075105,
+     48.2448201791811
     ],
     [
-     10.478824552326586,
-     48.25487158982872
+     10.510280661470347,
+     48.24413688643439
     ],
     [
-     10.47497046942837,
-     48.25528724840711
+     10.513698131032243,
+     48.24339316016581
     ],
     [
-     10.47136843035861,
-     48.25567642017145
+     10.516267854907197,
+     48.24282453185452
     ],
     [
-     10.467524824839359,
-     48.25608897744565
+     10.518998092227887,
+     48.2422307578337
     ],
     [
-     10.463952038611637,
-     48.25647831684807
+     10.520729877242587,
+     48.240306691960214
     ],
     [
-     10.460078090602908,
-     48.25690394989121
+     10.522205427477248,
+     48.23864296799932
     ],
     [
-     10.456087969416188,
-     48.25733008584856
+     10.523864541391418,
+     48.23678587353217
     ],
     [
-     10.452120227910937,
-     48.25777139305062
+     10.525649886767383,
+     48.234795925899775
     ],
     [
-     10.45,
-     48.25799825451803
+     10.527362141947663,
+     48.23287085419792
+    ],
+    [
+     10.529087137620763,
+     48.23093354491743
+    ],
+    [
+     10.530880194347645,
+     48.22892742021188
+    ],
+    [
+     10.532030275282068,
+     48.22761422744167
+    ],
+    [
+     10.533562151906068,
+     48.22591303637358
+    ],
+    [
+     10.53528957833109,
+     48.22397245815086
+    ],
+    [
+     10.536970820469634,
+     48.22209273254515
+    ],
+    [
+     10.537577799672729,
+     48.221414685821244
     ]
    ]
   },
   {
    "drone_id": "D3",
    "position": [
-    10.849347957444172,
-    48.257643205725856
+    10.848020445059207,
+    48.25556077434008
    ],
    "heading": 203.0,
    "status": "flying",
@@ -241,12 +289,8 @@
    "segment_id": "LINE_054",
    "route": [
     [
-     10.849347957444172,
-     48.257643205725856
-    ],
-    [
-     10.84845114339578,
-     48.256237588588924
+     10.848020445059207,
+     48.25556077434008
     ],
     [
      10.846449964013091,
@@ -273,120 +317,116 @@
      48.239565731719686
     ],
     [
-     10.840031354019915,
-     48.239565731719686
-    ],
-    [
      10.842405276636725,
      48.239332295716295
     ],
     [
-     10.838015254849582,
-     48.23699692985409
+     10.842491442601327,
+     48.23949373117146
     ],
     [
-     10.838529987523458,
-     48.235660016297935
+     10.840458244348525,
+     48.2402516228564
     ],
     [
-     10.838529987523458,
-     48.235660016297935
+     10.837116631010362,
+     48.24178433767072
     ],
     [
-     10.840293120856018,
-     48.233559092267505
+     10.833739478402721,
+     48.243334654481686
     ],
     [
-     10.840293120856018,
-     48.233559092267505
+     10.830301640816089,
+     48.24492512060885
     ],
     [
-     10.84238298077426,
-     48.23588481894106
+     10.826961284763371,
+     48.24644023342647
     ],
     [
-     10.843430467213865,
-     48.23734695813063
+     10.823451,
+     48.2480429
     ],
     [
-     10.843430467213865,
-     48.23734695813063
+     10.820886500000002,
+     48.24923699999998
     ],
     [
-     10.84241374235893,
-     48.23756228922317
+     10.817891227339318,
+     48.25062917335649
     ],
     [
-     10.842106461788573,
-     48.23763705579946
+     10.814833341423565,
+     48.252036997813526
     ],
     [
-     10.84200269382728,
-     48.23766228532803
+     10.812253223988707,
+     48.253684628520304
     ],
     [
-     10.841895237828595,
-     48.23769162198915
+     10.80990402798625,
+     48.2552122303737
     ],
     [
-     10.838379448542469,
-     48.23812806768737
+     10.807249479251197,
+     48.25688844337036
     ],
     [
-     10.839188469836786,
-     48.238540541142555
+     10.805233547718927,
+     48.25817095837493
     ],
     [
-     10.8355602792291,
-     48.23829159861831
+     10.80240222464596,
+     48.25996879278658
     ],
     [
-     10.8355602792291,
-     48.23829159861831
+     10.804542878897452,
+     48.2614056186286
     ],
     [
-     10.832883099355483,
-     48.23775473772003
+     10.806672469036727,
+     48.26283548749095
     ],
     [
-     10.828809578232182,
-     48.23708435310421
+     10.806837676348296,
+     48.26346086128673
     ],
     [
-     10.823681948965772,
-     48.236245240777514
+     10.807097180070542,
+     48.26404281682409
     ],
     [
-     10.821559734901285,
-     48.23355682915364
+     10.803481394679551,
+     48.265788264340934
     ],
     [
-     10.819079948847389,
-     48.23047924576541
+     10.804549919696116,
+     48.26753907627582
     ],
     [
-     10.816596893851283,
-     48.227325387058315
+     10.805759763600179,
+     48.26886685355754
     ],
     [
-     10.81402742143342,
-     48.224061473962564
+     10.807853227736786,
+     48.27126089274195
     ],
     [
-     10.81143288712511,
-     48.220765541996634
+     10.80938485290369,
+     48.273040873699884
     ],
     [
-     10.80887783158073,
-     48.2175615595086
+     10.81117003064159,
+     48.27510164841415
     ],
     [
-     10.80698603603446,
-     48.215115971619646
+     10.81198852348646,
+     48.277378592411225
     ],
     [
-     10.804843118669114,
-     48.21240735960912
+     10.812434230838617,
+     48.27856684503221
     ]
    ]
   },
@@ -418,10 +458,6 @@
      48.1124279347364
     ],
     [
-     10.648197921210881,
-     48.1124279347364
-    ],
-    [
      10.650917345876508,
      48.112024932831844
     ],
@@ -436,6 +472,46 @@
     [
      10.661141842824662,
      48.11047771732503
+    ],
+    [
+     10.648197921210881,
+     48.1124279347364
+    ],
+    [
+     10.644884051972214,
+     48.11011377508923
+    ],
+    [
+     10.641099455051318,
+     48.107496442004276
+    ],
+    [
+     10.640101924754616,
+     48.1050929312693
+    ],
+    [
+     10.63883332370932,
+     48.10205046805534
+    ],
+    [
+     10.637681147299078,
+     48.099275722828764
+    ],
+    [
+     10.636634247592722,
+     48.09675369198289
+    ],
+    [
+     10.635372771165095,
+     48.09372438835697
+    ],
+    [
+     10.63410869634751,
+     48.09068636755172
+    ],
+    [
+     10.633822831364581,
+     48.09
     ]
    ]
   },
@@ -475,12 +551,8 @@
      48.19231845227318
     ],
     [
-     10.733162591471798,
-     48.191963478673784
-    ],
-    [
-     10.734486345439988,
-     48.19214553361069
+     10.733207350834732,
+     48.192043777306154
     ],
     [
      10.734486345439988,
@@ -491,92 +563,108 @@
      48.19278456990868
     ],
     [
-     10.737361422047544,
-     48.19278456990868
+     10.741490347550807,
+     48.19368084681499
     ],
     [
-     10.735078778356296,
-     48.19089067888661
+     10.745262539255009,
+     48.19453504656741
     ],
     [
-     10.731888793646505,
-     48.18828264971415
+     10.7491677517626,
+     48.195372650151526
     ],
     [
-     10.728657318516042,
-     48.18562508349396
+     10.753004232664125,
+     48.19621184629729
     ],
     [
-     10.725717868892103,
-     48.18320388694326
+     10.756800731887552,
+     48.19704718676754
     ],
     [
-     10.722238959979935,
-     48.18032688249797
+     10.760250387957626,
+     48.1977969480064
     ],
     [
-     10.71968373679749,
-     48.17826795180243
+     10.763378598041013,
+     48.198480073115064
     ],
     [
-     10.716972358758936,
-     48.17580409136459
+     10.76679254720361,
+     48.199243999770275
     ],
     [
-     10.7142880542676,
-     48.173355737447594
+     10.770734137170935,
+     48.20010524032138
     ],
     [
-     10.711777087533932,
-     48.17109597635203
+     10.774593919763305,
+     48.200951225808666
     ],
     [
-     10.70949117490045,
-     48.16902472425882
+     10.778304420660163,
+     48.2017484286195
     ],
     [
-     10.706916589521654,
-     48.16686101977362
+     10.7817082,
+     48.20249249999999
     ],
     [
-     10.70438818842936,
-     48.16443932030872
+     10.7849674,
+     48.2032132
     ],
     [
-     10.70150766358475,
-     48.161863477644474
+     10.7877731,
+     48.2038443
     ],
     [
-     10.698644573098761,
-     48.15920658197652
+     10.7904193,
+     48.20441229999999
     ],
     [
-     10.69566589616798,
-     48.15655337434598
+     10.793788100000002,
+     48.20545179999998
     ],
     [
-     10.692012895126908,
-     48.15322718370963
+     10.797318348914132,
+     48.20664354389184
     ],
     [
-     10.689309982810528,
-     48.15080665771118
+     10.800739925608582,
+     48.20775666063332
     ],
     [
-     10.686535489041063,
-     48.1482872252553
+     10.804367948578204,
+     48.208932390191436
     ],
     [
-     10.68366275936643,
-     48.14569587607015
+     10.80780645671709,
+     48.21006143254893
     ],
     [
-     10.681514142306924,
-     48.14366636585474
+     10.811185285705363,
+     48.21115409744663
     ],
     [
-     10.678680388482007,
-     48.141008631996485
+     10.814658746380445,
+     48.21226989639709
+    ],
+    [
+     10.818032546226817,
+     48.21336247747574
+    ],
+    [
+     10.820838220676109,
+     48.21428566029129
+    ],
+    [
+     10.824261892846351,
+     48.21535829244041
+    ],
+    [
+     10.826850643641507,
+     48.21623059710368
     ]
    ]
   }
@@ -812,68 +900,68 @@
   },
   {
    "cell_id": "LINE_004#15",
-   "risk": 0.258,
-   "inspected": "none",
+   "risk": 0.122,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#16",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#17",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#18",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#19",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#20",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#21",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#22",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#23",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#24",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_004#25",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
@@ -1016,68 +1104,68 @@
   },
   {
    "cell_id": "LINE_015#01",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#02",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#03",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#04",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#05",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#06",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#07",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#08",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#09",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#10",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_015#11",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
@@ -1322,325 +1410,325 @@
   },
   {
    "cell_id": "LINE_024#00",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#01",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#02",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#03",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#04",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#05",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#06",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#07",
-   "risk": 0.258,
+   "risk": 0.406,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#08",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#09",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#10",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#11",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#12",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#13",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#14",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#15",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#16",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#17",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#18",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#19",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#20",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#21",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#22",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#23",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#24",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#25",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#26",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#27",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#28",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#29",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#30",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#31",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#32",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#33",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#34",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#35",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#36",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#37",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#38",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#39",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#40",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#41",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#42",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#43",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#44",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#45",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#46",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#47",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#48",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#49",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#50",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#51",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#52",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_024#53",
-   "risk": 0.1,
+   "risk": 0.28,
    "inspected": "none",
    "top_fault": null
   },
@@ -1712,68 +1800,68 @@
   },
   {
    "cell_id": "LINE_026#10",
-   "risk": 0.332,
-   "inspected": "none",
+   "risk": 0.183,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#11",
-   "risk": 0.332,
-   "inspected": "none",
+   "risk": 0.183,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#12",
-   "risk": 0.332,
-   "inspected": "none",
+   "risk": 0.183,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#13",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#14",
-   "risk": 0.19,
-   "inspected": "none",
-   "top_fault": null
+   "risk": 0.534,
+   "inspected": "air",
+   "top_fault": "broken_conductor"
   },
   {
    "cell_id": "LINE_026#15",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#16",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#17",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#18",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#19",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_026#20",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.095,
+   "inspected": "air",
    "top_fault": null
   },
   {
@@ -2150,68 +2238,68 @@
   },
   {
    "cell_id": "LINE_035#13",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#14",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#15",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#16",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#17",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#18",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#19",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#20",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#21",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#22",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#23",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
@@ -2654,68 +2742,68 @@
   },
   {
    "cell_id": "LINE_054#03",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#04",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#05",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#06",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#07",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#08",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#09",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#10",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#11",
-   "risk": 0.1,
-   "inspected": "none",
+   "risk": 0.048,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#12",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.107,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_054#13",
-   "risk": 0.19,
-   "inspected": "none",
+   "risk": 0.107,
+   "inspected": "air",
    "top_fault": null
   },
   {
@@ -3106,7 +3194,7 @@
   },
   {
    "segment_id": "LINE_004",
-   "p_live": 0.9
+   "p_live": 0.988
   },
   {
    "segment_id": "LINE_005",
@@ -3150,7 +3238,7 @@
   },
   {
    "segment_id": "LINE_015",
-   "p_live": 0.9
+   "p_live": 0.988
   },
   {
    "segment_id": "LINE_016",
@@ -3194,7 +3282,7 @@
   },
   {
    "segment_id": "LINE_026",
-   "p_live": 0.9
+   "p_live": 0.988
   },
   {
    "segment_id": "LINE_027",
@@ -3230,7 +3318,7 @@
   },
   {
    "segment_id": "LINE_035",
-   "p_live": 0.9
+   "p_live": 0.988
   },
   {
    "segment_id": "LINE_036",
@@ -3306,7 +3394,7 @@
   },
   {
    "segment_id": "LINE_054",
-   "p_live": 0.9
+   "p_live": 0.988
   },
   {
    "segment_id": "LINE_055",
@@ -3688,6 +3776,34 @@
     48.215061343060505
    ],
    "message": "D5 takes off from LINE_026"
+  },
+  {
+   "t": 168.0,
+   "type": "finding",
+   "drone_id": "D5",
+   "cell_id": "LINE_026#14",
+   "segment_id": "LINE_026",
+   "fault_type": "broken_conductor",
+   "confidence": 0.43,
+   "position": [
+    10.684623582437716,
+    48.20502906860134
+   ],
+   "message": "D5: possible broken_conductor on LINE_026 km 7.1 (RGB camera, from the air, confidence 43%)"
+  },
+  {
+   "t": 168.0,
+   "type": "recommendation",
+   "drone_id": null,
+   "cell_id": "LINE_026#14",
+   "segment_id": "LINE_026",
+   "fault_type": null,
+   "confidence": null,
+   "position": [
+    10.687398591018333,
+    48.20391491023704
+   ],
+   "message": "Needs confirmation: possible broken_conductor at LINE_026 km 7.1 (risk 53%)"
   }
  ]
 }
