@@ -15,6 +15,7 @@ Each file is a one-time snapshot of a live feed, not a historical archive. The s
 
 - The points are the operators' published map coordinates. A coordinate is not a verified survey of a damaged asset or a customer's exact location. Both feeds also provide affected postcode or area fields where available.
 - SSEN's feed includes planned and unplanned outages. Northern Powergrid's feed covers current, ongoing faults and is updated every five minutes. A snapshot can become stale as soon as the source changes.
+- In the captured Northern Powergrid response, some source `loggedtime` and `updatedate` values are later than the recorded retrieval time. The original values are preserved; verify their time basis before using them in chronology or duration calculations.
 - These datasets cover parts of Great Britain, not Germany. Do not match their points to `grid_segments` or use them as evidence about the fictional storm or the Bavaria network.
 - The snapshots have not been harmonized with the Bundesnetzagentur workbooks. Their fields, reporting scope, outage definitions, and time coverage differ.
 
