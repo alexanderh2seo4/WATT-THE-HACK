@@ -1,5 +1,10 @@
 import { useState, type ReactNode } from 'react'
 import MapGL, { NavigationControl, type ErrorEvent, type MapProps, type StyleSpecification } from 'react-map-gl/maplibre'
+import { setWorkerUrl } from 'maplibre-gl'
+import mapWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
+
+// Vite must emit the separate v6 worker; MapLibre's default relative URL is lost when bundled.
+setWorkerUrl(mapWorkerUrl)
 
 // Study area [west, south, east, north]
 export const STUDY_BOUNDS: [number, number, number, number] = [10.45, 48.09, 10.88, 48.38]
