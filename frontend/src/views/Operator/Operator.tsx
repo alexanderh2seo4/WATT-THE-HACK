@@ -1,102 +1,355 @@
-import type { ReactNode } from 'react'
-import { postSimControl, postStartPositions, putInputs } from '../../api'
-import { Map, NetworkLayer } from '../../components/Map'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
+import { MapProvider, Marker, Popup, useMap, type MapLayerMouseEvent } from 'react-map-gl/maplibre'
+import type { Feature, FeatureCollection, Position } from 'geojson'
+import {
+  postSimControl,
+  postStartPositions,
+  putInputs,
+  type FaultType,
+  type OperatorInputs,
+  type Report,
+  type SimEvent,
+  type State,
+  type Static,
+} from '../../api'
+import { Map } from '../../components/Map'
 import { Section, SidebarLayout } from '../../components/Sidebar'
 import { useStore } from '../../store'
+import { Drones } from './Drones'
+import { Legend } from './Legend'
+import { deadSegments, RiskLayers } from './RiskLayers'
 
-function Step({
-  n,
-  title,
-  active,
-  enabled,
-  children,
-}: {
-  n: number
-  title: string
-  active: boolean
-  enabled: boolean
-  children?: ReactNode
-}) {
+const MAP_ID = 'operator'
+
+export function Operator() {
   return (
-    <li className={`flex gap-3 ${enabled ? '' : 'opacity-40'}`}>
-      <span
-        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-          active ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-500'
-        }`}
-      >
-        {n}
-      </span>
-      <div className="flex-1 pb-4">
-        <div className={`text-sm font-medium ${active ? 'text-slate-900' : 'text-slate-500'}`}>{title}</div>
-        {active && <div className="mt-2 space-y-2">{children}</div>}
-      </div>
-    </li>
+    <MapProvider>
+      <OperatorPage />
+    </MapProvider>
   )
 }
 
-const btn =
-  'w-full rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-700 disabled:opacity-40'
-
-export function Operator() {
+function OperatorPage() {
   const { staticData, state } = useStore()
-  const inputs = state?.inputs
-  const hasInputs = !!inputs && inputs.reports.length > 0
-  const hasStarts = (state?.start_positions.length ?? 0) > 0
-  const live = !!state && state.status !== 'setup'
-  const step = live ? 3 : hasStarts ? 3 : hasInputs ? 2 : 1
+  const [showVegetation, setShowVegetation] = useState(true)
+  const [hover, setHover] = useState<{ id: string; lngLat: [number, number] } | null>(null)
+  const setup = !state || state.status === 'setup'
+
+  // map handlers can fire with an older closure; always toggle against the latest snapshot
+  const stateRef = useRef(state)
+  stateRef.current = state
+  const toggleDead = (segmentId: string) => {
+    const inputs = stateRef.current?.inputs
+    if (!inputs) return
+    const dead = inputs.known_dead_segments
+    const next = dead.includes(segmentId) ? dead.filter((s) => s !== segmentId) : [...dead, segmentId]
+    putInputs({ ...inputs, known_dead_segments: next })
+  }
+
+  const onClick = (e: MapLayerMouseEvent) => {
+    const id = e.features?.[0]?.properties?.segment_id as string | undefined
+    if (id && setup) toggleDead(id)
+  }
+  const onMove = (e: MapLayerMouseEvent) => {
+    const id = e.features?.[0]?.properties?.segment_id as string | undefined
+    setHover(id ? { id, lngLat: [e.lngLat.lng, e.lngLat.lat] } : null)
+  }
 
   return (
     <SidebarLayout
       sidebar={
         <>
-          <Section title="Workflow">
-            <ol>
-              <Step n={1} title="Inputs" active={step === 1} enabled>
-                <button
-                  className={btn}
-                  disabled={!staticData}
-                  onClick={() => staticData && putInputs(staticData.default_inputs)}
-                >
-                  Load default reports
-                </button>
-                <p className="text-xs text-slate-500">Upload & known-dead chips: TODO</p>
-              </Step>
-              <Step n={2} title="Find start positions" active={step === 2} enabled={hasInputs}>
-                <button className={btn} onClick={() => postStartPositions()}>
-                  Find start positions
-                </button>
-              </Step>
-              <Step n={3} title="Run" active={step === 3} enabled={hasStarts || live}>
-                {!live && (
-                  <button className={btn} onClick={() => postSimControl({ action: 'start' })}>
-                    Start mission
-                  </button>
-                )}
-                {live && <p className="text-xs text-slate-500">{state.drones.length} drones in the air</p>}
-              </Step>
-            </ol>
-          </Section>
-
-          <Section title="Log">
-            <ul className="space-y-1.5 text-sm">
-              {(state?.events ?? [])
-                .slice()
-                .reverse()
-                .map((e, i) => (
-                  <li key={i} className="flex gap-2">
-                    <span className="font-mono text-xs text-slate-400">{Math.round(e.t / 60)}′</span>
-                    <span>{e.message}</span>
-                  </li>
-                ))}
-              {!state?.events.length && <li className="text-slate-400">No events yet</li>}
-            </ul>
-          </Section>
+          <Stepper staticData={staticData} state={state} onRemoveDead={toggleDead} />
+          {state && !setup && <Stats state={state} />}
+          <Log state={state} staticData={staticData} />
         </>
       }
     >
-      <Map>
-        <NetworkLayer />
+      <Map
+        id={MAP_ID}
+        interactiveLayerIds={['segments-hit']}
+        onClick={onClick}
+        onMouseMove={onMove}
+        onMouseLeave={() => setHover(null)}
+        cursor={hover && setup ? 'pointer' : 'grab'}
+      >
+        {staticData && <RiskLayers staticData={staticData} state={state} showVegetation={showVegetation} />}
+        {setup && state?.start_positions.map((sp, i) => (
+          <Marker key={sp.drone_id} longitude={sp.position[0]} latitude={sp.position[1]}>
+            <div className="group relative" onMouseEnter={() => setHover(null)}>
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white shadow-md ring-2 ring-white">
+                {i + 1}
+              </div>
+              <div className="pointer-events-none absolute bottom-9 left-1/2 hidden w-56 -translate-x-1/2 rounded-lg bg-slate-900 px-2.5 py-1.5 text-xs text-white shadow-lg group-hover:block">
+                <span className="font-semibold">{sp.drone_id}</span> · {sp.segment_id}
+                <div className="text-slate-300">{sp.reason}</div>
+              </div>
+            </div>
+          </Marker>
+        ))}
+        <Drones state={state} />
+        {hover && (
+          <Popup longitude={hover.lngLat[0]} latitude={hover.lngLat[1]} closeButton={false} offset={12} className="pointer-events-none text-xs">
+            <span className="font-medium">{hover.id}</span>
+            {setup && (
+              <span className="text-slate-500">
+                {' '}
+                · click to {state?.inputs.known_dead_segments.includes(hover.id) ? 'unmark' : 'mark'} dead
+              </span>
+            )}
+          </Popup>
+        )}
       </Map>
+      <Legend showVegetation={showVegetation} onToggleVegetation={() => setShowVegetation((v) => !v)} />
     </SidebarLayout>
   )
+}
+
+// ---------- stepper ----------
+
+const btn =
+  'w-full rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:opacity-40'
+const btnGhost =
+  'flex-1 cursor-pointer rounded-lg border border-slate-200 px-3 py-1.5 text-center text-sm text-slate-700 transition hover:bg-slate-50'
+
+function Step({
+  n,
+  title,
+  state,
+  summary,
+  children,
+}: {
+  n: number
+  title: string
+  state: 'done' | 'active' | 'todo'
+  summary?: string
+  children?: ReactNode
+}) {
+  return (
+    <li className={`flex gap-3 ${state === 'todo' ? 'opacity-40' : ''}`}>
+      <span
+        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+          state === 'active' ? 'bg-slate-900 text-white' : state === 'done' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
+        }`}
+      >
+        {state === 'done' ? '✓' : n}
+      </span>
+      <div className="min-w-0 flex-1 pb-4">
+        <div className="flex items-baseline justify-between gap-2">
+          <span className={`text-sm font-medium ${state === 'active' ? 'text-slate-900' : 'text-slate-500'}`}>{title}</span>
+          {summary && <span className="truncate text-xs text-slate-400">{summary}</span>}
+        </div>
+        {children && <div className="mt-2 space-y-2">{children}</div>}
+      </div>
+    </li>
+  )
+}
+
+function parseReports(fc: FeatureCollection, offset: number): Report[] {
+  return fc.features
+    .filter((f) => f.geometry?.type === 'Polygon')
+    .map((f, i) => {
+      const p = f.properties ?? {}
+      const types = Array.isArray(p.fault_types) ? p.fault_types : String(p.fault_types ?? '').split(/[,;\s]+/)
+      return {
+        report_id: String(p.report_id ?? `upload_${offset + i + 1}`),
+        polygon: f.geometry as Report['polygon'],
+        fault_types: types.filter(Boolean) as FaultType[],
+        confidence: Number(p.confidence ?? 0.5),
+        text: String(p.text ?? ''),
+      }
+    })
+}
+
+function Stepper({
+  staticData,
+  state,
+  onRemoveDead,
+}: {
+  staticData: Static | null
+  state: State | null
+  onRemoveDead: (id: string) => void
+}) {
+  // start positions computed for an older version of the inputs need a recompute
+  const [startsFor, setStartsFor] = useState<string | null>(null)
+  const inputs = state?.inputs
+  const inputsKey = JSON.stringify(inputs ?? null)
+  const live = !!state && state.status !== 'setup'
+  const hasInputs = !!inputs && inputs.reports.length + inputs.known_dead_segments.length > 0
+  const anyStarts = (state?.start_positions.length ?? 0) > 0
+  // first time we see start positions (e.g. page reload) we assume they match the current inputs
+  useEffect(() => {
+    if (startsFor === null && anyStarts) setStartsFor(inputsKey)
+  }, [startsFor, anyStarts, inputsKey])
+  const hasStarts = anyStarts && (startsFor === null || startsFor === inputsKey)
+  const [error, setError] = useState<string | null>(null)
+
+  const save = (next: OperatorInputs) => putInputs(next).catch((e) => setError(String(e)))
+
+  const onUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file || !inputs) return
+    try {
+      const reports = parseReports(JSON.parse(await file.text()), inputs.reports.length)
+      if (!reports.length) throw new Error('no polygons found')
+      setError(null)
+      save({ ...inputs, reports: [...inputs.reports, ...reports] })
+    } catch (err) {
+      setError(`Could not read ${file.name}: ${(err as Error).message}`)
+    }
+  }
+
+  const findStarts = async () => {
+    await postStartPositions()
+    setStartsFor(inputsKey)
+  }
+
+  const step1 = live || hasStarts ? 'done' : 'active'
+  const step2 = live || hasStarts ? 'done' : hasInputs ? 'active' : 'todo'
+  const step3 = live ? 'active' : hasStarts ? 'active' : 'todo'
+  const dead = inputs?.known_dead_segments ?? []
+  const nReports = inputs?.reports.length ?? 0
+
+  return (
+    <Section title="Mission">
+      <ol>
+        <Step n={1} title="Inputs" state={step1} summary={`${nReports} reports · ${dead.length} dead`}>
+          {!live && (
+            <>
+              <div className="flex gap-2">
+                <button className={btnGhost} disabled={!staticData} onClick={() => staticData && save(staticData.default_inputs)}>
+                  Load defaults
+                </button>
+                <label className={btnGhost}>
+                  Upload reports
+                  <input type="file" accept=".geojson,.json,application/geo+json" className="hidden" onChange={onUpload} />
+                </label>
+              </div>
+              <div>
+                <div className="mb-1 text-xs text-slate-500">Known dead lines · click a line on the map</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {dead.map((s) => (
+                    <span key={s} className="flex items-center gap-1 rounded-full bg-slate-100 py-0.5 pl-2 pr-1 text-xs text-slate-700">
+                      {s}
+                      <button
+                        onClick={() => onRemoveDead(s)}
+                        className="flex h-4 w-4 items-center justify-center rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-700"
+                        title="Remove"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                  {!dead.length && <span className="text-xs text-slate-400">none</span>}
+                </div>
+              </div>
+              {error && <p className="text-xs text-rose-600">{error}</p>}
+            </>
+          )}
+        </Step>
+        <Step n={2} title="Find start positions" state={step2} summary={hasStarts || live ? `${state?.start_positions.length} drones` : undefined}>
+          {!live && hasInputs && (
+            <button className={hasStarts ? btnGhost + ' w-full' : btn} onClick={findStarts}>
+              {hasStarts ? 'Recompute' : 'Find start positions'}
+            </button>
+          )}
+          {!live && hasStarts && <p className="text-xs text-slate-400">Hover a marker to see why it was chosen.</p>}
+        </Step>
+        <Step n={3} title="Run" state={step3} summary={live ? state?.status : undefined}>
+          {!live && hasStarts && (
+            <button className={btn} onClick={() => postSimControl({ action: 'start' })}>
+              Start mission
+            </button>
+          )}
+        </Step>
+      </ol>
+    </Section>
+  )
+}
+
+// ---------- stats + log ----------
+
+function Stats({ state }: { state: State }) {
+  const inspected = state.cells.filter((c) => c.inspected !== 'none').length
+  const pct = state.cells.length ? Math.round((100 * inspected) / state.cells.length) : 0
+  const findings = state.events.filter((e) => e.type === 'finding').length
+  const flying = state.drones.filter((d) => d.status === 'flying').length
+  const dead = deadSegments(state).length
+  const item = (v: ReactNode, label: string) => (
+    <div className="flex-1">
+      <div className="text-base font-semibold tabular-nums text-slate-900">{v}</div>
+      <div className="text-[11px] text-slate-400">{label}</div>
+    </div>
+  )
+  return (
+    <div className="flex gap-2 rounded-xl bg-slate-50 px-3 py-2">
+      {item(`${pct}%`, 'checked')}
+      {item(findings, 'findings')}
+      {item(`${flying}/${state.drones.length}`, 'flying')}
+      {item(dead, 'dead lines')}
+    </div>
+  )
+}
+
+const EVENT_STYLE: Partial<Record<SimEvent['type'], string>> = {
+  finding: 'bg-amber-50 text-amber-900 ring-1 ring-amber-200',
+  recommendation: 'bg-rose-50 text-rose-900 ring-1 ring-rose-200 font-medium',
+  line_dead: 'bg-slate-100 text-slate-800',
+  stranded: 'bg-slate-100 text-slate-800',
+}
+
+function coordsOf(f: Feature | undefined): Position[] {
+  const g = f?.geometry
+  if (!g) return []
+  if (g.type === 'LineString') return g.coordinates
+  if (g.type === 'MultiLineString') return g.coordinates.flat()
+  return []
+}
+
+function Log({ state, staticData }: { state: State | null; staticData: Static | null }) {
+  const { [MAP_ID]: map } = useMap()
+  const index = useMemo(() => {
+    const m = new globalThis.Map<string, Feature>()
+    for (const f of staticData?.cells.features ?? []) m.set(f.properties?.cell_id, f)
+    for (const f of staticData?.segments.features ?? []) m.set(f.properties?.segment_id, f)
+    return m
+  }, [staticData])
+
+  const flyTo = (e: SimEvent) => {
+    if (!map) return
+    if (e.position) return map.flyTo({ center: e.position, zoom: Math.max(map.getZoom(), 13) })
+    const coords = coordsOf(index.get(e.cell_id ?? '') ?? index.get(e.segment_id ?? ''))
+    if (!coords.length) return
+    const lons = coords.map((c) => c[0])
+    const lats = coords.map((c) => c[1])
+    map.fitBounds([Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats)], { padding: 80, maxZoom: 14 })
+  }
+
+  const events = (state?.events ?? []).slice(-300).reverse()
+  return (
+    <Section title="Log">
+      <ul className="space-y-1">
+        {events.map((e, i) => (
+          <li key={events.length - i}>
+            <button
+              onClick={() => flyTo(e)}
+              className={`flex w-full gap-2 rounded-md px-2 py-1 text-left text-[13px] leading-snug transition hover:brightness-95 ${
+                EVENT_STYLE[e.type] ?? 'text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              <span className="w-9 shrink-0 font-mono text-[11px] leading-5 text-slate-400">{formatT(e.t)}</span>
+              <span className="min-w-0">{e.message}</span>
+            </button>
+          </li>
+        ))}
+        {!events.length && <li className="px-2 text-sm text-slate-400">No events yet</li>}
+      </ul>
+    </Section>
+  )
+}
+
+function formatT(t: number) {
+  const m = Math.floor(t / 60)
+  return `${Math.floor(m / 60)}:${String(m % 60).padStart(2, '0')}`
 }
