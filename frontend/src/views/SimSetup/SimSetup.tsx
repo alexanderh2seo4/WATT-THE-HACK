@@ -423,7 +423,7 @@ function Collapsible({ title, children }: { title: string; children: ReactNode }
 
 function SetupLegend() {
   const line = (color: string) => (
-    <span className="block w-6" style={{ borderTopWidth: 3, borderTopStyle: 'dashed', borderColor: color }} />
+    <span className="block w-6" style={{ borderTopWidth: 4, borderTopStyle: 'dashed', borderColor: color }} />
   )
   return (
     <div className="absolute bottom-3 left-3 space-y-1.5 rounded-xl bg-white/95 p-3 text-xs text-slate-600 shadow-sm ring-1 ring-slate-200">

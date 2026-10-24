@@ -6,15 +6,16 @@ import { Layer, Source, useMap } from 'react-map-gl/maplibre'
 import type { ExpressionSpecification } from 'maplibre-gl'
 import type { FeatureCollection, LineString, Polygon } from 'geojson'
 import type { LonLat, State, Static } from '../../api'
+import { DEAD_COLOR } from '../../components/Map'
 
 export const RISK_STOPS: [number, string][] = [
-  [0, '#e7e5e4'],
-  [0.1, '#fde68a'],
-  [0.35, '#fbbf24'],
-  [0.6, '#f97316'],
+  [0, '#e9d27c'],
+  [0.1, '#f1c232'],
+  [0.35, '#f59e0b'],
+  [0.6, '#ea580c'],
   [0.85, '#dc2626'],
 ]
-export const CLEAR_COLOR = '#9cb8a6'
+export const CLEAR_COLOR = '#6b9a7f'
 /** Inspected cells below this risk are drawn "calm grey-green". */
 const CLEAR_BELOW = 0.3
 
@@ -25,7 +26,12 @@ const cellColor: ExpressionSpecification = [
   CLEAR_COLOR,
   ['interpolate', ['linear'], risk, ...RISK_STOPS.flat()],
 ]
-const cellWidth: ExpressionSpecification = ['interpolate', ['linear'], risk, 0, 2, 1, 5.5]
+/** px by risk (low..high), growing with zoom: ~2.2..6 at the default view, up to 4..9 zoomed in */
+const byRisk = (lo: number, hi: number): ExpressionSpecification => ['interpolate', ['linear'], risk, 0, lo, 1, hi]
+const cellWidth: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 8, byRisk(1.75, 5), 10, byRisk(2.5, 6.5), 13, byRisk(4, 9)]
+const deadWidth: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 8, 2.5, 10, 3.5, 13, 5]
+const routeWidth: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 8, 2, 10, 2.75, 13, 4]
+const nodeRadius: ExpressionSpecification = ['interpolate', ['linear'], ['zoom'], 8, 2.5, 10, 3, 13, 4.5]
 
 /** Dead = backend says p_live == 0, or operator marked it known dead. */
 export function deadSegments(state: State | null): string[] {
@@ -139,7 +145,7 @@ export function RiskLayers({
           id="reports-hover-line"
           type="line"
           filter={hoverFilter}
-          paint={{ 'line-color': '#6366f1', 'line-width': 2, 'line-opacity': 0.7 }}
+          paint={{ 'line-color': '#6366f1', 'line-width': 2.5, 'line-opacity': 0.85 }}
         />
       </Source>
 
@@ -160,7 +166,7 @@ export function RiskLayers({
           id="cells-dead"
           type="line"
           filter={deadFilter as ExpressionSpecification}
-          paint={{ 'line-color': cellColor, 'line-width': cellWidth, 'line-dasharray': [1.2, 1.2] }}
+          paint={{ 'line-color': DEAD_COLOR, 'line-width': deadWidth, 'line-dasharray': [1.5, 1.2] }}
         />
       </Source>
 
@@ -168,7 +174,7 @@ export function RiskLayers({
         <Layer
           id="nodes-circle"
           type="circle"
-          paint={{ 'circle-radius': 2.5, 'circle-color': '#ffffff', 'circle-stroke-color': '#94a3b8', 'circle-stroke-width': 1 }}
+          paint={{ 'circle-radius': nodeRadius, 'circle-color': '#ffffff', 'circle-stroke-color': '#94a3b8', 'circle-stroke-width': 1 }}
         />
       </Source>
 
@@ -177,7 +183,7 @@ export function RiskLayers({
           id="routes-line"
           type="line"
           layout={{ 'line-cap': 'round' }}
-          paint={{ 'line-color': '#334155', 'line-width': 1.5, 'line-opacity': 0.6, 'line-dasharray': [0.1, 2.5] }}
+          paint={{ 'line-color': '#1e293b', 'line-width': routeWidth, 'line-opacity': 0.85, 'line-dasharray': [0.1, 2.2] }}
         />
       </Source>
     </>

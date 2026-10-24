@@ -6,6 +6,10 @@ import { useStore } from '../../store'
 export const DEAD_COLOR = '#94a3b8'
 export const HIDDEN_DEAD_COLOR = '#c026d3'
 
+/** zoom-interpolated line width: px at zoom 8 / 10 (about the default view) / 13 */
+const zw = (z8: number, z10: number, z13: number): ExpressionSpecification =>
+  ['interpolate', ['linear'], ['zoom'], 8, z8, 10, z10, 13, z13]
+
 const inList = (ids: string[]): ExpressionSpecification => ['in', ['get', 'segment_id'], ['literal', ids]]
 
 /** Base grid layer: storm footprint, line segments and nodes from /api/static.
@@ -45,19 +49,19 @@ export function NetworkLayer({ dead = [], hiddenDead = [] }: { dead?: string[]; 
           type="line"
           filter={filters.alive}
           layout={{ 'line-cap': 'round', 'line-join': 'round' }}
-          paint={{ 'line-color': '#475569', 'line-width': 2 }}
+          paint={{ 'line-color': '#334155', 'line-width': zw(2, 2.75, 4.5) }}
         />
         <Layer
           id="segments-dead"
           type="line"
           filter={filters.dead}
-          paint={{ 'line-color': DEAD_COLOR, 'line-width': 2.5, 'line-dasharray': [1.5, 1.5] }}
+          paint={{ 'line-color': DEAD_COLOR, 'line-width': zw(2.5, 3.5, 5), 'line-dasharray': [1.5, 1.5] }}
         />
         <Layer
           id="segments-hidden-dead"
           type="line"
           filter={filters.hidden}
-          paint={{ 'line-color': HIDDEN_DEAD_COLOR, 'line-width': 3, 'line-dasharray': [1.5, 1.2] }}
+          paint={{ 'line-color': HIDDEN_DEAD_COLOR, 'line-width': zw(3, 4, 6), 'line-dasharray': [1.5, 1.2] }}
         />
       </Source>
       <Source id="nodes" type="geojson" data={staticData.nodes}>
@@ -65,7 +69,7 @@ export function NetworkLayer({ dead = [], hiddenDead = [] }: { dead?: string[]; 
           id="nodes-circle"
           type="circle"
           paint={{
-            'circle-radius': 3,
+            'circle-radius': zw(2.5, 3.25, 4.5),
             'circle-color': '#ffffff',
             'circle-stroke-color': '#475569',
             'circle-stroke-width': 1.5,
