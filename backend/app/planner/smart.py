@@ -17,6 +17,7 @@ from app.models import (CellState, DroneParams, DroneState, Event, FaultType, Ob
 from app.planner import Planner
 from app.planner import missions, start_positions
 from app.planner.missions import Network
+from app.planner.recommend import CONFIRM_CONF
 from app.planner.risk import (ALL_TYPES, DEAD_LINE_MIN, DEAD_LINE_P, NEIGHBOUR_P, prior, report_cells,
                               update_finding, update_live, update_no_finding, vegetation_shares)
 
@@ -30,7 +31,7 @@ CONFIRM_TAKEOFF_MIN = 10  # ... but go earlier for a landing that confirms / che
 TARGET_RATE = 0.02  # while charging: worth a short hop (e.g. galloping / sag check in a report area)
 CONFIRM_RATE = 0.04  # when charged: worth forcing the flight to end there (uncertain finding to confirm)
 MIN_FLIGHT_VALUE = 0.03
-CREW = 0.8  # above this a fault is confirmed: no more value in looking again
+CREW = 0.8  # above this (and confirmed) a fault is known: no more value in looking again
 CLEAR_TOP = 0.1  # a finding whose belief dropped below this is no longer shown as top fault
 INSPECTED_RANK = {"none": 0, "air": 1, "landed": 2}
 N_NET: dict[int, Network] = {}  # Network is pure geometry: build once per Static
@@ -91,8 +92,13 @@ class SmartPlanner(Planner):
         self.P = np.array([[pr[cid][t] for t in ALL_TYPES] for cid in self.net.cell_ids])
         self.inspected = ["none"] * self.n
         self.detected: list[set[int]] = [set() for _ in range(self.n)]
+        # confirmed = two detections of the type, or one confident landed detection (PLAN.md §4.5: crew only
+        # after a confirmed finding). Unconfirmed detections keep their value, so a second look is scheduled.
+        self.n_det = np.zeros((self.n, len(ALL_TYPES)), int)
+        self.confirmed = np.zeros((self.n, len(ALL_TYPES)), bool)
         self.claim_cells: dict[str, set[int]] = {}
         self.claim_land: dict[str, int] = {}
+        self.home: dict[str, int] = {}  # drone_id -> cell of its last / planned landing (where it charges)
         self.first_plans: dict = {}  # drone_id -> FlightPlan from start_positions
         self._cache = None
 
@@ -100,8 +106,29 @@ class SmartPlanner(Planner):
         if event.type in ("landing", "stranded") and event.drone_id:
             self.claim_cells.pop(event.drone_id, None)
             self.claim_land.pop(event.drone_id, None)
+            if event.type == "stranded":
+                self.home.pop(event.drone_id, None)
         if event.type == "line_dead" and event.segment_id and event.segment_id not in self.dead:
             self._mark_dead(event.segment_id)
+        if event.type == "recommendation" and event.message.startswith("Area of "):
+            self._explain_away(event.message.split()[2])
+
+    def _explain_away(self, rid: str) -> None:
+        """A report area was searched without finding anything: the report is most likely a false alarm.
+        Cell-wise Bayes treats the cells independently, which keeps ~1/(1-pd) of the report's evidence in
+        every cell; instead drop that report's contribution (inspected cells: prior without the report,
+        after one air pass). Stops drones re-flying a cleared area just because its prior was high."""
+        reports = [r for r in self.inputs.reports if r.report_id != rid]
+        if len(reports) == len(self.inputs.reports):
+            return
+        pr = prior(self.net.cell_ids, self.cell_seg_of, self.report_cells, reports, self.veg, self.in_storm,
+                   set(self.inputs.known_dead_segments), self.neighbours)
+        for cid in self.report_cells.get(rid, []):
+            i = self.net.cell_idx[cid]
+            if self.inspected[i] != "none":
+                p0 = np.array([pr[cid][t] for t in ALL_TYPES]) * (1 - self.pd_air)
+                self.P[i] = np.minimum(self.P[i], p0)
+        self._cache = None
 
     def _mark_dead(self, sid: str) -> None:
         """Dead line: no charging there for anyone; its cells and (modestly) its neighbours get riskier."""
@@ -131,6 +158,9 @@ class SmartPlanner(Planner):
             if t in det:
                 self.P[i, k] = update_finding(self.P[i, k], pd[k], self.pfp[k], det[t])
                 self.detected[i].add(k)
+                self.n_det[i, k] += 1
+                if self.n_det[i, k] >= 2 or (obs.mode == "landed" and det[t] >= CONFIRM_CONF):
+                    self.confirmed[i, k] = True
             elif pd[k] > 0:
                 self.P[i, k] = update_no_finding(self.P[i, k], pd[k])
         sid = obs.segment_id
@@ -149,7 +179,7 @@ class SmartPlanner(Planner):
 
     def _values(self):
         P = self.P
-        open_ = P < CREW
+        open_ = (P < CREW) | ((self.n_det > 0) & ~self.confirmed)
         air = (P * self.pd_air * open_).sum(axis=1)
         land = (P * self.pd_land * open_).sum(axis=1)
         after = P * (1 - self.pd_air) / (1 - P * self.pd_air)  # belief after an air pass without finding
@@ -199,11 +229,15 @@ class SmartPlanner(Planner):
         if first and drone.position == first.route[0].position and drone.battery_min >= p.max_flight_min - 0.1:
             return self._take(drone, first)
         air, land, land_after, p_live_cell, landable = self._values()
-        others_land = [c for d, c in self.claim_land.items() if d != drone.drone_id]
-        landable[others_land] = False
+        hop_ok = landable.copy()  # emergency hop off a dead line: any free landable cell
+        hop_ok[[c for d, c in self.claim_land.items() if d != drone.drone_id]] = False
+        # one drone per landing line (spreads the risk of landing on a line that turns out dead)
+        for d, c in list(self.claim_land.items()) + list(self.home.items()):
+            if d != drone.drone_id:
+                landable[self.net.seg_cells[self.net.cell_seg[c]]] = False
         if drone.status != "charging" and not self._landable(drone.segment_id):
             # landed on a dead line: hop to a live one using the reserve
-            plan = missions.hop(self.net, drone.position, (drone.battery_min - p.landing_min) * 60 - 5, landable,
+            plan = missions.hop(self.net, drone.position, (drone.battery_min - p.landing_min) * 60 - 5, hop_ok,
                                 land, p_live_cell, p.speed_transit_mps)
             return self._take(drone, plan)
         if drone.battery_min < p.landing_min + RESERVE_MIN + 2:
@@ -242,6 +276,7 @@ class SmartPlanner(Planner):
             return None
         self.claim_cells[drone.drone_id] = plan.cells
         self.claim_land[drone.drone_id] = plan.land_cell
+        self.home[drone.drone_id] = plan.land_cell
         return plan.route
 
     # ---------- output ----------

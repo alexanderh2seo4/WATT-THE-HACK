@@ -1,6 +1,6 @@
-"""Compare planners on the default scenario over several seeds (4 h sim each).
+"""Compare planners on a scenario over several seeds.
 
-Run from backend/:  uv run python scripts/compare_planners.py [hours] [seeds...]
+Run from backend/:  [SCENARIO=demo|default] uv run python scripts/compare_planners.py [hours] [seeds...]
 Metrics per fault: first finding event of the right type on the fault's cell.
 """
 
@@ -18,7 +18,7 @@ from app.sim.engine import Engine  # noqa: E402
 
 
 def run(planner: str, seed: int, hours: float) -> dict:
-    cfg = load_default_config().model_copy(update={"seed": seed})
+    cfg = load_default_config(os.environ.get("SCENARIO", "demo")).model_copy(update={"seed": seed})
     eng = Engine(load_static(), cfg, PLANNERS[planner])
     t0 = time.perf_counter()
     eng.plan_start_positions()
@@ -52,7 +52,7 @@ def main() -> None:
         times = [v / 60 for r in res for v in r["first"].values() if v is not None]
         per_fault = {fid: [r["first"][fid] for r in res] for fid in faults}
         rows.append((name, found, times, per_fault, res, faults))
-    print(f"\n{hours:g} h sim, seeds {seeds}\n")
+    print(f"\n{os.environ.get('SCENARIO', 'demo')}, {hours:g} h sim, seeds {seeds}\n")
     fids = list(rows[0][5])
     head = "| planner | faults found (of 4) | mean time to detection | " + " | ".join(
         f"{fid} {rows[0][5][fid]}" for fid in fids) + " | cells inspected | landings | stranded | false crew calls | compute |"

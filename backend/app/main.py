@@ -14,8 +14,11 @@ from app.planner import PLANNERS
 from app.sim.engine import Engine
 
 
-def load_default_config() -> SimConfig:
-    return SimConfig.model_validate_json((SCENARIOS / "default.json").read_text())
+DEFAULT_SCENARIO = "demo"  # scripted demo story (backend/README.md "Demo script"); "default" stays as a preset
+
+
+def load_default_config(name: str = DEFAULT_SCENARIO) -> SimConfig:
+    return SimConfig.model_validate_json((SCENARIOS / f"{name}.json").read_text())
 
 
 def make_engine() -> Engine:

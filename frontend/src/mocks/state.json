@@ -460,130 +460,170 @@
   {
    "drone_id": "D4",
    "position": [
-    10.776990381233245,
-    48.201466106649036
+    10.51547205258618,
+    48.24300062693397
    ],
-   "heading": 252.1,
+   "heading": 108.4,
    "status": "flying",
    "battery_min": 22.02,
    "max_flight_min": 30.0,
-   "segment_id": "LINE_036",
+   "segment_id": "LINE_064",
    "route": [
     [
-     10.776990381233245,
-     48.201466106649036
+     10.51547205258618,
+     48.24300062693397
     ],
     [
-     10.774593919763305,
-     48.200951225808666
+     10.516267854907197,
+     48.24282453185452
     ],
     [
-     10.770734137170935,
-     48.20010524032138
+     10.518998092227887,
+     48.2422307578337
     ],
     [
-     10.76679254720361,
-     48.199243999770275
+     10.520729877242587,
+     48.240306691960214
     ],
     [
-     10.763378598041013,
-     48.198480073115064
+     10.522205427477248,
+     48.23864296799932
     ],
     [
-     10.760250387957626,
-     48.1977969480064
+     10.523864541391418,
+     48.23678587353217
     ],
     [
-     10.756800731887552,
-     48.19704718676754
+     10.525649886767383,
+     48.234795925899775
     ],
     [
-     10.753004232664125,
-     48.19621184629729
+     10.527362141947663,
+     48.23287085419792
     ],
     [
-     10.7491677517626,
-     48.195372650151526
+     10.529087137620763,
+     48.23093354491743
     ],
     [
-     10.745262539255009,
-     48.19453504656741
+     10.530880194347645,
+     48.22892742021188
     ],
     [
-     10.741490347550807,
-     48.19368084681499
+     10.532030275282068,
+     48.22761422744167
     ],
     [
-     10.737361422047544,
-     48.19278456990868
+     10.533562151906068,
+     48.22591303637358
     ],
     [
-     10.735078778356296,
-     48.19089067888661
+     10.53528957833109,
+     48.22397245815086
     ],
     [
-     10.731888793646505,
-     48.18828264971415
+     10.536970820469634,
+     48.22209273254515
     ],
     [
-     10.728657318516042,
-     48.18562508349396
+     10.53833673541081,
+     48.22056689089147
     ],
     [
-     10.725717868892103,
-     48.18320388694326
+     10.540070783539335,
+     48.21861885277491
     ],
     [
-     10.722238959979935,
-     48.18032688249797
+     10.541935756995457,
+     48.216530082504036
     ],
     [
-     10.71968373679749,
-     48.17826795180243
+     10.543753372698632,
+     48.21451012765827
     ],
     [
-     10.716972358758936,
-     48.17580409136459
+     10.545585489094291,
+     48.2124476765634
     ],
     [
-     10.7142880542676,
-     48.173355737447594
+     10.547234460905601,
+     48.21058798370628
     ],
     [
-     10.711777087533932,
-     48.17109597635203
+     10.548562824920538,
+     48.20910103408332
     ],
     [
-     10.70949117490045,
-     48.16902472425882
+     10.552124547036072,
+     48.20878159975337
     ],
     [
-     10.706916589521654,
-     48.16686101977362
+     10.555199196758167,
+     48.20851824035565
     ],
     [
-     10.70438818842936,
-     48.16443932030872
+     10.558373255851931,
+     48.208236273132904
     ],
     [
-     10.70150766358475,
-     48.161863477644474
+     10.561145821783668,
+     48.20799135392217
     ],
     [
-     10.698644573098761,
-     48.15920658197652
+     10.563717976410516,
+     48.207762360327486
     ],
     [
-     10.695876010760234,
-     48.156740530473485
+     10.567209541996478,
+     48.20745885161354
     ],
     [
-     10.693859644099291,
-     48.15490871598147
+     10.569932487061436,
+     48.207217788078275
     ],
     [
-     10.693859644099291,
-     48.15490871598147
+     10.57355522943206,
+     48.206899862490914
+    ],
+    [
+     10.577174367584322,
+     48.20657355500037
+    ],
+    [
+     10.579985154994517,
+     48.2070279379714
+    ],
+    [
+     10.583501531013866,
+     48.20759832648235
+    ],
+    [
+     10.587022684718022,
+     48.20818371859998
+    ],
+    [
+     10.590543754603175,
+     48.20875678931998
+    ],
+    [
+     10.593698535319618,
+     48.209269594156126
+    ],
+    [
+     10.59630656449204,
+     48.20969715503703
+    ],
+    [
+     10.599216845092911,
+     48.21015564514061
+    ],
+    [
+     10.599219443482895,
+     48.210405635402765
+    ],
+    [
+     10.599219443482895,
+     48.210405635402765
     ]
    ]
   },
@@ -793,9 +833,9 @@
   },
   {
    "cell_id": "LINE_003#03",
-   "risk": 0.138,
+   "risk": 0.043,
    "inspected": "air",
-   "top_fault": "hotspot"
+   "top_fault": null
   },
   {
    "cell_id": "LINE_003#04",
@@ -1837,7 +1877,7 @@
   },
   {
    "cell_id": "LINE_026#08",
-   "risk": 0.729,
+   "risk": 0.709,
    "inspected": "air",
    "top_fault": "vegetation"
   },
@@ -2197,13 +2237,13 @@
   },
   {
    "cell_id": "LINE_034#00",
-   "risk": 0.166,
+   "risk": 0.02,
    "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_034#01",
-   "risk": 0.156,
+   "risk": 0.008,
    "inspected": "air",
    "top_fault": null
   },
@@ -2341,32 +2381,32 @@
   },
   {
    "cell_id": "LINE_035#22",
-   "risk": 0.235,
-   "inspected": "none",
+   "risk": 0.05,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#23",
-   "risk": 0.61,
-   "inspected": "none",
-   "top_fault": null
+   "risk": 0.944,
+   "inspected": "air",
+   "top_fault": "vegetation"
   },
   {
    "cell_id": "LINE_035#24",
-   "risk": 0.133,
-   "inspected": "none",
+   "risk": 0.029,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#25",
-   "risk": 0.03,
-   "inspected": "none",
+   "risk": 0.011,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_035#26",
-   "risk": 0.185,
-   "inspected": "none",
+   "risk": 0.039,
+   "inspected": "air",
    "top_fault": null
   },
   {
@@ -2413,50 +2453,50 @@
   },
   {
    "cell_id": "LINE_036#06",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_036#07",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_036#08",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_036#09",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_036#10",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_036#11",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_036#12",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
    "cell_id": "LINE_036#13",
-   "risk": 0.025,
-   "inspected": "air",
+   "risk": 0.08,
+   "inspected": "none",
    "top_fault": null
   },
   {
@@ -2479,31 +2519,31 @@
   },
   {
    "cell_id": "LINE_037#03",
-   "risk": 0.194,
+   "risk": 0.044,
    "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_037#04",
-   "risk": 0.182,
+   "risk": 0.034,
    "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_037#05",
-   "risk": 0.172,
+   "risk": 0.025,
    "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_037#06",
-   "risk": 0.156,
+   "risk": 0.008,
    "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_037#07",
-   "risk": 0.044,
+   "risk": 0.006,
    "inspected": "air",
    "top_fault": null
   },
@@ -3013,7 +3053,7 @@
   },
   {
    "cell_id": "LINE_059#00",
-   "risk": 0.156,
+   "risk": 0.008,
    "inspected": "air",
    "top_fault": null
   },
@@ -3121,14 +3161,14 @@
   },
   {
    "cell_id": "LINE_064#02",
-   "risk": 0.064,
-   "inspected": "none",
+   "risk": 0.018,
+   "inspected": "air",
    "top_fault": null
   },
   {
    "cell_id": "LINE_064#03",
-   "risk": 0.054,
-   "inspected": "none",
+   "risk": 0.016,
+   "inspected": "air",
    "top_fault": null
   },
   {
@@ -3367,11 +3407,11 @@
   },
   {
    "segment_id": "LINE_035",
-   "p_live": 0.9
+   "p_live": 0.988
   },
   {
    "segment_id": "LINE_036",
-   "p_live": 0.308
+   "p_live": 0.8
   },
   {
    "segment_id": "LINE_037",
@@ -3483,7 +3523,7 @@
   },
   {
    "segment_id": "LINE_064",
-   "p_live": 0.8
+   "p_live": 0.973
   }
  ],
  "inputs": {
@@ -3738,12 +3778,12 @@
   },
   {
    "drone_id": "D4",
-   "segment_id": "LINE_002",
+   "segment_id": "LINE_035",
    "position": [
-    10.83299158622364,
-    48.20646159026694
+    10.503700170293495,
+    48.27298611638505
    ],
-   "reason": "covers report 05, report 03 area + 0.5 km forest + 12 km line in first flight, exp. risk 2.76"
+   "reason": "covers report 02 area + 1.0 km forest + 12 km line in first flight, exp. risk 3.16"
   },
   {
    "drone_id": "D5",
@@ -3803,14 +3843,14 @@
    "type": "takeoff",
    "drone_id": "D4",
    "cell_id": null,
-   "segment_id": "LINE_002",
+   "segment_id": "LINE_035",
    "fault_type": null,
    "confidence": null,
    "position": [
-    10.83299158622364,
-    48.20646159026694
+    10.503700170293495,
+    48.27298611638505
    ],
-   "message": "D4 takes off from LINE_002"
+   "message": "D4 takes off from LINE_035"
   },
   {
    "t": 1.0,
@@ -3827,18 +3867,32 @@
    "message": "D5 takes off from LINE_060"
   },
   {
-   "t": 230.0,
+   "t": 68.0,
    "type": "finding",
-   "drone_id": "D5",
-   "cell_id": "LINE_003#03",
-   "segment_id": "LINE_003",
-   "fault_type": "hotspot",
-   "confidence": 0.43,
+   "drone_id": "D4",
+   "cell_id": "LINE_035#23",
+   "segment_id": "LINE_035",
+   "fault_type": "vegetation",
+   "confidence": 0.86,
    "position": [
-    10.810818958489,
-    48.27469637749935
+    10.499002,
+    48.269726
    ],
-   "message": "D5: possible hotspot on LINE_003 km 1.7 (thermal camera (extra) / conductor temperature (landed), from the air, confidence 43%)"
+   "message": "D4: possible vegetation on LINE_035 km 11.8 (RGB camera, from the air, confidence 86%)"
+  },
+  {
+   "t": 68.0,
+   "type": "recommendation",
+   "drone_id": null,
+   "cell_id": "LINE_035#23",
+   "segment_id": "LINE_035",
+   "fault_type": null,
+   "confidence": null,
+   "position": [
+    10.499002462672417,
+    48.26972608808981
+   ],
+   "message": "Needs confirmation: possible vegetation at LINE_035 km 11.8 (risk 94%), second look scheduled"
   },
   {
    "t": 386.0,
@@ -3849,7 +3903,7 @@
    "fault_type": null,
    "confidence": null,
    "position": null,
-   "message": "Area of SYN_REPORT_04 cleared: all 7 cells inspected, no fault"
+   "message": "Area of SYN_REPORT_04 cleared (report 04): all 7 cells inspected, no fault found"
   },
   {
    "t": 397.0,
@@ -3858,12 +3912,12 @@
    "cell_id": "LINE_026#08",
    "segment_id": "LINE_026",
    "fault_type": "vegetation",
-   "confidence": 0.67,
+   "confidence": 0.63,
    "position": [
     10.654398,
     48.214692
    ],
-   "message": "D2: possible vegetation on LINE_026 km 4.2 (RGB camera, from the air, confidence 67%)"
+   "message": "D2: possible vegetation on LINE_026 km 4.2 (RGB camera, from the air, confidence 63%)"
   },
   {
    "t": 397.0,
@@ -3877,7 +3931,7 @@
     10.654362575384203,
     48.21469137896878
    ],
-   "message": "Needs confirmation: possible vegetation at LINE_026 km 4.2 (risk 73%)"
+   "message": "Needs confirmation: possible vegetation at LINE_026 km 4.2 (risk 71%), second look scheduled"
   }
  ]
 }
