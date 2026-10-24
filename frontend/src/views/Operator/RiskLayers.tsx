@@ -8,12 +8,19 @@ import type { FeatureCollection, LineString, Polygon } from 'geojson'
 import type { LonLat, State, Static } from '../../api'
 import { DEAD_COLOR } from '../../components/Map'
 
+/**
+ * Fault-risk ramp. Stops sit at log-ish, data-informed breakpoints: after "Load defaults" the median cell
+ * is ~5% and the 90th percentile ~20%, so a linear 0..1 ramp painted almost everything the same yellow.
+ * Each stop is a distinct hue and strictly darker than the one before (CIE L* 87 > 79 > 69 > 56 > 44 > 27),
+ * so the order also reads without hue. 40% / 80% line up with the "confirm" / "send crew" thresholds.
+ */
 export const RISK_STOPS: [number, string][] = [
-  [0, '#e9d27c'],
-  [0.1, '#f1c232'],
-  [0.35, '#f59e0b'],
-  [0.6, '#ea580c'],
-  [0.85, '#dc2626'],
+  [0.02, '#eed980'], // pale straw  (prior floor)
+  [0.05, '#f5bc35'], // yellow-amber
+  [0.1, '#f59018'], // amber-orange
+  [0.2, '#e35b17'], // orange
+  [0.4, '#c9252c'], // red        (confirm)
+  [0.8, '#7f1131'], // crimson    (send crew)
 ]
 export const CLEAR_COLOR = '#6b9a7f'
 /** Inspected cells below this risk are drawn "calm grey-green". */
@@ -24,7 +31,7 @@ const cellColor: ExpressionSpecification = [
   'case',
   ['all', ['!=', ['coalesce', ['feature-state', 'insp'], 'none'], 'none'], ['<', risk, CLEAR_BELOW]],
   CLEAR_COLOR,
-  ['interpolate', ['linear'], risk, ...RISK_STOPS.flat()],
+  ['interpolate-lab', ['linear'], risk, ...RISK_STOPS.flat()],
 ]
 /** px by risk (low..high), growing with zoom: ~2.2..6 at the default view, up to 4..9 zoomed in */
 const byRisk = (lo: number, hi: number): ExpressionSpecification => ['interpolate', ['linear'], risk, 0, lo, 1, hi]
