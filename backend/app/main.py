@@ -1,11 +1,16 @@
-"""FastAPI app: all endpoints of PLAN.md §3.1. One in-memory Engine, stepped on every GET /api/state."""
+"""FastAPI app: all endpoints of PLAN.md §3.1. One in-memory Engine, stepped on every GET /api/state.
+
+Planner: SmartPlanner by default; `PLANNER=dumb uv run uvicorn ...` runs the M1 baseline for comparison.
+"""
+
+import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.data import SCENARIOS, load_static
 from app.models import OperatorInputs, SimConfig, SimControl, StartPosition, State, Static
-from app.planner import DumbPlanner
+from app.planner import PLANNERS
 from app.sim.engine import Engine
 
 
@@ -14,7 +19,7 @@ def load_default_config() -> SimConfig:
 
 
 def make_engine() -> Engine:
-    return Engine(load_static(), load_default_config(), DumbPlanner)
+    return Engine(load_static(), load_default_config(), PLANNERS[os.environ.get("PLANNER", "smart")])
 
 
 app = FastAPI(title="Drone grid inspection")

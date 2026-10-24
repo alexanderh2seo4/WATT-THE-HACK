@@ -313,6 +313,11 @@
       "type": "number",
       "title": "Battery Min"
      },
+     "max_flight_min": {
+      "type": "number",
+      "title": "Max Flight Min",
+      "default": 30
+     },
      "segment_id": {
       "anyOf": [
        {

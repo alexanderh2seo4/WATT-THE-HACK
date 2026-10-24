@@ -24,8 +24,9 @@ ASK_PLANNER_EVERY_S = 60  # charging drones ask the planner for a route this oft
 
 
 class Drone:
-    def __init__(self, sp: StartPosition, battery_min: float):
+    def __init__(self, sp: StartPosition, battery_min: float, max_flight_min: float = 30):
         self.id = sp.drone_id
+        self.max_flight_min = max_flight_min
         self.position = list(sp.position)
         self.segment_id: str | None = sp.segment_id
         self.heading = 0.0
@@ -41,6 +42,7 @@ class Drone:
         remaining = [self.position] + [w.position for w in self.route[self.leg:]] if self.route else []
         return DroneState(drone_id=self.id, position=self.position, heading=round(self.heading, 1),
                           status=self.status, battery_min=round(self.battery_min, 2),
+                          max_flight_min=self.max_flight_min,
                           segment_id=self.segment_id, route=remaining)
 
 
@@ -90,6 +92,10 @@ class Engine:
         self.inputs = inputs
         self.planner.set_inputs(inputs)
         self._report_cells()
+        if self.status != "running":  # start positions were planned for the old inputs
+            self.start_positions = []
+            if self.status == "setup":
+                self._place_drones()
 
     def set_config(self, config: SimConfig) -> None:
         self.config = config
@@ -260,7 +266,8 @@ class Engine:
         return segment_id in self.config.dead_segments or segment_id in self.inputs.known_dead_segments
 
     def _place_drones(self) -> None:
-        self.drones = [Drone(sp, self.config.drone.start_battery_min) for sp in self.start_positions]
+        self.drones = [Drone(sp, self.config.drone.start_battery_min, self.config.drone.max_flight_min)
+                       for sp in self.start_positions]
 
     def _emit(self, type_: str, d: Drone, message: str, **kw) -> None:
         kw.setdefault("position", list(d.position))
