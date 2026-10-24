@@ -10,11 +10,11 @@ import numpy as np
 from app.geo import to_lonlat
 from app.planner.missions import HOP_RADIUS_M, Network, plan_flight, station
 
-N_EXACT = 10  # candidates per drone evaluated with the real flight planner
+N_EXACT = 40  # candidates per drone evaluated with the real flight planner
 OVERLAP = 0.15  # value left in a cell another drone's first flight already covers
 MIN_SEPARATION_M = 3000
 P_LIVE_START = 0.85
-W_STATION = 1.0  # weight of the landed-only value around the first landing (see missions.station)
+W_STATION = 3.0  # weight of the landed-only value around the first landing (see missions.station): a station serves ~6 hops
 
 
 def choose(net: Network, n: int, budget_s: float, air_value: np.ndarray, land_value: np.ndarray,
@@ -50,7 +50,8 @@ def choose(net: Network, n: int, budget_s: float, air_value: np.ndarray, land_va
         if plan:
             idx = list(plan.cells)
             v[idx] *= OVERLAP
-            taken_land[plan.land_cell] = True
+            # one drone per landing line: if that line turns out dead, only one drone has to hop
+            taken_land[net.seg_cells[net.cell_seg[plan.land_cell]]] = True
             la[net.cell_dist[plan.land_cell] <= HOP_RADIUS_M] *= OVERLAP
     return chosen
 

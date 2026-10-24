@@ -14,12 +14,13 @@ from shapely.geometry import Point, shape
 from app.geo import dist_m, heading_deg, lerp, project, to_xy
 from app.models import (DroneState, Event, Fault, OperatorInputs, SimConfig, StartPosition, State, Static, Waypoint)
 from app.planner import Planner
-from app.planner.recommend import recommendations
+from app.planner.recommend import CONFIRM_CONF, recommendations
 from app.sim.sensors import inspect
 
 DT = 1.0  # sim seconds per step
 MAX_STEPS_PER_CALL = 6 * 3600  # don't hang if the tab was asleep for a long time
 N_DRONES = 5
+LOG_MIN_RISK = 0.4  # unconfirmed detections are logged only if they push the cell to "needs confirmation"
 ASK_PLANNER_EVERY_S = 60  # charging drones ask the planner for a route this often
 
 
@@ -80,6 +81,8 @@ class Engine:
         self.planner.set_params(self.config.sensors, self.config.drone)
         self.planner.set_inputs(self.inputs)
         self.done_recs: set[str] = set()
+        self.n_det: dict[tuple[str, str], int] = {}  # (cell, fault type) -> detections so far
+        self.confirmed: set[tuple[str, str]] = set()  # 2 detections, or 1 confident landed detection
         self.cell_faults: dict[str, list[Fault]] = {}
         for f in self.config.faults:
             self.cell_faults.setdefault(self._cell_of(f.segment_id, f.position), []).append(f)
@@ -168,6 +171,17 @@ class Engine:
         d.mag_read = set()
         self._emit("takeoff", d, f"{d.id} takes off from {d.segment_id}")
 
+    def _divert(self, d: Drone, dead_seg: str) -> None:
+        p = self.config.drone
+        state = d.state().model_copy(update={"segment_id": dead_seg})  # planner: "my landing line is dead, hop"
+        route = self.planner.next_route(state, p.speed_inspect_mps, p.landing_min)
+        if not route:
+            return
+        d.route, d.leg = route, 1
+        dest = route[-1].segment_id
+        self._log(Event(t=self.t, type="line_dead", drone_id=d.id, segment_id=dead_seg, position=list(d.position),
+                        message=f"{d.id} diverts to {dest}: its landing line {dead_seg} is dead"))
+
     def _fly(self, d: Drone) -> None:
         p = self.config.drone
         d.battery_min = max(0.0, d.battery_min - DT / 60)
@@ -210,6 +224,9 @@ class Engine:
             d.status = "charging"
             return
         self._emit("line_dead", d, f"{d.id}: no current on {d.segment_id} - line is dead, cannot charge")
+        for o in self.drones:  # drones on their way to land on this line divert now
+            if o is not d and o.status == "flying" and o.route and o.route[-1].segment_id == d.segment_id:
+                self._divert(o, d.segment_id)
         if d.battery_min > self.config.drone.landing_min:
             self._try_takeoff(d)  # hop on with the reserve (status is still "landing" here)
         if d.status == "landing":
@@ -227,19 +244,31 @@ class Engine:
                       faults=faults, sensors=self.config.sensors, live=not self._is_dead(d.segment_id),
                       read_live=read_live)
         self.planner.on_observation(obs)
+        risk = {c.cell_id: c.risk for c in self.planner.cell_states()}[cell] if obs.detections else 0.0
         for det in obs.detections:
             true = next((f for f in faults if f.fault_type == det.fault_type), None)
             sp = self.config.sensors[det.fault_type]
             how = "from the air" if mode == "air" else "landed"
-            self._emit("finding", d, f"{d.id}: possible {det.fault_type} on {d.segment_id} km {self.cell_km[cell]} "
-                                     f"({sp.sensor or 'sensor'}, {how}, confidence {det.confidence:.0%})",
+            key = (cell, det.fault_type)
+            self.n_det[key] = self.n_det.get(key, 0) + 1
+            where = f"{d.segment_id} km {self.cell_km[cell]}"
+            if key not in self.confirmed and (self.n_det[key] >= 2 or (mode == "landed" and det.confidence >= CONFIRM_CONF)):
+                self.confirmed.add(key)
+                what = f"{det.fault_type} confirmed on {where}"
+            elif key in self.confirmed:
+                what = f"{det.fault_type} seen again on {where}"
+            elif risk < LOG_MIN_RISK:
+                continue  # weak single detection on a low-prior cell: the belief absorbs it, the log stays readable
+            else:
+                what = f"possible {det.fault_type} on {where}"
+            self._emit("finding", d, f"{d.id}: {what} ({sp.sensor or 'sensor'}, {how}, confidence {det.confidence:.0%})",
                        cell_id=cell, fault_type=det.fault_type, confidence=det.confidence,
                        position=list(true.position) if true else list(d.position))
         self._recommend()
 
     def _recommend(self) -> None:
         for _, cell, seg, msg in recommendations(self.planner.cell_states(), self.planner.segment_states(),
-                                                 self.cell_km, self.report_cells, self.done_recs):
+                                                 self.cell_km, self.report_cells, self.done_recs, self.confirmed):
             if cell:
                 pos = self.cell_mid[cell]
             elif seg:

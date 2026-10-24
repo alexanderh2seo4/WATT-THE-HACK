@@ -20,7 +20,9 @@ Draft values (see PLAN.md). Change them here when the team decides.
 - The sensor reports its own confidence: true detections 0.6–0.95 from the air, 0.85–0.99 landed; false positives 0.3–0.7. The planner's Bayes update mixes posterior and prior by this confidence, so a shaky single detection lands in "needs confirmation" (0.4–0.8) rather than "send crew".
 - Proposed 50 Hz magnetometer: one live/dead reading per segment per flight, correct with p = 0.9. The current sensor on landing always gives the truth.
 - Sensor and drone specs (`SimConfig.sensors`, `SimConfig.drone`) are treated as known to the planner (calibration data). Fault locations and dead lines are not.
-- False-positive rates in the default scenario are low (0.2–0.5 % per cell pass and fault type) so the log is not flooded.
+- False-positive rates in the default scenario are low (0.2–0.5 % per cell pass and fault type) so the log is not flooded; 0.1 % in the demo scenario.
+- Confirmation (PLAN.md §4.5 "after a confirmed finding"): a fault is confirmed by a second detection of the same type in the cell, or by one landed detection with confidence ≥ 0.8. "Send repair crew" only fires for confirmed faults; until then the cell shows "Needs confirmation" and keeps its value for the planner, so a second pass or landing is scheduled.
+- Log: the first detection is logged as "possible …", the confirming one as "… confirmed". An unconfirmed detection that leaves the cell below 40 % risk (e.g. a weak false positive on a low-prior cell) is not logged at all; the belief update still happens.
 
 ## Grid / data
 - Lines are split into ~500 m cells. Risk and coverage are tracked per cell.
@@ -69,7 +71,9 @@ Belief = P(fault of type t in cell), with cell risk = 1 − Π(1 − p_t). All w
 - Routes (`missions.py`): greedy runs between cell boundaries along a line, scored by value / (4 × transit s + inspect s + 60 s). A run is allowed only if the drone can still reach a landable cell afterwards with landing time and the 5 min reserve kept.
 - Landing score = 3 × landed value + 0.4 × air value within 4 km + 1 × station value + 0.3 × p_live. Station value = the landed-only value of the 6 best cells within 3 km.
 - Take-off: normal flights at ≥ 20 min battery. If an uncertain finding is worth ≥ 0.04 detections per battery-minute, the flight is forced to land on it. While charging (battery ≥ 10 min), a drone hops to a landing target worth ≥ 0.02 per battery-minute. A flight worth < 0.03 expected detections is not flown. Drones don't value cells another drone is flying and don't share landing cells.
-- Start positions (`start_positions.py`): greedy over drones, one per line, ≥ 3 km apart, p_live ≥ 0.85. Each candidate is scored by the value of its real first flight plus its station value. Cells already covered by an earlier drone keep 15 % of their value. The first flights are then flown exactly as planned.
+- Start positions (`start_positions.py`): greedy over drones, one per line, ≥ 3 km apart, p_live ≥ 0.85. The 40 best candidates (by a cheap proxy) are scored by the value of their real first flight plus 3 × the station value at the first landing (a station serves several hops over the next hours; with weight 1 no drone was stationed in the galloping area, weights 2–4 give the same result). Cells already covered by an earlier drone keep 15 % of their value. The first flights are then flown exactly as planned.
+- One drone per landing line (first flights and later flights): if the line turns out dead only one drone has to hop. Drones already flying to a line that another drone just found dead divert to the best reachable live cell.
+- Explaining away: when a report area is cleared, the inspected cells of that area are reset to "prior without that report, after one air pass" (if lower). Reports are about one event in the area, so cell-wise independent Bayes would keep too much of the report's evidence and drones would re-fly the cleared area.
 - The 5 min reserve is kept even when landing on a line known to be live (simple, conservative).
 
 ## Bundesnetzagentur historical data
@@ -81,3 +85,10 @@ The analysis script counts reported rows, not unique physical faults: meter repl
 ## Geolocated outage feed examples
 
 `resources/outage_location_examples/` holds point snapshots from British operator feeds captured on 24 October 2026. These are more localized than the German event records, but their published points are not guaranteed fault-asset coordinates. They cover Great Britain, are current-feed snapshots rather than historical archives, and must not be treated as observations about the Bavaria scenario. See that folder's README for dates, licenses, attribution, and source links.
+
+## Demo scenario (`backend/scenarios/demo.json`, loaded at startup)
+Scripted for the PLAN.md §7 story; the ground truth was placed knowing where the planner flies, so it is a demonstration, not a benchmark (`compare_planners.py` runs seeds 1–10 for that).
+- Seed 2 (seeds 3, 4, 5, 9, 11, 16 … give the full story too; in seeds where the camera misses F1 on its first pass the report 02 area is wrongly cleared).
+- Hidden dead line LINE_015: it lies in the report 03 protection sector, so "the line that tripped" is plausible. D2's first flight lands there.
+- F1 vegetation LINE_026#04 (report 02, as in default). F2 hotspot LINE_002#03 (report 05; moved one cell so the second-round flight covers it within 3 h). F3 galloping LINE_054#13 (report 06; the cell the stationed drone hops to first). F4 vegetation LINE_035#23: 100 % forest, in the storm, outside every report area. The old F4 cell (LINE_035#12) is only 15 % forest and ranked ~70th by the prior, so no drone reached it in 4 h. #23 is ranked 5th of 418 cells, almost entirely because of the vegetation layer.
+- Sensors as in default except false positives 0.1 % per pass and type.
