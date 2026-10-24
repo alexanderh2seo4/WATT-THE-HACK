@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
 import { MapProvider, Marker, Popup, useMap, type MapLayerMouseEvent } from 'react-map-gl/maplibre'
 import type { Feature, FeatureCollection, Position } from 'geojson'
 import {
@@ -18,7 +18,8 @@ import { Section, SidebarLayout } from '../../components/Sidebar'
 import { useStore } from '../../store'
 import { DRONE_COLORS, Drones } from './Drones'
 import { Legend } from './Legend'
-import { RecommendationList, RecommendationMarkers, recommendations } from './Recommendations'
+import { RecommendationReport } from './RecommendationReport'
+import { RecommendationList, RecommendationMarkers, recommendations, type Rec } from './Recommendations'
 import { deadSegments, RiskLayers } from './RiskLayers'
 
 const MAP_ID = 'operator'
@@ -39,6 +40,14 @@ function OperatorPage() {
   const setup = !state || state.status === 'setup'
   const flyTo = useFlyTo(staticData)
   const recs = useMemo(() => recommendations(state), [state])
+  // open report panel: kept by key so it follows the live state (and a later "Send crew" for the same cell)
+  const [selected, setSelected] = useState<string | null>(null)
+  const selectedRec = recs.find((r) => r.key === selected)
+  const selectRec = (r: Rec) => {
+    flyTo(r.event)
+    setSelected(r.key)
+  }
+  const closeReport = useCallback(() => setSelected(null), [])
 
   // map handlers can fire with an older closure; always toggle against the latest snapshot
   const stateRef = useRef(state)
@@ -78,7 +87,7 @@ function OperatorPage() {
               <Stats state={state} toAct={recs.filter((r) => !r.resolved && r.kind !== 'cleared').length} />
               <DroneSummary state={state} />
               <Section title="Recommendations">
-                <RecommendationList recs={recs} onSelect={(r) => flyTo(r.event)} />
+                <RecommendationList recs={recs} selected={selected} onSelect={selectRec} />
               </Section>
             </>
           )}
@@ -126,7 +135,7 @@ function OperatorPage() {
             </div>
           </Marker>
         ))}
-        <RecommendationMarkers recs={recs} onSelect={(r) => flyTo(r.event)} />
+        <RecommendationMarkers recs={recs} onSelect={selectRec} />
         <Drones state={state} />
         {hover && (
           <Popup longitude={hover.lngLat[0]} latitude={hover.lngLat[1]} closeButton={false} offset={12} className="pointer-events-none text-xs">
@@ -152,6 +161,9 @@ function OperatorPage() {
           </Popup>
         )}
       </Map>
+      {selectedRec && state && !setup && (
+        <RecommendationReport rec={selectedRec} state={state} staticData={staticData} onClose={closeReport} />
+      )}
       <Legend showVegetation={showVegetation} onToggleVegetation={() => setShowVegetation((v) => !v)} />
     </SidebarLayout>
   )

@@ -46,3 +46,8 @@ def test_sim_two_hours_finds_faults():
     assert {"takeoff", "landing", "finding"} <= types
     assert sum(c["inspected"] != "none" for c in s["cells"]) > 50
     assert any(c["top_fault"] for c in s["cells"])
+    # report panel: every crew/confirm recommendation comes with its cell's observations (risk before -> after)
+    obs_cells = {o["cell_id"] for o in s["observations"]}
+    recs = [e for e in s["events"] if e["type"] == "recommendation" and e["cell_id"]]
+    assert recs and all(e["cell_id"] in obs_cells for e in recs)
+    assert all({"risk_before", "risk_after", "mode", "drone_id"} <= o.keys() for o in s["observations"])

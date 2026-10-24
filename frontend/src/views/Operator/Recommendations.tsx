@@ -100,7 +100,7 @@ export function RecommendationMarkers({ recs, onSelect }: { recs: Rec[]; onSelec
 }
 
 /** Pinned list in the sidebar: what the operator should act on. */
-export function RecommendationList({ recs, onSelect }: { recs: Rec[]; onSelect: (r: Rec) => void }) {
+export function RecommendationList({ recs, selected, onSelect }: { recs: Rec[]; selected?: string | null; onSelect: (r: Rec) => void }) {
   if (!recs.length)
     return <p className="px-1 text-sm text-slate-400">None yet. They appear once the evidence for a place is strong enough.</p>
   return (
@@ -113,7 +113,7 @@ export function RecommendationList({ recs, onSelect }: { recs: Rec[]; onSelect: 
               onClick={() => onSelect(r)}
               className={`flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] leading-snug ring-1 transition hover:brightness-95 ${
                 r.resolved ? 'bg-white text-slate-400 ring-slate-100 line-through' : s.card
-              }`}
+              } ${r.key === selected ? 'ring-2 !ring-slate-500' : ''}`}
             >
               <span
                 className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white"

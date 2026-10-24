@@ -257,6 +257,57 @@
  },
  "components": {
   "schemas": {
+   "CellObservation": {
+    "properties": {
+     "t": {
+      "type": "number",
+      "title": "T"
+     },
+     "drone_id": {
+      "type": "string",
+      "title": "Drone Id"
+     },
+     "cell_id": {
+      "type": "string",
+      "title": "Cell Id"
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "air",
+       "landed"
+      ],
+      "title": "Mode"
+     },
+     "detections": {
+      "items": {
+       "$ref": "#/components/schemas/Detection"
+      },
+      "type": "array",
+      "title": "Detections",
+      "default": []
+     },
+     "risk_before": {
+      "type": "number",
+      "title": "Risk Before"
+     },
+     "risk_after": {
+      "type": "number",
+      "title": "Risk After"
+     }
+    },
+    "type": "object",
+    "required": [
+     "t",
+     "drone_id",
+     "cell_id",
+     "mode",
+     "risk_before",
+     "risk_after"
+    ],
+    "title": "CellObservation",
+    "description": "One inspection pass of a cell (also \"nothing found\") with the cell risk before/after it.\nOnly sent for cells behind a recommendation (recommend.relevant_cells), for its report panel."
+   },
    "CellState": {
     "properties": {
      "cell_id": {
@@ -305,6 +356,32 @@
      "risk"
     ],
     "title": "CellState"
+   },
+   "Detection": {
+    "properties": {
+     "fault_type": {
+      "type": "string",
+      "enum": [
+       "vegetation",
+       "sag",
+       "ice",
+       "galloping",
+       "hotspot",
+       "broken_conductor"
+      ],
+      "title": "Fault Type"
+     },
+     "confidence": {
+      "type": "number",
+      "title": "Confidence"
+     }
+    },
+    "type": "object",
+    "required": [
+     "fault_type",
+     "confidence"
+    ],
+    "title": "Detection"
    },
    "DroneParams": {
     "properties": {
@@ -982,6 +1059,14 @@
        "total": 0,
        "found": []
       }
+     },
+     "observations": {
+      "items": {
+       "$ref": "#/components/schemas/CellObservation"
+      },
+      "type": "array",
+      "title": "Observations",
+      "default": []
      }
     },
     "type": "object",
