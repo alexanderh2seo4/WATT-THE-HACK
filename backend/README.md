@@ -59,4 +59,4 @@ uv run python scripts/export_mocks.py   # -> frontend/src/mocks/{static,state}.j
 - `app/sim/engine.py` sim stepping (1 s steps, wall time x speed, seeded), cell inspection, findings
 - `app/sim/sensors.py` sensor model: ground truth -> noisy `Observation` (air per cell, landed per cell, magnetometer)
 - `app/main.py` endpoints
-- `scenarios/default.json` default `SimConfig` (ground truth + sensor/drone params)
+- `scenarios/*.json` `SimConfig` presets (ground truth + sensor/drone params); `default.json` is loaded at start. Listed by `GET /api/sim/presets`, fetched by `GET /api/sim/presets/{name}` (sim-setup view)

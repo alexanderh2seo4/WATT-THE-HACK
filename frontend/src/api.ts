@@ -122,6 +122,11 @@ export const getSimConfig = () =>
 export const putSimConfig = (config: SimConfig) =>
   MOCK ? mock((mockConfig = config)) : req<unknown>('PUT', '/sim/config', config)
 
+export const getPresets = () => (MOCK ? mock(['default']) : req<string[]>('GET', '/sim/presets'))
+
+export const getPreset = (name: string) =>
+  MOCK ? mock(structuredClone(mockConfig) as SimConfig) : req<SimConfig>('GET', `/sim/presets/${encodeURIComponent(name)}`)
+
 export const postSimControl = (control: SimControl) =>
   MOCK ? mock(mockControl(control)) : req<unknown>('POST', '/sim/control', control)
 

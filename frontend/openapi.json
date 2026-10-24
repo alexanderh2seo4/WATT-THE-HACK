@@ -155,6 +155,67 @@
     }
    }
   },
+  "/api/sim/presets": {
+   "get": {
+    "summary": "List Presets",
+    "operationId": "list_presets_api_sim_presets_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "type": "string"
+         },
+         "type": "array",
+         "title": "Response List Presets Api Sim Presets Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/sim/presets/{name}": {
+   "get": {
+    "summary": "Get Preset",
+    "operationId": "get_preset_api_sim_presets__name__get",
+    "parameters": [
+     {
+      "name": "name",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Name"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SimConfig"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/sim/control": {
    "post": {
     "summary": "Sim Control",
