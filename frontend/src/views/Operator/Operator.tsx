@@ -50,8 +50,10 @@ function OperatorPage() {
     const id = e.features?.[0]?.properties?.segment_id as string | undefined
     if (id && setup) toggleDead(id)
   }
+  // map mousemove keeps firing over markers; suppress the line popup so the marker tooltip stays visible
+  const overMarker = useRef(false)
   const onMove = (e: MapLayerMouseEvent) => {
-    const id = e.features?.[0]?.properties?.segment_id as string | undefined
+    const id = overMarker.current && setup ? undefined : (e.features?.[0]?.properties?.segment_id as string | undefined)
     setHover(id ? { id, lngLat: [e.lngLat.lng, e.lngLat.lat] } : null)
   }
 
@@ -76,7 +78,14 @@ function OperatorPage() {
         {staticData && <RiskLayers staticData={staticData} state={state} showVegetation={showVegetation} />}
         {setup && state?.start_positions.map((sp, i) => (
           <Marker key={sp.drone_id} longitude={sp.position[0]} latitude={sp.position[1]}>
-            <div className="group relative" onMouseEnter={() => setHover(null)}>
+            <div
+              className="group relative"
+              onMouseEnter={() => {
+                overMarker.current = true
+                setHover(null)
+              }}
+              onMouseLeave={() => (overMarker.current = false)}
+            >
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white shadow-md ring-2 ring-white">
                 {i + 1}
               </div>

@@ -17,8 +17,10 @@ export function TopBar() {
 
   const togglePlay = () =>
     postSimControl({ action: running ? 'pause' : status === 'setup' ? 'start' : 'resume' })
-  // Speed changes keep the current run state (assumption: backend accepts speed with any action).
-  const setSpeed = (speed: number) => postSimControl({ action: running ? 'resume' : 'pause', speed })
+  // Speed changes keep the current run state. Backend only pauses when running and only resumes
+  // when paused, so 'pause' is a no-op when already paused; 'resume' is safe while running or in setup
+  // (avoids pausing right after Start when the last polled status is still 'setup').
+  const setSpeed = (speed: number) => postSimControl({ action: status === 'paused' ? 'pause' : 'resume', speed })
 
   const tab = ({ isActive }: { isActive: boolean }) =>
     `rounded-md px-3 py-1.5 text-sm font-medium transition ${
