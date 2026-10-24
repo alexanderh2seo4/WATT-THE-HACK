@@ -232,7 +232,7 @@ export interface components {
              * Type
              * @enum {string}
              */
-            type: "takeoff" | "landing" | "finding" | "line_dead" | "recommendation" | "stranded" | "all_found";
+            type: "takeoff" | "landing" | "finding" | "line_dead" | "recommendation" | "stranded" | "all_found" | "reroute";
             /** Drone Id */
             drone_id?: string | null;
             /** Cell Id */

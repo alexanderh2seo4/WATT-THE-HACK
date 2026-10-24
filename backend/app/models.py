@@ -17,7 +17,8 @@ FaultType = Literal["vegetation", "sag", "ice", "galloping", "hotspot", "broken_
 SimStatus = Literal["setup", "running", "paused"]
 DroneStatus = Literal["charging", "flying", "landing", "stranded"]
 Inspected = Literal["none", "air", "landed"]
-EventType = Literal["takeoff", "landing", "finding", "line_dead", "recommendation", "stranded", "all_found"]
+EventType = Literal["takeoff", "landing", "finding", "line_dead", "recommendation", "stranded", "all_found",
+                    "reroute"]
 
 
 # ---------- operator inputs ----------

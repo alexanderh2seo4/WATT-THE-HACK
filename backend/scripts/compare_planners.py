@@ -1,7 +1,8 @@
 """Compare planners on a scenario over several seeds.
 
-Run from backend/:  [SCENARIO=demo|default] uv run python scripts/compare_planners.py [hours] [seeds...]
-Metrics per fault: first finding event of the right type on the fault's cell.
+Run from backend/:  [SCENARIO=demo|default] [LAND_ON_FINDING=0] uv run python scripts/compare_planners.py [hours] [seeds...]
+Metrics per fault: first finding event of the right type on the fault's cell; confirmed = the sim's benchmark
+(second detection, or one confident landed detection), with the mean delay from found to confirmed.
 """
 
 import os
@@ -39,7 +40,8 @@ def run(planner: str, seed: int, hours: float) -> dict:
     false_crew = sum(1 for e in eng.events if e.type == "recommendation" and e.message.startswith("Send repair")
                      and e.cell_id not in fault_cells)
     st = eng.state()
-    return {"first": first, "wall": wall, "inspected": sum(c.inspected != "none" for c in st.cells),
+    delays = [f.t_confirmed - f.t_found for f in eng.found.values() if f.t_confirmed is not None]
+    return {"first": first, "confirmed": len(delays), "delays": delays, "wall": wall, "inspected": sum(c.inspected != "none" for c in st.cells),
             "landings": sum(e.type == "landing" for e in eng.events),
             "stranded": sum(e.type == "stranded" for e in eng.events), "false_crew": false_crew,
             "faults": {f.fault_id: f.fault_type for f in cfg.faults}}
@@ -59,7 +61,7 @@ def main() -> None:
     print(f"\n{os.environ.get('SCENARIO', 'demo')}, {hours:g} h sim, seeds {seeds}\n")
     fids = list(rows[0][5])
     head = "| planner | faults found (of 4) | mean time to detection | " + " | ".join(
-        f"{fid} {rows[0][5][fid]}" for fid in fids) + " | cells inspected | landings | stranded | false crew calls | compute |"
+        f"{fid} {rows[0][5][fid]}" for fid in fids) + " | faults confirmed | mean found to confirmed | cells inspected | landings | stranded | false crew calls | compute |"
     print(head)
     print("|" + "---|" * (head.count("|") - 1))
     for name, found, times, per_fault, res, faults in rows:
@@ -68,6 +70,9 @@ def main() -> None:
             ts = [t for t in per_fault[fid] if t is not None]
             cols.append(f"{len(ts)}/{len(res)}" + (f", {sum(ts) / len(ts) / 60:.0f} min" if ts else ""))
         n = len(res)
+        delays = [x / 60 for r in res for x in r["delays"]]
+        cols.append(f"{sum(r['confirmed'] for r in res) / n:.1f}")
+        cols.append(f"{sum(delays) / len(delays):.0f} min" if delays else "-")
         print(f"| {name} | {sum(found) / n:.1f} | {sum(times) / len(times) if times else float('nan'):.0f} min | "
               + " | ".join(cols)
               + f" | {sum(r['inspected'] for r in res) / n:.0f} | {sum(r['landings'] for r in res) / n:.1f} | "

@@ -426,7 +426,8 @@
        "line_dead",
        "recommendation",
        "stranded",
-       "all_found"
+       "all_found",
+       "reroute"
       ],
       "title": "Type"
      },
