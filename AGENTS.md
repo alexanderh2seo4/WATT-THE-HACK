@@ -12,6 +12,7 @@ Guiding principles:
 - **Hardcoding and shortcuts are fine** if they speed up the demo, as long as the assumptions are stated.
 - **STATE ASSUMPTIONS**. Additional assumptions about the resources (e.g. flight speed...) should be added to @ASSUMPTIONS.md
 - **Don't over-engineer error handling**, validation or logging.
+- **SIMPLICITY** while the logic might be complex, frontends should be super straight forward and easy to understand and not overloaded with data. Also they should look modern
 
 ## The challenge
 
