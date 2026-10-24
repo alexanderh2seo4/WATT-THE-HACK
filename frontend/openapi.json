@@ -1,0 +1,906 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Drone grid inspection",
+  "version": "0.1.0"
+ },
+ "paths": {
+  "/api/static": {
+   "get": {
+    "summary": "Get Static",
+    "operationId": "get_static_api_static_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Static"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/state": {
+   "get": {
+    "summary": "Get State",
+    "operationId": "get_state_api_state_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/State"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/inputs": {
+   "put": {
+    "summary": "Put Inputs",
+    "operationId": "put_inputs_api_inputs_put",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/OperatorInputs"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/OperatorInputs"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/plan/start-positions": {
+   "post": {
+    "summary": "Plan Start Positions",
+    "operationId": "plan_start_positions_api_plan_start_positions_post",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/StartPosition"
+         },
+         "type": "array",
+         "title": "Response Plan Start Positions Api Plan Start Positions Post"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/sim/config": {
+   "get": {
+    "summary": "Get Sim Config",
+    "operationId": "get_sim_config_api_sim_config_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SimConfig"
+        }
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "summary": "Put Sim Config",
+    "operationId": "put_sim_config_api_sim_config_put",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SimConfig"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SimConfig"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/sim/control": {
+   "post": {
+    "summary": "Sim Control",
+    "operationId": "sim_control_api_sim_control_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SimControl"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/State"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "CellState": {
+    "properties": {
+     "cell_id": {
+      "type": "string",
+      "title": "Cell Id"
+     },
+     "risk": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Risk"
+     },
+     "inspected": {
+      "type": "string",
+      "enum": [
+       "none",
+       "air",
+       "landed"
+      ],
+      "title": "Inspected",
+      "default": "none"
+     },
+     "top_fault": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "vegetation",
+         "sag",
+         "ice",
+         "galloping",
+         "hotspot",
+         "broken_conductor"
+        ]
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Top Fault"
+     }
+    },
+    "type": "object",
+    "required": [
+     "cell_id",
+     "risk"
+    ],
+    "title": "CellState"
+   },
+   "DroneParams": {
+    "properties": {
+     "speed_inspect_mps": {
+      "type": "number",
+      "title": "Speed Inspect Mps",
+      "default": 10
+     },
+     "speed_transit_mps": {
+      "type": "number",
+      "title": "Speed Transit Mps",
+      "default": 16
+     },
+     "max_flight_min": {
+      "type": "number",
+      "title": "Max Flight Min",
+      "default": 30
+     },
+     "full_charge_min": {
+      "type": "number",
+      "title": "Full Charge Min",
+      "default": 180
+     },
+     "landing_min": {
+      "type": "number",
+      "title": "Landing Min",
+      "default": 3
+     },
+     "start_battery_min": {
+      "type": "number",
+      "title": "Start Battery Min",
+      "default": 30
+     }
+    },
+    "type": "object",
+    "title": "DroneParams"
+   },
+   "DroneState": {
+    "properties": {
+     "drone_id": {
+      "type": "string",
+      "title": "Drone Id"
+     },
+     "position": {
+      "items": {
+       "type": "number"
+      },
+      "type": "array",
+      "title": "Position"
+     },
+     "heading": {
+      "type": "number",
+      "title": "Heading",
+      "default": 0
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "charging",
+       "flying",
+       "landing",
+       "stranded"
+      ],
+      "title": "Status"
+     },
+     "battery_min": {
+      "type": "number",
+      "title": "Battery Min"
+     },
+     "segment_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Segment Id"
+     },
+     "route": {
+      "items": {
+       "items": {
+        "type": "number"
+       },
+       "type": "array"
+      },
+      "type": "array",
+      "title": "Route",
+      "default": []
+     }
+    },
+    "type": "object",
+    "required": [
+     "drone_id",
+     "position",
+     "status",
+     "battery_min"
+    ],
+    "title": "DroneState"
+   },
+   "Event": {
+    "properties": {
+     "t": {
+      "type": "number",
+      "title": "T"
+     },
+     "type": {
+      "type": "string",
+      "enum": [
+       "takeoff",
+       "landing",
+       "finding",
+       "line_dead",
+       "recommendation",
+       "stranded"
+      ],
+      "title": "Type"
+     },
+     "drone_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Drone Id"
+     },
+     "cell_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cell Id"
+     },
+     "segment_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Segment Id"
+     },
+     "fault_type": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "vegetation",
+         "sag",
+         "ice",
+         "galloping",
+         "hotspot",
+         "broken_conductor"
+        ]
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Fault Type"
+     },
+     "confidence": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Confidence"
+     },
+     "position": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Position"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "t",
+     "type",
+     "message"
+    ],
+    "title": "Event"
+   },
+   "Fault": {
+    "properties": {
+     "fault_id": {
+      "type": "string",
+      "title": "Fault Id"
+     },
+     "segment_id": {
+      "type": "string",
+      "title": "Segment Id"
+     },
+     "position": {
+      "items": {
+       "type": "number"
+      },
+      "type": "array",
+      "title": "Position"
+     },
+     "fault_type": {
+      "type": "string",
+      "enum": [
+       "vegetation",
+       "sag",
+       "ice",
+       "galloping",
+       "hotspot",
+       "broken_conductor"
+      ],
+      "title": "Fault Type"
+     }
+    },
+    "type": "object",
+    "required": [
+     "fault_id",
+     "segment_id",
+     "position",
+     "fault_type"
+    ],
+    "title": "Fault"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "OperatorInputs": {
+    "properties": {
+     "reports": {
+      "items": {
+       "$ref": "#/components/schemas/Report"
+      },
+      "type": "array",
+      "title": "Reports",
+      "default": []
+     },
+     "known_dead_segments": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Known Dead Segments",
+      "default": []
+     }
+    },
+    "type": "object",
+    "title": "OperatorInputs"
+   },
+   "Report": {
+    "properties": {
+     "report_id": {
+      "type": "string",
+      "title": "Report Id"
+     },
+     "polygon": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Polygon"
+     },
+     "fault_types": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "vegetation",
+        "sag",
+        "ice",
+        "galloping",
+        "hotspot",
+        "broken_conductor"
+       ]
+      },
+      "type": "array",
+      "title": "Fault Types"
+     },
+     "confidence": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Confidence"
+     },
+     "text": {
+      "type": "string",
+      "title": "Text"
+     }
+    },
+    "type": "object",
+    "required": [
+     "report_id",
+     "polygon",
+     "fault_types",
+     "confidence",
+     "text"
+    ],
+    "title": "Report"
+   },
+   "SegmentState": {
+    "properties": {
+     "segment_id": {
+      "type": "string",
+      "title": "Segment Id"
+     },
+     "p_live": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "P Live"
+     }
+    },
+    "type": "object",
+    "required": [
+     "segment_id",
+     "p_live"
+    ],
+    "title": "SegmentState"
+   },
+   "SensorParams": {
+    "properties": {
+     "p_detect_air": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "P Detect Air"
+     },
+     "p_detect_landed": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "P Detect Landed"
+     },
+     "p_false_positive": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "P False Positive"
+     },
+     "sensor": {
+      "type": "string",
+      "title": "Sensor",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "p_detect_air",
+     "p_detect_landed",
+     "p_false_positive"
+    ],
+    "title": "SensorParams"
+   },
+   "SimConfig": {
+    "properties": {
+     "seed": {
+      "type": "integer",
+      "title": "Seed",
+      "default": 42
+     },
+     "dead_segments": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Dead Segments",
+      "default": []
+     },
+     "faults": {
+      "items": {
+       "$ref": "#/components/schemas/Fault"
+      },
+      "type": "array",
+      "title": "Faults",
+      "default": []
+     },
+     "sensors": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/SensorParams"
+      },
+      "propertyNames": {
+       "enum": [
+        "vegetation",
+        "sag",
+        "ice",
+        "galloping",
+        "hotspot",
+        "broken_conductor"
+       ]
+      },
+      "type": "object",
+      "title": "Sensors",
+      "default": {}
+     },
+     "drone": {
+      "$ref": "#/components/schemas/DroneParams",
+      "default": {
+       "speed_inspect_mps": 10.0,
+       "speed_transit_mps": 16.0,
+       "max_flight_min": 30.0,
+       "full_charge_min": 180.0,
+       "landing_min": 3.0,
+       "start_battery_min": 30.0
+      }
+     }
+    },
+    "type": "object",
+    "title": "SimConfig"
+   },
+   "SimControl": {
+    "properties": {
+     "action": {
+      "type": "string",
+      "enum": [
+       "start",
+       "pause",
+       "resume",
+       "reset"
+      ],
+      "title": "Action"
+     },
+     "speed": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 600.0,
+        "minimum": 1.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Speed"
+     }
+    },
+    "type": "object",
+    "required": [
+     "action"
+    ],
+    "title": "SimControl"
+   },
+   "StartPosition": {
+    "properties": {
+     "drone_id": {
+      "type": "string",
+      "title": "Drone Id"
+     },
+     "segment_id": {
+      "type": "string",
+      "title": "Segment Id"
+     },
+     "position": {
+      "items": {
+       "type": "number"
+      },
+      "type": "array",
+      "title": "Position"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     }
+    },
+    "type": "object",
+    "required": [
+     "drone_id",
+     "segment_id",
+     "position",
+     "reason"
+    ],
+    "title": "StartPosition"
+   },
+   "State": {
+    "properties": {
+     "t": {
+      "type": "number",
+      "title": "T"
+     },
+     "speed": {
+      "type": "number",
+      "title": "Speed"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "setup",
+       "running",
+       "paused"
+      ],
+      "title": "Status"
+     },
+     "drones": {
+      "items": {
+       "$ref": "#/components/schemas/DroneState"
+      },
+      "type": "array",
+      "title": "Drones"
+     },
+     "cells": {
+      "items": {
+       "$ref": "#/components/schemas/CellState"
+      },
+      "type": "array",
+      "title": "Cells"
+     },
+     "segments": {
+      "items": {
+       "$ref": "#/components/schemas/SegmentState"
+      },
+      "type": "array",
+      "title": "Segments"
+     },
+     "inputs": {
+      "$ref": "#/components/schemas/OperatorInputs"
+     },
+     "start_positions": {
+      "items": {
+       "$ref": "#/components/schemas/StartPosition"
+      },
+      "type": "array",
+      "title": "Start Positions"
+     },
+     "events": {
+      "items": {
+       "$ref": "#/components/schemas/Event"
+      },
+      "type": "array",
+      "title": "Events"
+     }
+    },
+    "type": "object",
+    "required": [
+     "t",
+     "speed",
+     "status",
+     "drones",
+     "cells",
+     "segments",
+     "inputs",
+     "start_positions",
+     "events"
+    ],
+    "title": "State"
+   },
+   "Static": {
+    "properties": {
+     "segments": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Segments"
+     },
+     "cells": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Cells"
+     },
+     "nodes": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Nodes"
+     },
+     "storm": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Storm"
+     },
+     "default_inputs": {
+      "$ref": "#/components/schemas/OperatorInputs"
+     },
+     "vegetation": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Vegetation"
+     }
+    },
+    "type": "object",
+    "required": [
+     "segments",
+     "cells",
+     "nodes",
+     "storm",
+     "default_inputs",
+     "vegetation"
+    ],
+    "title": "Static"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}
