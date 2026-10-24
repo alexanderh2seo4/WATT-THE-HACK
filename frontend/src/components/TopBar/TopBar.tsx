@@ -20,14 +20,18 @@ export function TopBar() {
 
   const tab = ({ isActive }: { isActive: boolean }) =>
     `rounded-md px-3 py-1.5 text-sm font-medium transition ${
-      isActive ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'
+      isActive ? 'bg-brand text-white' : 'text-slate-600 hover:bg-slate-100'
     }`
 
   return (
     <header className="flex h-14 shrink-0 items-center gap-6 border-b border-slate-200 bg-white px-4">
-      <div className="flex items-center gap-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
-        <span className="font-semibold tracking-tight">Storm Patrol</span>
+      <div className="flex items-center gap-2" title="Storm Patrol, a hackathon prototype built for Nomadic's challenge">
+        <img src="/nomadic-logo.svg" alt="Nomadic" className="h-3.5 w-auto" />
+        <span className="h-6 w-px bg-slate-200" />
+        <div className="flex flex-col leading-tight">
+          <span className="font-heading text-[15px] font-semibold tracking-tight text-brand">Storm Patrol</span>
+          <span className="text-[10px] tracking-wide text-slate-400">Nomadic Challenge · hackathon</span>
+        </div>
         {MOCK && <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-800">mock</span>}
       </div>
 
@@ -46,7 +50,7 @@ export function TopBar() {
         <button
           onClick={togglePlay}
           title={running ? 'Pause' : 'Play'}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-900 text-white hover:bg-slate-700"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white transition hover:bg-highlight hover:text-brand"
         >
           {running ? (
             <svg viewBox="0 0 16 16" className="h-3.5 w-3.5 fill-current">
@@ -65,7 +69,7 @@ export function TopBar() {
               key={s}
               onClick={() => setSpeed(s)}
               className={`rounded-md px-2.5 py-1 text-sm tabular-nums transition ${
-                state?.speed === s ? 'bg-white font-medium shadow-sm' : 'text-slate-500 hover:text-slate-800'
+                state?.speed === s ? 'bg-highlight font-medium text-brand shadow-sm' : 'text-slate-500 hover:text-slate-800'
               }`}
             >
               {s}×

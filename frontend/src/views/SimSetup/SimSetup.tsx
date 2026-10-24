@@ -293,7 +293,7 @@ export function SimSetup() {
               <button
                 onClick={save}
                 disabled={!dirty}
-                className="flex-1 rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:opacity-40"
+                className="flex-1 rounded-lg bg-brand px-3 py-2 text-sm font-medium text-white transition enabled:hover:bg-highlight enabled:hover:text-brand disabled:opacity-40"
               >
                 Save scenario
               </button>
@@ -361,7 +361,7 @@ export function SimSetup() {
                 </select>
                 <button
                   onClick={() => addFault(popSeg, popover.position)}
-                  className="rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white hover:bg-slate-700"
+                  className="rounded-md bg-brand px-2 py-1 text-xs font-medium text-white transition hover:bg-highlight hover:text-brand"
                 >
                   Add fault here
                 </button>

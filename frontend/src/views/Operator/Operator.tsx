@@ -130,7 +130,7 @@ function OperatorPage() {
 // ---------- stepper ----------
 
 const btn =
-  'w-full rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:opacity-40'
+  'w-full rounded-lg bg-brand px-3 py-2 text-sm font-medium text-white transition enabled:hover:bg-highlight enabled:hover:text-brand disabled:opacity-40'
 const btnGhost =
   'flex-1 cursor-pointer rounded-lg border border-slate-200 px-3 py-1.5 text-center text-sm text-slate-700 transition hover:bg-slate-50'
 
@@ -151,7 +151,7 @@ function Step({
     <li className={`flex gap-3 ${state === 'todo' ? 'opacity-40' : ''}`}>
       <span
         className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-          state === 'active' ? 'bg-slate-900 text-white' : state === 'done' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
+          state === 'active' ? 'bg-brand text-highlight' : state === 'done' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
         }`}
       >
         {state === 'done' ? '✓' : n}
