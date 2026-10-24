@@ -8,12 +8,12 @@
     {"fault_id": "F4", "segment_id": "LINE_035", "position": [10.539403, 48.302277], "fault_type": "vegetation"}
   ],
   "sensors": {
-    "vegetation":       {"p_detect_air": 0.85, "p_detect_landed": 0.6,  "p_false_positive": 0.03, "sensor": "RGB camera"},
-    "sag":              {"p_detect_air": 0.3,  "p_detect_landed": 0.9,  "p_false_positive": 0.02, "sensor": "IMU / inclinometer (landed)"},
-    "ice":              {"p_detect_air": 0.5,  "p_detect_landed": 0.9,  "p_false_positive": 0.02, "sensor": "RGB camera / ice thickness (landed)"},
-    "galloping":        {"p_detect_air": 0.2,  "p_detect_landed": 0.85, "p_false_positive": 0.03, "sensor": "accelerometer (landed)"},
-    "hotspot":          {"p_detect_air": 0.75, "p_detect_landed": 0.9,  "p_false_positive": 0.05, "sensor": "thermal camera (extra) / conductor temperature (landed)"},
-    "broken_conductor": {"p_detect_air": 0.8,  "p_detect_landed": 0.7,  "p_false_positive": 0.01, "sensor": "RGB camera"}
+    "vegetation":       {"p_detect_air": 0.85, "p_detect_landed": 0.6,  "p_false_positive": 0.005, "sensor": "RGB camera"},
+    "sag":              {"p_detect_air": 0.3,  "p_detect_landed": 0.9,  "p_false_positive": 0.003, "sensor": "RGB camera (air) / IMU inclinometer (landed)"},
+    "ice":              {"p_detect_air": 0.5,  "p_detect_landed": 0.9,  "p_false_positive": 0.002, "sensor": "RGB camera / ice load (landed)"},
+    "galloping":        {"p_detect_air": 0.0,  "p_detect_landed": 0.85, "p_false_positive": 0.005, "sensor": "accelerometer (landed only)"},
+    "hotspot":          {"p_detect_air": 0.75, "p_detect_landed": 0.9,  "p_false_positive": 0.005, "sensor": "thermal camera (extra) / conductor temperature (landed)"},
+    "broken_conductor": {"p_detect_air": 0.8,  "p_detect_landed": 0.7,  "p_false_positive": 0.002, "sensor": "RGB camera"}
   },
   "drone": {
     "speed_inspect_mps": 10,

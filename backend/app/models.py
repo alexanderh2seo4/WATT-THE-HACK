@@ -144,3 +144,20 @@ class SimControl(BaseModel):
 class Waypoint(BaseModel):
     position: LonLat
     segment_id: str | None = None  # set = flying along this line (inspecting, slow); None = transit (fast)
+
+
+class Detection(BaseModel):
+    fault_type: FaultType
+    confidence: float  # the sensor's own certainty 0..1
+
+
+class Observation(BaseModel):
+    """One inspected cell (air pass or landed), INCLUDING passes with no finding. Sim -> planner only."""
+    t: float
+    drone_id: str
+    cell_id: str
+    segment_id: str
+    mode: Literal["air", "landed"]
+    detections: list[Detection] = []  # empty = nothing found
+    reads_live: bool | None = None  # magnetometer (air) or current sensor (landed); None = no reading
+    live_accuracy: float = 1.0  # P(reading is correct)

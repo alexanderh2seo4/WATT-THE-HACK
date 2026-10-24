@@ -35,7 +35,8 @@ uv run python scripts/export_mocks.py   # -> frontend/src/mocks/{static,state}.j
 
 - `app/models.py` Pydantic models = API contract
 - `app/data.py` loads `resources/`, splits lines into ~500 m cells, default operator inputs
-- `app/planner/` `Planner` interface + `DumbPlanner` placeholder (never imports `sim/`)
-- `app/sim/engine.py` sim stepping (1 s steps, wall time x speed, seeded)
+- `app/planner/` `Planner` interface + `DumbPlanner` (M1: nearest unchecked line), `risk.py` pure Bayes updates, `recommend.py` §4.5 recommendations (never imports `sim/`)
+- `app/sim/engine.py` sim stepping (1 s steps, wall time x speed, seeded), cell inspection, findings
+- `app/sim/sensors.py` sensor model: ground truth -> noisy `Observation` (air per cell, landed per cell, magnetometer)
 - `app/main.py` endpoints
 - `scenarios/default.json` default `SimConfig` (ground truth + sensor/drone params)
