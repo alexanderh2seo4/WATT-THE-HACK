@@ -110,6 +110,18 @@ class Progress(BaseModel):
     all_confirmed_t: float | None = None
 
 
+class CellObservation(BaseModel):
+    """One inspection pass of a cell (also "nothing found") with the cell risk before/after it.
+    Only sent for cells behind a recommendation (recommend.relevant_cells), for its report panel."""
+    t: float
+    drone_id: str
+    cell_id: str
+    mode: Literal["air", "landed"]
+    detections: list["Detection"] = []
+    risk_before: float
+    risk_after: float
+
+
 class State(BaseModel):
     t: float  # sim seconds since start
     speed: float
@@ -121,6 +133,7 @@ class State(BaseModel):
     start_positions: list[StartPosition]
     events: list[Event]  # full log, newest last
     progress: Progress = Progress()
+    observations: list[CellObservation] = []  # simulated passes behind the recommendations, oldest first
 
 
 # ---------- simulation ground truth + params ----------
@@ -183,3 +196,6 @@ class Observation(BaseModel):
     detections: list[Detection] = []  # empty = nothing found
     reads_live: bool | None = None  # magnetometer (air) or current sensor (landed); None = no reading
     live_accuracy: float = 1.0  # P(reading is correct)
+
+
+CellObservation.model_rebuild()

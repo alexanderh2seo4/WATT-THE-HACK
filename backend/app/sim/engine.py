@@ -12,10 +12,10 @@ from typing import Callable
 from shapely.geometry import Point, shape
 
 from app.geo import dist_m, heading_deg, lerp, project, to_xy
-from app.models import (DroneState, Event, Fault, FaultFound, OperatorInputs, Progress, SimConfig, StartPosition, State,
+from app.models import (CellObservation, DroneState, Event, Fault, FaultFound, OperatorInputs, Progress, SimConfig, StartPosition, State,
                         Static, Waypoint)
 from app.planner import Planner
-from app.planner.recommend import CONFIRM_CONF, recommendations
+from app.planner.recommend import CONFIRM_CONF, observations_for, recommendations
 from app.sim.sensors import inspect
 
 DT = 1.0  # sim seconds per step
@@ -83,6 +83,7 @@ class Engine:
         self.planner.set_params(self.config.sensors, self.config.drone)
         self.planner.set_inputs(self.inputs)
         self.done_recs: set[str] = set()
+        self.obs_log: list[CellObservation] = []  # every pass with risk before/after (report panel)
         self.n_det: dict[tuple[str, str], int] = {}  # (cell, fault type) -> detections so far
         self.confirmed: set[tuple[str, str]] = set()  # 2 detections, or 1 confident landed detection
         self.cell_faults: dict[str, list[Fault]] = {}
@@ -255,8 +256,11 @@ class Engine:
         obs = inspect(self.rng, t=self.t, drone_id=d.id, cell_id=cell, segment_id=d.segment_id, mode=mode,
                       faults=faults, sensors=self.config.sensors, live=not self._is_dead(d.segment_id),
                       read_live=read_live)
+        before = self._risk(cell)
         self.planner.on_observation(obs)
-        risk = {c.cell_id: c.risk for c in self.planner.cell_states()}[cell] if obs.detections else 0.0
+        risk = self._risk(cell)
+        self.obs_log.append(CellObservation(t=obs.t, drone_id=d.id, cell_id=cell, mode=mode, detections=obs.detections,
+                                            risk_before=before, risk_after=risk))
         for det in obs.detections:
             true = next((f for f in faults if f.fault_type == det.fault_type), None)
             sp = self.config.sensors[det.fault_type]
@@ -315,6 +319,9 @@ class Engine:
                 pos = None
             self._log(Event(t=self.t, type="recommendation", cell_id=cell, segment_id=seg, position=pos, message=msg))
 
+    def _risk(self, cell: str) -> float:
+        return next((c.risk for c in self.planner.cell_states() if c.cell_id == cell), 0.0)
+
     def _cell_of(self, segment_id: str, position: list[float]) -> str:
         line, n = self.seg_m[segment_id], self.n_cells.get(segment_id, 1)
         i = min(n - 1, int(line.project(Point(to_xy(*position))) / line.length * n))
@@ -349,7 +356,8 @@ class Engine:
                      inputs=self.inputs, start_positions=self.start_positions, events=self.events,
                      progress=Progress(total=len(self.config.faults),
                                        found=sorted(self.found.values(), key=lambda f: f.t_found),
-                                       all_found_t=self.all_found_t, all_confirmed_t=self.all_confirmed_t))
+                                       all_found_t=self.all_found_t, all_confirmed_t=self.all_confirmed_t),
+                     observations=observations_for(self.obs_log, self.done_recs, self.report_cells))
 
 
 def clock(t: float) -> str:

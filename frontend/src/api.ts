@@ -22,6 +22,7 @@ export type SimEvent = With<S['Event'], { position?: LonLat | null }>
 export type DroneState = With<S['DroneState'], { position: LonLat; route: LonLat[] }>
 export type CellState = S['CellState']
 export type SegmentState = S['SegmentState']
+export type CellObservation = S['CellObservation']
 export type SimStatus = S['State']['status']
 export type Fault = With<S['Fault'], { position: LonLat }>
 export type SensorParams = S['SensorParams']
@@ -76,6 +77,7 @@ const mockState: State = mockFile('state', {
   start_positions: [],
   events: [],
   progress: { total: 0, found: [] },
+  observations: [],
 })
 let mockConfig: SimConfig | null = mockFile<SimConfig | null>('sim_config', null)
 let mockLastTick = performance.now()

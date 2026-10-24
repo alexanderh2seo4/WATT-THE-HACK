@@ -145,6 +145,33 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * CellObservation
+         * @description One inspection pass of a cell (also "nothing found") with the cell risk before/after it.
+         *     Only sent for cells behind a recommendation (recommend.relevant_cells), for its report panel.
+         */
+        CellObservation: {
+            /** T */
+            t: number;
+            /** Drone Id */
+            drone_id: string;
+            /** Cell Id */
+            cell_id: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "air" | "landed";
+            /**
+             * Detections
+             * @default []
+             */
+            detections: components["schemas"]["Detection"][];
+            /** Risk Before */
+            risk_before: number;
+            /** Risk After */
+            risk_after: number;
+        };
         /** CellState */
         CellState: {
             /** Cell Id */
@@ -159,6 +186,16 @@ export interface components {
             inspected: "none" | "air" | "landed";
             /** Top Fault */
             top_fault?: ("vegetation" | "sag" | "ice" | "galloping" | "hotspot" | "broken_conductor") | null;
+        };
+        /** Detection */
+        Detection: {
+            /**
+             * Fault Type
+             * @enum {string}
+             */
+            fault_type: "vegetation" | "sag" | "ice" | "galloping" | "hotspot" | "broken_conductor";
+            /** Confidence */
+            confidence: number;
         };
         /** DroneParams */
         DroneParams: {
@@ -447,6 +484,11 @@ export interface components {
              *     }
              */
             progress: components["schemas"]["Progress"];
+            /**
+             * Observations
+             * @default []
+             */
+            observations: components["schemas"]["CellObservation"][];
         };
         /** Static */
         Static: {

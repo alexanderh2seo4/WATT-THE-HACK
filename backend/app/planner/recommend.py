@@ -57,3 +57,25 @@ def recommendations(cells: list[CellState], segments: list[SegmentState], cell_k
             add(f"cleared:{rid}", None, None,
                 f"Area of {rid} cleared ({report_name(rid)}): all {len(own)} cells inspected, no fault found")
     return out
+
+
+def relevant_cells(done: set[str], report_cells: dict[str, list[str]]) -> set[str]:
+    """Cells whose observations explain an emitted recommendation (keys in `done`): the cell itself
+    (crew/confirm), every cell of the line (ground check) or of the report area (cleared)."""
+    out: set[str] = set()
+    for key in done:
+        kind, _, ref = key.partition(":")
+        if kind in ("crew", "confirm"):
+            out.add(ref)
+        elif kind == "cleared":
+            out.update(report_cells.get(ref, []))
+        elif kind == "ground":
+            out.add(ref + "#")  # prefix: all cells of the segment
+    return out
+
+
+def observations_for(obs_log: list, done: set[str], report_cells: dict[str, list[str]]) -> list:
+    """The CellObservations behind the emitted recommendations (for the operator's report panel)."""
+    cells = relevant_cells(done, report_cells)
+    prefixes = tuple(c for c in cells if c.endswith("#"))
+    return [o for o in obs_log if o.cell_id in cells or (prefixes and o.cell_id.startswith(prefixes))]

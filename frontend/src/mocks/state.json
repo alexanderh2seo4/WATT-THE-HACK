@@ -3960,5 +3960,107 @@
   ],
   "all_found_t": null,
   "all_confirmed_t": null
- }
+ },
+ "observations": [
+  {
+   "t": 65.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_037#04",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.561,
+   "risk_after": 0.182
+  },
+  {
+   "t": 68.0,
+   "drone_id": "D4",
+   "cell_id": "LINE_035#23",
+   "mode": "air",
+   "detections": [
+    {
+     "fault_type": "vegetation",
+     "confidence": 0.86
+    }
+   ],
+   "risk_before": 0.61,
+   "risk_after": 0.944
+  },
+  {
+   "t": 113.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_037#05",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.529,
+   "risk_after": 0.172
+  },
+  {
+   "t": 160.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_037#06",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.469,
+   "risk_after": 0.156
+  },
+  {
+   "t": 208.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_037#07",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.469,
+   "risk_after": 0.156
+  },
+  {
+   "t": 256.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_034#01",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.469,
+   "risk_after": 0.156
+  },
+  {
+   "t": 296.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_034#00",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.51,
+   "risk_after": 0.166
+  },
+  {
+   "t": 386.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_059#00",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.469,
+   "risk_after": 0.156
+  },
+  {
+   "t": 397.0,
+   "drone_id": "D2",
+   "cell_id": "LINE_026#08",
+   "mode": "air",
+   "detections": [
+    {
+     "fault_type": "vegetation",
+     "confidence": 0.63
+    }
+   ],
+   "risk_before": 0.246,
+   "risk_after": 0.709
+  },
+  {
+   "t": 457.0,
+   "drone_id": "D1",
+   "cell_id": "LINE_037#07",
+   "mode": "air",
+   "detections": [],
+   "risk_before": 0.008,
+   "risk_after": 0.006
+  }
+ ]
 }
