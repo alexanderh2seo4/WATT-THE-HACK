@@ -282,6 +282,18 @@ class Engine:
                        position=list(true.position) if true else list(d.position))
             self._track_found(d, cell, det.fault_type, faults)
         self._recommend()
+        if mode == "air" and d.status == "flying" and obs.detections:
+            self._confirm_reroute(d, cell, [det.fault_type for det in obs.detections])
+
+    def _confirm_reroute(self, d: Drone, cell: str, types: list[str]) -> None:
+        """Ask the planner whether this drone should break off its flight and land on the finding to confirm it."""
+        route = self.planner.confirm_route(d.state(), cell)
+        if not route:
+            return
+        d.route, d.leg = route, 1
+        what = " / ".join(t for t in types if (cell, t) not in self.confirmed) or " / ".join(types)
+        where = f"{route[-1].segment_id} km {self.cell_km[cell]}"
+        self._emit("reroute", d, f"{d.id} re-routes to land at {where} to confirm possible {what}", cell_id=cell)
 
     def _track_found(self, d: Drone, cell: str, fault_type: str, faults: list[Fault]) -> None:
         """Benchmark: a true fault counts as found at its first logged finding of its type on its cell (the

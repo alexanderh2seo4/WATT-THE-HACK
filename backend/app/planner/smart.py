@@ -8,6 +8,8 @@ give (sum over types of p_t · p_detect_t, using the published sensor specs), so
 Cells already above the crew threshold are worth nothing more (we know enough there).
 """
 
+import os
+
 import numpy as np
 from shapely.geometry import shape
 
@@ -17,7 +19,7 @@ from app.models import (CellState, DroneParams, DroneState, Event, FaultType, Ob
 from app.planner import Planner
 from app.planner import missions, start_positions
 from app.planner.missions import Network
-from app.planner.recommend import CONFIRM_CONF
+from app.planner.recommend import CONFIRM, CONFIRM_CONF
 from app.planner.risk import (ALL_TYPES, DEAD_LINE_MIN, DEAD_LINE_P, NEIGHBOUR_P, prior, report_cells,
                               update_finding, update_live, update_no_finding, vegetation_shares)
 
@@ -34,6 +36,11 @@ MIN_FLIGHT_VALUE = 0.03
 CREW = 0.8  # above this (and confirmed) a fault is known: no more value in looking again
 CLEAR_TOP = 0.1  # a finding whose belief dropped below this is no longer shown as top fault
 INSPECTED_RANK = {"none": 0, "air": 1, "landed": 2}
+# Land on a finding (confirm_route): a flying drone whose air finding needs confirmation lands on that cell
+# right away (landed sensors confirm with one confident detection). LAND_ON_FINDING=0 = old behaviour.
+LAND_ON_FINDING = os.environ.get("LAND_ON_FINDING", "1") != "0"
+MIN_CONFIRM_VALUE = 0.1  # P(a landing confirms the finding) below this: not worth breaking off the flight
+HANDOFF_RADIUS_M = 2000  # a drone parked this close to a finding hops over to confirm it (instead of the flyer)
 N_NET: dict[int, Network] = {}  # Network is pure geometry: build once per Static
 
 
@@ -62,6 +69,7 @@ class SmartPlanner(Planner):
         self.cell_seg_idx = np.array([self.segs.index(s) for s in net.cell_seg])
         self.sensors: dict[str, SensorParams] = {}
         self.drone = DroneParams()
+        self.land_on_finding = LAND_ON_FINDING
         self._pd()
         self.set_inputs(static.default_inputs)
 
@@ -100,6 +108,7 @@ class SmartPlanner(Planner):
         self.claim_land: dict[str, int] = {}
         self.home: dict[str, int] = {}  # drone_id -> cell of its last / planned landing (where it charges)
         self.first_plans: dict = {}  # drone_id -> FlightPlan from start_positions
+        self.parked: dict[str, DroneState] = {}  # charging drones, as of their last next_route call (<= 60 s old)
         self._cache = None
 
     def on_event(self, event: Event) -> None:
@@ -108,6 +117,7 @@ class SmartPlanner(Planner):
             self.claim_land.pop(event.drone_id, None)
             if event.type == "stranded":
                 self.home.pop(event.drone_id, None)
+                self.parked.pop(event.drone_id, None)
         if event.type == "line_dead" and event.segment_id and event.segment_id not in self.dead:
             self._mark_dead(event.segment_id)
         if event.type == "recommendation" and event.message.startswith("Area of "):
@@ -228,6 +238,8 @@ class SmartPlanner(Planner):
         first = self.first_plans.pop(drone.drone_id, None)
         if first and drone.position == first.route[0].position and drone.battery_min >= p.max_flight_min - 0.1:
             return self._take(drone, first)
+        if drone.status == "charging":
+            self.parked[drone.drone_id] = drone
         air, land, land_after, p_live_cell, landable = self._values()
         hop_ok = landable.copy()  # emergency hop off a dead line: any free landable cell
         hop_ok[[c for d, c in self.claim_land.items() if d != drone.drone_id]] = False
@@ -235,11 +247,25 @@ class SmartPlanner(Planner):
         for d, c in list(self.claim_land.items()) + list(self.home.items()):
             if d != drone.drone_id:
                 landable[self.net.seg_cells[self.net.cell_seg[c]]] = False
+        if self.land_on_finding:
+            # the reserve only helps if a hop is possible: land on a line not known live only with another free
+            # landable line within hop range ((reserve - landing) min of transit). Part of the flag: early
+            # confirmation landings move the drones' homes, and without this D1 got stranded on the hidden dead
+            # line in 7 of 10 default-scenario seeds.
+            reach = (RESERVE_MIN - p.landing_min) * 60 * p.speed_transit_mps
+            other = self.cell_seg_idx[:, None] != self.cell_seg_idx[None, :]
+            landable &= (p_live_cell >= 1) | ((self.net.cell_dist <= reach) & hop_ok[None, :] & other).any(axis=1)
         if drone.status != "charging" and not self._landable(drone.segment_id):
             # landed on a dead line: hop to a live one using the reserve
             plan = missions.hop(self.net, drone.position, (drone.battery_min - p.landing_min) * 60 - 5, hop_ok,
                                 land, p_live_cell, p.speed_transit_mps)
             return self._take(drone, plan)
+        if drone.status == "charging" and self.land_on_finding:
+            # parked near a finding that needs confirmation: hop over as soon as the battery allows
+            for i in self._pending_findings(drone):
+                plan = self._confirm_hop(drone, i)
+                if plan:
+                    return self._take(drone, plan)
         if drone.battery_min < p.landing_min + RESERVE_MIN + 2:
             return None
         budget = (drone.battery_min - p.landing_min - RESERVE_MIN) * 60
@@ -271,9 +297,60 @@ class SmartPlanner(Planner):
             return None
         return int(np.where(ok, rate, -1).argmax())
 
+    # ---------- land on a finding ----------
+
+    def confirm_route(self, drone: DroneState, cell_id: str) -> list[Waypoint] | None:
+        """Called while `drone` flies, right after an air detection on `cell_id`. If the finding needs
+        confirmation and landed sensors can confirm it, return a new route that lands on that cell now
+        (or hand it to a drone parked nearby and keep flying). None = keep the current plan.
+        Only the cell under a landed drone is sensed, so the landing must be on the finding's own cell."""
+        i = self.net.cell_idx.get(cell_id)
+        if not self.land_on_finding or i is None or drone.status != "flying" or not self._needs_landing(i):
+            return None
+        if self.claim_land.get(drone.drone_id) == i:
+            return None  # already landing there
+        # a drone parked close by is the cheaper confirmer: it hops over on its next call (<= 60 s), this one
+        # keeps its flight plan
+        if any(i in self._pending_findings(d) and self._confirm_hop(d, i) for d in self.parked.values()
+               if d.drone_id != drone.drone_id):
+            return None
+        return self._take(drone, self._confirm_hop(drone, i))
+
+    def _needs_landing(self, i: int) -> bool:
+        """An unconfirmed detection that makes the cell "needs confirmation", and a landing would likely confirm it."""
+        risk = 1 - np.prod(1 - self.P[i])
+        todo = [k for k in self.detected[i] if not self.confirmed[i, k]]
+        return risk >= CONFIRM and any(self.P[i, k] * self.pd_land[k] >= MIN_CONFIRM_VALUE for k in todo)
+
+    def _pending_findings(self, drone: DroneState) -> list[int]:
+        """Cells with an unconfirmed detection within hop range of a parked drone, nearest first (not the cell it
+        sits on: its landing already sensed that one)."""
+        d = self.net.dist_to_cells(to_xy(*drone.position))
+        cells = np.where(((self.n_det > 0) & ~self.confirmed).any(axis=1) & (d <= HANDOFF_RADIUS_M) & (d > 100))[0]
+        return [int(i) for i in cells[np.argsort(d[cells])]
+                if not any(c == i for o, c in self.claim_land.items() if o != drone.drone_id)]
+
+    def _line_taken(self, i: int, me: str) -> bool:
+        sid = self.net.cell_seg[i]
+        return any(self.net.cell_seg[c] == sid for d, c in list(self.claim_land.items()) + list(self.home.items())
+                   if d != me)
+
+    def _confirm_hop(self, drone: DroneState, i: int):
+        """Straight transit + landing on cell i (missions.hop), keeping landing time and the 5 min reserve.
+        None if the finding no longer needs it, the line is dead / doubtful or another drone lands or charges on
+        it (one drone per landing line), or the battery is short."""
+        if not self._needs_landing(i) or not self._landable(self.net.cell_seg[i]) or self._line_taken(i, drone.drone_id):
+            return None
+        _, land, _, p_live_cell, _ = self._values()
+        only = np.zeros(self.n, bool)
+        only[i] = True
+        budget = (drone.battery_min - self.drone.landing_min - RESERVE_MIN) * 60
+        return missions.hop(self.net, drone.position, budget, only, land, p_live_cell, self.drone.speed_transit_mps)
+
     def _take(self, drone: DroneState, plan) -> list[Waypoint] | None:
         if not plan:
             return None
+        self.parked.pop(drone.drone_id, None)
         self.claim_cells[drone.drone_id] = plan.cells
         self.claim_land[drone.drone_id] = plan.land_cell
         self.home[drone.drone_id] = plan.land_cell
