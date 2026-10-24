@@ -25,6 +25,7 @@ def write(path: Path, data: dict) -> None:
 def main() -> None:
     frontend = REPO_ROOT / "frontend"
     engine = make_engine()
+    engine.set_inputs(engine.static.default_inputs)
     engine.plan_start_positions()
     engine.control("start")
     engine.step_n(SIM_MINUTES * 60)

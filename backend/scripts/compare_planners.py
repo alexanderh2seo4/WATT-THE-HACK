@@ -20,6 +20,7 @@ from app.sim.engine import Engine  # noqa: E402
 def run(planner: str, seed: int, hours: float) -> dict:
     cfg = load_default_config(os.environ.get("SCENARIO", "demo")).model_copy(update={"seed": seed})
     eng = Engine(load_static(), cfg, PLANNERS[planner])
+    eng.set_inputs(eng.static.default_inputs)
     t0 = time.perf_counter()
     eng.plan_start_positions()
     eng.control("start")

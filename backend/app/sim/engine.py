@@ -52,7 +52,8 @@ class Engine:
         self.static = static
         self.config = config
         self.planner_factory = planner_factory
-        self.inputs: OperatorInputs = static.default_inputs
+        # no reports / dead lines until the operator loads or uploads them ("Load defaults" = static.default_inputs)
+        self.inputs = OperatorInputs()
         self.speed = 60.0
         self.start_positions: list[StartPosition] = []
         # network geometry for cell lookup (projected metres); cells are equal pieces of each segment
@@ -125,7 +126,9 @@ class Engine:
         elif action == "resume" and self.status == "paused":
             self.status = "running"
             self._last_wall = time.monotonic()
-        elif action == "reset":
+        elif action == "reset":  # back to a fresh start: operator inputs are cleared too
+            self.inputs = OperatorInputs()
+            self.start_positions = []
             self.reset()
 
     # ---------- stepping ----------

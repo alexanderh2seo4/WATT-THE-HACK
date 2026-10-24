@@ -14,8 +14,14 @@ def test_static_loads():
     assert s["default_inputs"]["known_dead_segments"] == ["LINE_024"]
 
 
-def test_drones_move_after_start():
+def reset_and_load_defaults():
     client.post("/api/sim/control", json={"action": "reset"})
+    assert client.get("/api/state").json()["inputs"]["reports"] == []  # nothing until the operator loads reports
+    client.put("/api/inputs", json=client.get("/api/static").json()["default_inputs"])  # "Load defaults"
+
+
+def test_drones_move_after_start():
+    reset_and_load_defaults()
     sps = client.post("/api/plan/start-positions").json()
     assert len(sps) == 5 and all(sp["segment_id"] != "LINE_024" for sp in sps)
 
@@ -32,7 +38,7 @@ def test_drones_move_after_start():
 
 
 def test_sim_two_hours_finds_faults():
-    client.post("/api/sim/control", json={"action": "reset"})
+    reset_and_load_defaults()
     client.post("/api/sim/control", json={"action": "start", "speed": 600})
     engine.step_n(2 * 3600)
     s = client.get("/api/state").json()

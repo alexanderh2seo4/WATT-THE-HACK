@@ -22,6 +22,7 @@ def test_smart_start_positions():
 
 def test_smart_four_hours_fast_and_finds_faults():
     eng = Engine(load_static(), load_default_config(), SmartPlanner)
+    eng.set_inputs(eng.static.default_inputs)  # "Load defaults"
     t0 = time.perf_counter()
     eng.plan_start_positions()
     eng.control("start")
