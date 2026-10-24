@@ -49,7 +49,7 @@ Caveats, honestly: the demo ground truth was placed knowing where the planner fl
 
 ## Demo script
 
-`scenarios/demo.json` is loaded at startup (`default.json` stays available as a preset). Seed 2, LINE_024 known dead (operator), hidden dead line LINE_015 (the line that tripped in report 03's protection sector). Faults: F1 vegetation LINE_026 km 4.2 (report 02), F2 hotspot LINE_002 km 1.7 (report 05), F3 galloping LINE_054 km 6.6 (report 06, landed only), F4 vegetation LINE_035 km 11.8 (forest, outside every report area). Report 04 (flash) has no fault: it was the generator test.
+`scenarios/demo.json` is loaded at startup (`default.json` stays available as a preset). The sim starts (and Reset returns) with no operator inputs: click **Load defaults** in the Inputs step to load the 6 reports + LINE_024 known dead, then find start positions and start. Seed 2, LINE_024 known dead (operator), hidden dead line LINE_015 (the line that tripped in report 03's protection sector). Faults: F1 vegetation LINE_026 km 4.2 (report 02), F2 hotspot LINE_002 km 1.7 (report 05), F3 galloping LINE_054 km 6.6 (report 06, landed only), F4 vegetation LINE_035 km 11.8 (forest, outside every report area). Report 04 (flash) has no fault: it was the generator test.
 
 Sim time → what happens (at 300×, 1 sim minute ≈ 0.2 s wall time, 3 h ≈ 36 s):
 

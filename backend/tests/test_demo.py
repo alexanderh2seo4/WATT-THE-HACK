@@ -8,6 +8,7 @@ from app.sim.engine import Engine
 
 def test_demo_story_three_hours():
     eng = Engine(load_static(), load_default_config(), SmartPlanner)
+    eng.set_inputs(eng.static.default_inputs)  # "Load defaults"
     eng.plan_start_positions()
     eng.control("start")
     eng.step_n(3 * 3600)
