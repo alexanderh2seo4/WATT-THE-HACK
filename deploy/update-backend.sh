@@ -42,7 +42,7 @@ fi
 
 cd backend
 uv sync --locked
-uv run pytest tests/test_smoke.py::test_static_loads tests/test_smoke.py::test_drones_move_after_start tests/test_sessions.py -q
+uv run pytest tests/test_smoke.py::test_static_loads tests/test_smoke.py::test_drones_move_after_start tests/test_smoke.py::test_play_requires_reports tests/test_sessions.py -q
 
 units="$HOME/.config/systemd/user"
 mkdir -p "$units"

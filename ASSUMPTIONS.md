@@ -3,6 +3,7 @@
 Draft values (see PLAN.md). Change them here when the team decides.
 
 ## Hosted demo
+- Play requires at least one loaded/uploaded report. An early Play click stays in setup and highlights Play and the input controls red; marking dead lines alone does not satisfy this prerequisite. The API enforces the same rule.
 - On page load, a four-second preview shows vegetation (green), storm exposure (amber), default report areas (purple) and current initial fault risk (the normal yellow-to-red scale), one second each. Heat overlays use the repository notebook's exponential distance falloff with 0.5 km decay, approximated on a 384×384 browser raster. Reports are weighted by supplied confidence; initial cell risk comes from the existing simulation. Text and progress remain black and white. These are visual exposure previews, not additional fault probabilities or an automatic start-position plan; the intro never changes visitor inputs or mission state.
 - Storm preview detail comes from actual grid corridors clipped to the supplied storm footprint, with only faint heat over the broad footprint. It visualises exposed infrastructure, not finer-resolution wind measurements or confirmed storm damage.
 - Each browser-tab session gets its own Python process and in-memory simulation, up to 8 simultaneous sessions. Random IDs in `sessionStorage` survive refresh; these are anonymous sessions, not authenticated accounts. Visitors cannot change each other's state using their own session IDs. Only the supplied fictional data is used.

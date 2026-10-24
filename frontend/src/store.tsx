@@ -1,19 +1,27 @@
 // One store for both views: static data (fetched once) + the latest /state snapshot.
-import { createContext, useContext, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { usePolling, useStatic, type State, type Static } from './api'
 
 interface Store {
   staticData: Static | null
   state: State | null
+  inputWarning: boolean
+  warnMissingInputs: () => void
 }
 
-const StoreContext = createContext<Store>({ staticData: null, state: null })
+const StoreContext = createContext<Store>({ staticData: null, state: null, inputWarning: false, warnMissingInputs: () => {} })
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const staticData = useStatic()
   const { state, error } = usePolling(500)
+  const [attemptedPlay, setAttemptedPlay] = useState(false)
+  const hasReports = (state?.inputs.reports.length ?? 0) > 0
+  const inputWarning = attemptedPlay && !hasReports && state?.status === 'setup'
+  useEffect(() => {
+    if (hasReports) setAttemptedPlay(false)
+  }, [hasReports])
   return (
-    <StoreContext.Provider value={{ staticData, state }}>
+    <StoreContext.Provider value={{ staticData, state, inputWarning, warnMissingInputs: () => setAttemptedPlay(true) }}>
       {children}
       {(!state || error) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-100/95 p-6">

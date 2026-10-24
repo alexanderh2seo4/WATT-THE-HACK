@@ -13,6 +13,7 @@ Quick try (reuse the same ID for your session):
 
 ```bash
 SESSION_ID=$(uv run python -c 'from uuid import uuid4; print(uuid4())')
+curl -s localhost:8000/api/static -H "X-Session-ID: $SESSION_ID" | uv run python -c 'import json,sys; print(json.dumps(json.load(sys.stdin)["default_inputs"]))' | curl -X PUT localhost:8000/api/inputs -H "X-Session-ID: $SESSION_ID" -H 'content-type: application/json' --data-binary @-
 curl -X POST localhost:8000/api/plan/start-positions -H "X-Session-ID: $SESSION_ID"
 curl -X POST localhost:8000/api/sim/control -H "X-Session-ID: $SESSION_ID" -H 'content-type: application/json' -d '{"action":"start","speed":60}'
 curl localhost:8000/api/state -H "X-Session-ID: $SESSION_ID"
