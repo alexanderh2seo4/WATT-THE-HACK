@@ -2,6 +2,7 @@ import { BrowserRouter, HashRouter, Route, Routes } from 'react-router'
 import { AllFoundBanner } from './components/AllFoundBanner'
 import { TopBar } from './components/TopBar/TopBar'
 import { StoreProvider } from './store'
+import { StartupIntro } from './components/StartupIntro'
 import { Operator } from './views/Operator/Operator'
 import { SimSetup } from './views/SimSetup/SimSetup'
 
@@ -11,16 +12,18 @@ const Router = import.meta.env.BASE_URL === '/' ? BrowserRouter : HashRouter
 export default function App() {
   return (
     <StoreProvider>
-      <Router>
-        <div className="flex h-full flex-col">
-          <TopBar />
-          <Routes>
-            <Route path="/" element={<Operator />} />
-            <Route path="/setup" element={<SimSetup />} />
-          </Routes>
-          <AllFoundBanner />
-        </div>
-      </Router>
+      <StartupIntro>
+        <Router>
+          <div className="flex h-full flex-col">
+            <TopBar />
+            <Routes>
+              <Route path="/" element={<Operator />} />
+              <Route path="/setup" element={<SimSetup />} />
+            </Routes>
+            <AllFoundBanner />
+          </div>
+        </Router>
+      </StartupIntro>
     </StoreProvider>
   )
 }

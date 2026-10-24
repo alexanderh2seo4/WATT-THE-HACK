@@ -27,3 +27,11 @@ h2,
 h3 {
   font-family: var(--font-heading);
 }
+@keyframes startup-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.startup-progress {
+  animation: startup-progress 4s linear forwards;
+}
