@@ -35,6 +35,7 @@ function OperatorPage() {
   const { staticData, state } = useStore()
   const [showVegetation, setShowVegetation] = useState(true)
   const [hover, setHover] = useState<{ id: string; lngLat: [number, number] } | null>(null)
+  const [reportHover, setReportHover] = useState<{ ids: string[]; lngLat: [number, number] } | null>(null)
   const setup = !state || state.status === 'setup'
   const flyTo = useFlyTo(staticData)
   const recs = useMemo(() => recommendations(state), [state])
@@ -57,9 +58,15 @@ function OperatorPage() {
   // map mousemove keeps firing over markers; suppress the line popup so the marker tooltip stays visible
   const overMarker = useRef(false)
   const onMove = (e: MapLayerMouseEvent) => {
-    const id = overMarker.current && setup ? undefined : (e.features?.[0]?.properties?.segment_id as string | undefined)
-    setHover(id ? { id, lngLat: [e.lngLat.lng, e.lngLat.lat] } : null)
+    const lngLat: [number, number] = [e.lngLat.lng, e.lngLat.lat]
+    const feats = overMarker.current && setup ? [] : (e.features ?? [])
+    const id = feats.find((f) => f.layer.id === 'segments-hit')?.properties?.segment_id as string | undefined
+    setHover(id ? { id, lngLat } : null)
+    // a line under the cursor wins; otherwise list every report area the cursor is in
+    const ids = id ? [] : [...new Set(feats.filter((f) => f.layer.id === 'reports-fill').map((f) => String(f.properties?.report_id)))]
+    setReportHover(ids.length ? { ids, lngLat } : null)
   }
+  const hoveredReports = useMemo(() => reportsUnder(state, reportHover?.ids ?? []), [state, reportHover])
 
   return (
     <SidebarLayout
@@ -81,13 +88,23 @@ function OperatorPage() {
     >
       <Map
         id={MAP_ID}
-        interactiveLayerIds={['segments-hit']}
+        interactiveLayerIds={['segments-hit', 'reports-fill']}
         onClick={onClick}
         onMouseMove={onMove}
-        onMouseLeave={() => setHover(null)}
-        cursor={hover && setup ? 'pointer' : 'grab'}
+        onMouseLeave={() => {
+          setHover(null)
+          setReportHover(null)
+        }}
+        cursor={(hover && setup) || hoveredReports.length ? 'pointer' : 'grab'}
       >
-        {staticData && <RiskLayers staticData={staticData} state={state} showVegetation={showVegetation} />}
+        {staticData && (
+          <RiskLayers
+            staticData={staticData}
+            state={state}
+            showVegetation={showVegetation}
+            hoveredReports={hoveredReports.map((r) => r.report_id)}
+          />
+        )}
         {setup && state?.start_positions.map((sp, i) => (
           <Marker key={sp.drone_id} longitude={sp.position[0]} latitude={sp.position[1]}>
             <div
@@ -95,6 +112,7 @@ function OperatorPage() {
               onMouseEnter={() => {
                 overMarker.current = true
                 setHover(null)
+                setReportHover(null)
               }}
               onMouseLeave={() => (overMarker.current = false)}
             >
@@ -121,9 +139,75 @@ function OperatorPage() {
             )}
           </Popup>
         )}
+        {reportHover && hoveredReports.length > 0 && (
+          <Popup
+            longitude={reportHover.lngLat[0]}
+            latitude={reportHover.lngLat[1]}
+            closeButton={false}
+            offset={12}
+            maxWidth="320px"
+            className="pointer-events-none text-xs"
+          >
+            <ReportTooltip reports={hoveredReports} />
+          </Popup>
+        )}
       </Map>
       <Legend showVegetation={showVegetation} onToggleVegetation={() => setShowVegetation((v) => !v)} />
     </SidebarLayout>
+  )
+}
+
+// ---------- report tooltip ----------
+
+const bboxArea = (r: Report) => {
+  const ring = ((r.polygon as { coordinates?: Position[][] }).coordinates?.[0] ?? []) as Position[]
+  if (!ring.length) return Infinity
+  const xs = ring.map((c) => c[0])
+  const ys = ring.map((c) => c[1])
+  return (Math.max(...xs) - Math.min(...xs)) * (Math.max(...ys) - Math.min(...ys))
+}
+
+/** Reports with the given ids, most specific (smallest area) first. */
+function reportsUnder(state: State | null, ids: string[]): Report[] {
+  if (!ids.length) return []
+  return (state?.inputs.reports ?? []).filter((r) => ids.includes(r.report_id)).sort((a, b) => bboxArea(a) - bboxArea(b))
+}
+
+// same scale the backend maps textual confidences onto (app/data.py CONFIDENCE)
+const CONFIDENCE_LABELS: [number, string][] = [
+  [0.2, 'low'],
+  [0.35, 'low–medium'],
+  [0.5, 'medium'],
+  [0.65, 'medium–high'],
+  [0.8, 'high'],
+]
+const confidenceLabel = (c: number) =>
+  CONFIDENCE_LABELS.reduce((best, cur) => (Math.abs(cur[0] - c) < Math.abs(best[0] - c) ? cur : best))[1]
+
+/** Most specific report first with its full text; overlapping broader ones below, clamped to two lines. */
+function ReportTooltip({ reports }: { reports: Report[] }) {
+  return (
+    <div className="space-y-2">
+      {reports.map((r, i) => (
+        <div key={r.report_id} className={`space-y-0.5 border-l-2 pl-2 ${i ? 'border-indigo-200' : 'border-indigo-500'}`}>
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="font-semibold text-slate-900">{r.report_id}</span>
+            <span className="shrink-0 text-[11px] text-slate-500">
+              confidence {confidenceLabel(r.confidence)} ({Math.round(r.confidence * 100)}%)
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {r.fault_types.map((t) => (
+              <span key={t} className="rounded bg-indigo-50 px-1.5 py-px text-[11px] text-indigo-700">
+                {t.replace('_', ' ')}
+              </span>
+            ))}
+          </div>
+          {r.text && <p className={`leading-snug ${i ? 'line-clamp-2 text-slate-500' : 'text-slate-700'}`}>{r.text}</p>}
+        </div>
+      ))}
+      {reports.length > 1 && <div className="text-[11px] text-slate-400">{reports.length} overlapping reports here</div>}
+    </div>
   )
 }
 

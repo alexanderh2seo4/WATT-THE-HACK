@@ -39,10 +39,13 @@ export function RiskLayers({
   staticData,
   state,
   showVegetation,
+  hoveredReports = [],
 }: {
   staticData: Static
   state: State | null
   showVegetation: boolean
+  /** report ids under the cursor, most specific first: all get a stronger outline, the first a slightly stronger fill */
+  hoveredReports?: string[]
 }) {
   const { current: map } = useMap()
   const applied = useRef<{ src: unknown; cells: Record<string, string> }>({ src: null, cells: {} })
@@ -65,6 +68,17 @@ export function RiskLayers({
   const deadKey = deadSegments(state).join(',')
   const deadFilter = useMemo(() => ['in', ['get', 'segment_id'], ['literal', deadKey ? deadKey.split(',') : []]], [deadKey])
   const aliveFilter = useMemo(() => ['!', deadFilter], [deadFilter])
+
+  const hoverKey = hoveredReports.join(',')
+  const hoverFilter = useMemo(
+    () => ['in', ['get', 'report_id'], ['literal', hoverKey ? hoverKey.split(',') : []]] as ExpressionSpecification,
+    [hoverKey],
+  )
+  // only the most specific one gets the fill: the broad study-area report would otherwise tint the whole map
+  const topFilter = useMemo(
+    () => ['==', ['get', 'report_id'], hoverKey.split(',')[0] ?? ''] as ExpressionSpecification,
+    [hoverKey],
+  )
 
   const reportsKey = JSON.stringify(state?.inputs.reports ?? [])
   const reports = useMemo<FeatureCollection<Polygon>>(
@@ -120,6 +134,13 @@ export function RiskLayers({
       <Source id="reports" type="geojson" data={reports}>
         <Layer id="reports-fill" type="fill" paint={{ 'fill-color': '#6366f1', 'fill-opacity': 0.035 }} />
         <Layer id="reports-line" type="line" paint={{ 'line-color': '#6366f1', 'line-width': 1, 'line-opacity': 0.3 }} />
+        <Layer id="reports-hover-fill" type="fill" filter={topFilter} paint={{ 'fill-color': '#6366f1', 'fill-opacity': 0.08 }} />
+        <Layer
+          id="reports-hover-line"
+          type="line"
+          filter={hoverFilter}
+          paint={{ 'line-color': '#6366f1', 'line-width': 2, 'line-opacity': 0.7 }}
+        />
       </Source>
 
       {/* invisible wide hit area for clicking/hovering lines */}
