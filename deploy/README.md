@@ -4,7 +4,11 @@
 - Backend: https://kimai.tailb58b58.ts.net:8443/api
 - Source: `main` in `alexanderh2seo4/WATT-THE-HACK` (not the separate `deebuggertech` remote).
 
-GitHub Actions builds and publishes the frontend on changes to `frontend/` on `main`.
+Every push/merge to `main` automatically builds and publishes the frontend through GitHub Actions.
+The backend checks `main` every minute, pulls updates, runs the core smoke tests, and
+restarts automatically when backend code, resources or deployment configuration changes.
+No GitHub token or SSH deployment secret is needed: the server pulls the public repository.
+Changes on other branches go live only after they are merged into `main`.
 The repository Actions variable `VITE_API_URL` holds the public backend URL above.
 GitHub Pages uses hash routing (`/#/setup`) so both views survive a refresh.
 Local development still uses `/api` via Vite's proxy.
@@ -17,15 +21,21 @@ The machine, WSL and Tailscale must stay running. The demo has one shared, publi
 unauthenticated simulation; all visitors can change it, and a restart resets it.
 Use only the fictional supplied data.
 
-To update the backend from this checkout (the first two commands run locally):
+The managed checkout is `~/apps/watt-the-hack/repo`. Do not edit it directly:
+the updater refuses to overwrite local tracked changes. Frontend/documentation-only
+pushes do not restart the backend. Backend deployments reset the shared simulation.
+
+To install the updater on a new server (run locally with this checkout):
 
 ```bash
-rsync -az --exclude=.venv --exclude=__pycache__ --exclude=.pytest_cache backend resources alex-linux:apps/watt-the-hack/
-scp deploy/watt-the-hack.service alex-linux:.config/systemd/user/watt-the-hack.service
-ssh alex-linux 'cd ~/apps/watt-the-hack/backend && uv sync --locked && systemctl --user daemon-reload && systemctl --user restart watt-the-hack'
+ssh alex-linux 'mkdir -p ~/apps/watt-the-hack ~/.config/systemd/user'
+scp deploy/update-backend.sh alex-linux:apps/watt-the-hack/update-backend.sh
+scp deploy/watt-the-hack-update.service deploy/watt-the-hack-update.timer alex-linux:.config/systemd/user/
+ssh alex-linux 'systemctl --user daemon-reload && systemctl --user enable --now watt-the-hack-update.timer'
 ```
 
-Initial setup also needs `systemctl --user enable --now watt-the-hack` and
+This needs Git, uv/Python 3.14, and systemd user services. The first timer run clones
+the repo, installs dependencies and starts the backend. Initial setup also needs
 `tailscale funnel --bg --https=8443 http://127.0.0.1:8787` on the server.
 User lingering is already enabled so the service survives SSH logout.
 
@@ -33,5 +43,10 @@ Status / logs:
 
 ```bash
 ssh alex-linux 'systemctl --user status watt-the-hack --no-pager'
+ssh alex-linux 'systemctl --user list-timers watt-the-hack-update.timer --no-pager'
+ssh alex-linux 'cat ~/apps/watt-the-hack/deployed-revision'
 ssh alex-linux 'journalctl --user -u watt-the-hack -n 40 --no-pager'
+ssh alex-linux 'journalctl --user -u watt-the-hack-update -n 40 --no-pager'
 ```
+
+To check for an update immediately: `ssh alex-linux 'systemctl --user start watt-the-hack-update'`.

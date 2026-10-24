@@ -1,0 +1,11 @@
+[Unit]
+Description=Check GitHub main for Storm Patrol updates every minute
+
+[Timer]
+OnBootSec=30s
+OnUnitInactiveSec=60s
+AccuracySec=1s
+Unit=watt-the-hack-update.service
+
+[Install]
+WantedBy=timers.target

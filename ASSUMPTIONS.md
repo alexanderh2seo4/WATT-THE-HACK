@@ -4,7 +4,7 @@ Draft values (see PLAN.md). Change them here when the team decides.
 
 ## Hosted demo
 - The public demo uses one shared in-memory simulation, not a separate session per visitor. Anyone can operate/reset it; restarting the backend clears its state. Only the supplied fictional data is used.
-- GitHub Pages serves the frontend from `main`; Python runs on `alex-linux` / `kimai` behind Tailscale Funnel on port 8443. The PC/WSL and Tailscale must remain online. Backend updates are deployed separately (see `deploy/README.md`).
+- Every push/merge to `main` redeploys the GitHub Pages frontend. Python runs on `alex-linux` / `kimai` behind Tailscale Funnel on port 8443 and checks `main` every minute, automatically testing/deploying backend, resource and deployment changes. Backend deployments reset the shared simulation. The PC/WSL and Tailscale must remain online (see `deploy/README.md`).
 
 ## Drone
 - Transit speed 16 m/s (Nomad website). Inspection speed along a line: 10 m/s (assumed, so the camera can see).

@@ -1,0 +1,8 @@
+[Unit]
+Description=Update Storm Patrol backend from GitHub main
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash %h/apps/watt-the-hack/update-backend.sh
+TimeoutStartSec=180

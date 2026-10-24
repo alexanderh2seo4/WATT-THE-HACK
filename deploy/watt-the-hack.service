@@ -3,9 +3,9 @@ Description=Storm Patrol demo backend
 After=network-online.target
 
 [Service]
-WorkingDirectory=%h/apps/watt-the-hack/backend
+WorkingDirectory=%h/apps/watt-the-hack/repo/backend
 Environment=CORS_ORIGINS=https://alexanderh2seo4.github.io
-ExecStart=%h/apps/watt-the-hack/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8787 --workers 1
+ExecStart=%h/apps/watt-the-hack/repo/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8787 --workers 1
 Restart=on-failure
 RestartSec=3
 
