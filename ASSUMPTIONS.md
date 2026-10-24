@@ -1,3 +1,9 @@
 ## Bundesnetzagentur historical data
 
 Detailed interruption records are present here for 2012–2024. The agency's currently linked incident workbooks cover 2013–2024; only 2012 could be recovered from the archived download. Do not interpret unavailable incident years (2006–2011) as zero incidents. The nationwide indicator series covers 2006–2024, and state-level SAIDI values cover 2008 onward. See `resources/bundesnetzagentur_strom/README.md` for sources and recovery details.
+
+The analysis script counts reported rows, not unique physical faults: meter replacements can be bulk reports and upstream faults can appear in several networks. Percentages pool records across available years, with all-record and unplanned populations kept separate. Impact uses the supplied restoration-stage integrals, not duration multiplied by initial impact. LV customer counts/minutes, MV transformer MVA/minutes and HV/EHV MW/minutes remain separate; ambiguous voltage combinations receive no inferred units. Missing/negative values are unavailable for the affected metric, and records are retained in count denominators. The published national PDF is authoritative for reliability indices; its archived workbook is checked, not added. State indices approximate geography using operator registration. Weather categories are not storm-only probabilities or fault-location priors for the fictional grid.
+
+## Geolocated outage feed examples
+
+`resources/outage_location_examples/` holds point snapshots from British operator feeds captured on 24 October 2026. These are more localized than the German event records, but their published points are not guaranteed fault-asset coordinates. They cover Great Britain, are current-feed snapshots rather than historical archives, and must not be treated as observations about the Bavaria scenario. See that folder's README for dates, licenses, attribution, and source links.
