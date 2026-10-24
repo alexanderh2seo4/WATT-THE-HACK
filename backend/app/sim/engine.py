@@ -2,16 +2,20 @@
 
 No background thread: every `advance()` (called on GET /api/state) steps the sim forward by
 `wall time since last call × speed` in fixed 1 s sim steps. Seeded RNG => same config, same run.
-The sim knows the ground truth (SimConfig); the planner only sees Events.
+The sim knows the ground truth (SimConfig); the planner only sees Events and Observations.
 """
 
 import random
 import time
 from typing import Callable
 
-from app.geo import dist_m, heading_deg, lerp
-from app.models import (DroneState, Event, OperatorInputs, SimConfig, StartPosition, State, Static, Waypoint)
+from shapely.geometry import Point, shape
+
+from app.geo import dist_m, heading_deg, lerp, project, to_xy
+from app.models import (DroneState, Event, Fault, OperatorInputs, SimConfig, StartPosition, State, Static, Waypoint)
 from app.planner import Planner
+from app.planner.recommend import recommendations
+from app.sim.sensors import inspect
 
 DT = 1.0  # sim seconds per step
 MAX_STEPS_PER_CALL = 6 * 3600  # don't hang if the tab was asleep for a long time
@@ -30,6 +34,8 @@ class Drone:
         self.route: list[Waypoint] = []
         self.leg = 0  # index of the waypoint we are flying towards
         self.landing_left_s = 0.0
+        self.last_cell: str | None = None  # cell under the drone in the previous step (air pass = entering a new cell)
+        self.mag_read: set[str] = set()  # segments the magnetometer already read on this flight
 
     def state(self) -> DroneState:
         remaining = [self.position] + [w.position for w in self.route[self.leg:]] if self.route else []
@@ -46,6 +52,19 @@ class Engine:
         self.inputs: OperatorInputs = static.default_inputs
         self.speed = 60.0
         self.start_positions: list[StartPosition] = []
+        # network geometry for cell lookup (projected metres); cells are equal pieces of each segment
+        self.seg_m = {f["properties"]["segment_id"]: project(shape(f["geometry"])) for f in static.segments["features"]}
+        self.n_cells: dict[str, int] = {}
+        self.cell_mid: dict[str, list[float]] = {}
+        for c in static.cells["features"]:
+            pr = c["properties"]
+            self.n_cells[pr["segment_id"]] = self.n_cells.get(pr["segment_id"], 0) + 1
+            mid = shape(c["geometry"]).interpolate(0.5, normalized=True)
+            self.cell_mid[pr["cell_id"]] = [mid.x, mid.y]
+        self.cell_km = {}
+        for cid in self.cell_mid:
+            sid, i = cid.split("#")
+            self.cell_km[cid] = round((int(i) + 0.5) * self.seg_m[sid].length / self.n_cells[sid] / 1000, 1)
         self.reset()
 
     # ---------- control ----------
@@ -56,7 +75,13 @@ class Engine:
         self.events: list[Event] = []
         self.rng = random.Random(self.config.seed)
         self.planner = self.planner_factory(self.static)
+        self.planner.set_params(self.config.sensors, self.config.drone)
         self.planner.set_inputs(self.inputs)
+        self.done_recs: set[str] = set()
+        self.cell_faults: dict[str, list[Fault]] = {}
+        for f in self.config.faults:
+            self.cell_faults.setdefault(self._cell_of(f.segment_id, f.position), []).append(f)
+        self._report_cells()
         self._place_drones()
         self._last_wall: float | None = None
         self._carry = 0.0
@@ -64,6 +89,7 @@ class Engine:
     def set_inputs(self, inputs: OperatorInputs) -> None:
         self.inputs = inputs
         self.planner.set_inputs(inputs)
+        self._report_cells()
 
     def set_config(self, config: SimConfig) -> None:
         self.config = config
@@ -122,7 +148,7 @@ class Engine:
                     self._landed(d)
             elif d.status == "charging":
                 p = self.config.drone
-                if not self._is_dead(d.segment_id):  # no charging on a dead line
+                if not self._is_dead(d.segment_id):  # linear charging, partial charges allowed
                     d.battery_min = min(p.max_flight_min, d.battery_min + DT / 60 * p.max_flight_min / p.full_charge_min)
                 if (self.t - DT) % ASK_PLANNER_EVERY_S == 0:  # planner decides whether it is worth flying now
                     self._try_takeoff(d)
@@ -133,6 +159,7 @@ class Engine:
         if not route:
             return
         d.route, d.leg, d.status = route, 1, "flying"
+        d.mag_read = set()
         self._emit("takeoff", d, f"{d.id} takes off from {d.segment_id}")
 
     def _fly(self, d: Drone) -> None:
@@ -154,6 +181,11 @@ class Engine:
                 d.position = lerp(d.position, wp.position, speed * budget / dist)
                 d.segment_id = wp.segment_id
                 budget = 0
+        # air sensors: inspect every cell we enter while flying along a line (not during transit)
+        cell = self._cell_of(d.segment_id, d.position) if d.segment_id else None
+        if cell and cell != d.last_cell:
+            self._inspect(d, cell, "air")
+        d.last_cell = cell
         if d.leg >= len(d.route):
             d.status, d.landing_left_s = "landing", p.landing_min * 60
             d.route, d.leg = [], 0
@@ -162,8 +194,13 @@ class Engine:
             self._emit("stranded", d, f"{d.id} ran out of battery")
 
     def _landed(self, d: Drone) -> None:
-        self._emit("landing", d, f"{d.id} landed on {d.segment_id}")
-        if not self._is_dead(d.segment_id):
+        live = not self._is_dead(d.segment_id)
+        self._emit("landing", d, f"{d.id} landed on {d.segment_id}: " + ("line live, charging" if live else "no current"))
+        cell = self._cell_of(d.segment_id, d.position) if d.segment_id else None
+        if cell:
+            self._inspect(d, cell, "landed")  # landed-only sensors + current sensor (true live/dead)
+        d.last_cell = cell
+        if live:
             d.status = "charging"
             return
         self._emit("line_dead", d, f"{d.id}: no current on {d.segment_id} - line is dead, cannot charge")
@@ -172,6 +209,50 @@ class Engine:
         if d.status == "landing":
             d.status = "stranded"
             self._emit("stranded", d, f"{d.id} is stranded on dead line {d.segment_id}")
+
+    # ---------- sensing ----------
+
+    def _inspect(self, d: Drone, cell: str, mode: str) -> None:
+        """Sense one cell, tell the planner (also when nothing is found), log findings + recommendations."""
+        faults = self.cell_faults.get(cell, [])
+        read_live = mode == "air" and d.segment_id not in d.mag_read
+        d.mag_read.add(d.segment_id)
+        obs = inspect(self.rng, t=self.t, drone_id=d.id, cell_id=cell, segment_id=d.segment_id, mode=mode,
+                      faults=faults, sensors=self.config.sensors, live=not self._is_dead(d.segment_id),
+                      read_live=read_live)
+        self.planner.on_observation(obs)
+        for det in obs.detections:
+            true = next((f for f in faults if f.fault_type == det.fault_type), None)
+            sp = self.config.sensors[det.fault_type]
+            how = "from the air" if mode == "air" else "landed"
+            self._emit("finding", d, f"{d.id}: possible {det.fault_type} on {d.segment_id} km {self.cell_km[cell]} "
+                                     f"({sp.sensor or 'sensor'}, {how}, confidence {det.confidence:.0%})",
+                       cell_id=cell, fault_type=det.fault_type, confidence=det.confidence,
+                       position=list(true.position) if true else list(d.position))
+        self._recommend()
+
+    def _recommend(self) -> None:
+        for _, cell, seg, msg in recommendations(self.planner.cell_states(), self.planner.segment_states(),
+                                                 self.cell_km, self.report_cells, self.done_recs):
+            if cell:
+                pos = self.cell_mid[cell]
+            elif seg:
+                pos = list(shape(next(f["geometry"] for f in self.static.segments["features"]
+                                      if f["properties"]["segment_id"] == seg)).interpolate(0.5, normalized=True).coords[0])
+            else:
+                pos = None
+            self._log(Event(t=self.t, type="recommendation", cell_id=cell, segment_id=seg, position=pos, message=msg))
+
+    def _cell_of(self, segment_id: str, position: list[float]) -> str:
+        line, n = self.seg_m[segment_id], self.n_cells.get(segment_id, 1)
+        i = min(n - 1, int(line.project(Point(to_xy(*position))) / line.length * n))
+        return f"{segment_id}#{i:02d}"
+
+    def _report_cells(self) -> None:
+        self.report_cells = {}
+        for r in self.inputs.reports:
+            poly = shape(r.polygon)
+            self.report_cells[r.report_id] = [cid for cid, m in self.cell_mid.items() if poly.contains(Point(m))]
 
     # ---------- helpers ----------
 
@@ -182,8 +263,10 @@ class Engine:
         self.drones = [Drone(sp, self.config.drone.start_battery_min) for sp in self.start_positions]
 
     def _emit(self, type_: str, d: Drone, message: str, **kw) -> None:
-        ev = Event(t=self.t, type=type_, drone_id=d.id, segment_id=d.segment_id, position=list(d.position),
-                   message=message, **kw)
+        kw.setdefault("position", list(d.position))
+        self._log(Event(t=self.t, type=type_, drone_id=d.id, segment_id=d.segment_id, message=message, **kw))
+
+    def _log(self, ev: Event) -> None:
         self.events.append(ev)
         self.planner.on_event(ev)
 

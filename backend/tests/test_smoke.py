@@ -29,3 +29,14 @@ def test_drones_move_after_start():
     moved = [a["position"] != b["position"] for a, b in zip(after["drones"], before["drones"])]
     assert all(moved)
     assert any(e["type"] == "takeoff" for e in after["events"])
+
+
+def test_sim_two_hours_finds_faults():
+    client.post("/api/sim/control", json={"action": "reset"})
+    client.post("/api/sim/control", json={"action": "start", "speed": 600})
+    engine.step_n(2 * 3600)
+    s = client.get("/api/state").json()
+    types = {e["type"] for e in s["events"]}
+    assert {"takeoff", "landing", "finding"} <= types
+    assert sum(c["inspected"] != "none" for c in s["cells"]) > 50
+    assert any(c["top_fault"] for c in s["cells"])
