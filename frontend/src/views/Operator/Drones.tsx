@@ -74,7 +74,9 @@ export function Drones({ state }: { state: State | null }) {
       let a = anims.current.get(d.drone_id)
       if (!a) {
         const el = document.createElement('div')
-        el.style.cssText = 'position:relative;width:38px;height:38px;pointer-events:none'
+        // no `position` here: MapLibre's .maplibregl-marker class makes it absolute (top:0;left:0) and positions it
+        // via transform. An inline position:relative put the markers in normal flow, each pushed 38px below the previous.
+        el.style.cssText = 'width:38px;height:38px;pointer-events:none'
         const marker = new MlMarker({ element: el }).setLngLat(d.position).addTo(map)
         a = { marker, el, from: d.position, to: d.position, t0: now, dur, trail: [], html: '', atRest: true }
         anims.current.set(d.drone_id, a)
