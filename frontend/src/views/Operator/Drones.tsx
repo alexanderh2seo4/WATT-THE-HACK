@@ -13,7 +13,6 @@ export const DRONE_COLORS: Record<DroneState['status'], string> = {
   charging: '#16a34a',
   stranded: '#e11d48',
 }
-const MAX_FLIGHT_MIN = 30 // battery ring full scale (SimConfig.drone.max_flight_min default)
 const TRAIL_SIM_S = 15 * 60 // trail shows the last 15 sim minutes
 
 interface Anim {
@@ -32,7 +31,7 @@ function droneSvg(d: DroneState) {
   const c = DRONE_COLORS[d.status]
   const r = 15
   const circ = 2 * Math.PI * r
-  const frac = Math.max(0, Math.min(1, d.battery_min / MAX_FLIGHT_MIN))
+  const frac = Math.max(0, Math.min(1, d.battery_min / (d.max_flight_min || 30)))
   return `
   <svg width="38" height="38" viewBox="0 0 38 38">
     <circle cx="19" cy="19" r="${r}" fill="white" stroke="#e2e8f0" stroke-width="3.5"/>
