@@ -2,6 +2,10 @@
 
 Draft values (see PLAN.md). Change them here when the team decides.
 
+## Hosted demo
+- The public demo uses one shared in-memory simulation, not a separate session per visitor. Anyone can operate/reset it; restarting the backend clears its state. Only the supplied fictional data is used.
+- GitHub Pages serves the frontend from `main`; Python runs on `alex-linux` / `kimai` behind Tailscale Funnel on port 8443. The PC/WSL and Tailscale must remain online. Backend updates are deployed separately (see `deploy/README.md`).
+
 ## Drone
 - Transit speed 16 m/s (Nomad website). Inspection speed along a line: 10 m/s (assumed, so the camera can see).
 - One flight ≤ 30 min. Landing/docking takes 3 min and counts as flight time (website: "under 5 min").

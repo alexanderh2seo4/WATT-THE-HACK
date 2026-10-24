@@ -26,7 +26,7 @@ export function TopBar() {
   return (
     <header className="flex h-14 shrink-0 items-center gap-6 border-b border-slate-200 bg-white px-4">
       <div className="flex items-center gap-2" title="Storm Patrol, a hackathon prototype built for Nomadic's challenge">
-        <img src="/nomadic-logo.svg" alt="Nomadic" className="h-3.5 w-auto" />
+        <img src={`${import.meta.env.BASE_URL}nomadic-logo.svg`} alt="Nomadic" className="h-3.5 w-auto" />
         <span className="h-6 w-px bg-slate-200" />
         <div className="flex flex-col leading-tight">
           <span className="font-heading text-[15px] font-semibold tracking-tight text-brand">Storm Patrol</span>

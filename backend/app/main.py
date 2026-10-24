@@ -26,8 +26,12 @@ def make_engine() -> Engine:
 
 
 app = FastAPI(title="Drone grid inspection")
-app.add_middleware(CORSMiddleware, allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
-                   allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[origin.strip() for origin in os.environ.get("CORS_ORIGINS", "").split(",") if origin.strip()],
+    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
+    allow_methods=["*"], allow_headers=["*"],
+)
 engine = make_engine()
 
 

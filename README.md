@@ -16,6 +16,9 @@ Then open http://localhost:5173. Also: `make install`, `make backend`, `make fro
 
 ## Run
 
+**Live app:** https://alexanderh2seo4.github.io/WATT-THE-HACK/ — GitHub Pages frontend,
+Python backend on `alex-linux`. See [deployment notes](deploy/README.md).
+
 Backend (Python, [uv](https://docs.astral.sh/uv/)):
 
 ```bash

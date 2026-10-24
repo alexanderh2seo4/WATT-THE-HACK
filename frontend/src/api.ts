@@ -100,8 +100,10 @@ function mockControl(c: SimControl): State {
 
 // ---------- fetch helpers ----------
 
+const API_URL = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/$/, '')
+
 async function req<T>(method: string, path: string, body?: unknown): Promise<T> {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_URL}${path}`, {
     method,
     headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
     body: body === undefined ? undefined : JSON.stringify(body),
