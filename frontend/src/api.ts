@@ -49,7 +49,10 @@ export type State = With<
 export const MOCK = import.meta.env.VITE_MOCK === '1'
 
 // glob so the build still works while the mock files don't exist yet
-const mockFiles = import.meta.glob<{ default: unknown }>('./mocks/*.json', { eager: true })
+// only bundled in mock mode (VITE_MOCK is a build-time constant, so the JSON is tree-shaken otherwise)
+const mockFiles: Record<string, { default: unknown }> = MOCK
+  ? import.meta.glob<{ default: unknown }>('./mocks/*.json', { eager: true })
+  : {}
 const mockFile = <T>(name: string, fallback: T): T =>
   structuredClone((mockFiles[`./mocks/${name}.json`]?.default as T) ?? fallback)
 

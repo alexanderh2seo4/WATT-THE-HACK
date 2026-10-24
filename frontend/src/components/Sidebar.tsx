@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 export function SidebarLayout({ sidebar, children }: { sidebar: ReactNode; children: ReactNode }) {
   return (
     <div className="flex min-h-0 flex-1">
-      <aside className="flex w-80 shrink-0 flex-col gap-4 overflow-y-auto border-r border-slate-200 bg-white p-4">
+      <aside className="flex w-96 shrink-0 flex-col gap-4 overflow-y-auto border-r border-slate-200 bg-white p-4">
         {sidebar}
       </aside>
       <main className="relative min-w-0 flex-1">{children}</main>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode 
 import { MapProvider, Marker, Popup, useMap, type MapLayerMouseEvent } from 'react-map-gl/maplibre'
 import type { Feature, FeatureCollection, Position } from 'geojson'
 import {
+  type DroneState,
   postSimControl,
   postStartPositions,
   putInputs,
@@ -15,8 +16,9 @@ import {
 import { Map } from '../../components/Map'
 import { Section, SidebarLayout } from '../../components/Sidebar'
 import { useStore } from '../../store'
-import { Drones } from './Drones'
+import { DRONE_COLORS, Drones } from './Drones'
 import { Legend } from './Legend'
+import { RecommendationList, RecommendationMarkers, recommendations } from './Recommendations'
 import { deadSegments, RiskLayers } from './RiskLayers'
 
 const MAP_ID = 'operator'
@@ -34,6 +36,8 @@ function OperatorPage() {
   const [showVegetation, setShowVegetation] = useState(true)
   const [hover, setHover] = useState<{ id: string; lngLat: [number, number] } | null>(null)
   const setup = !state || state.status === 'setup'
+  const flyTo = useFlyTo(staticData)
+  const recs = useMemo(() => recommendations(state), [state])
 
   // map handlers can fire with an older closure; always toggle against the latest snapshot
   const stateRef = useRef(state)
@@ -62,8 +66,16 @@ function OperatorPage() {
       sidebar={
         <>
           <Stepper staticData={staticData} state={state} onRemoveDead={toggleDead} />
-          {state && !setup && <Stats state={state} />}
-          <Log state={state} staticData={staticData} />
+          {state && !setup && (
+            <>
+              <Stats state={state} toAct={recs.filter((r) => !r.resolved && r.kind !== 'cleared').length} />
+              <DroneSummary state={state} />
+              <Section title="Recommendations">
+                <RecommendationList recs={recs} onSelect={(r) => flyTo(r.event)} />
+              </Section>
+            </>
+          )}
+          <Log state={state} onSelect={flyTo} />
         </>
       }
     >
@@ -96,6 +108,7 @@ function OperatorPage() {
             </div>
           </Marker>
         ))}
+        <RecommendationMarkers recs={recs} onSelect={(r) => flyTo(r.event)} />
         <Drones state={state} />
         {hover && (
           <Popup longitude={hover.lngLat[0]} latitude={hover.lngLat[1]} closeButton={false} offset={12} className="pointer-events-none text-xs">
@@ -279,11 +292,10 @@ function Stepper({
 
 // ---------- stats + log ----------
 
-function Stats({ state }: { state: State }) {
+function Stats({ state, toAct }: { state: State; toAct: number }) {
   const inspected = state.cells.filter((c) => c.inspected !== 'none').length
   const pct = state.cells.length ? Math.round((100 * inspected) / state.cells.length) : 0
   const findings = state.events.filter((e) => e.type === 'finding').length
-  const flying = state.drones.filter((d) => d.status === 'flying').length
   const dead = deadSegments(state).length
   const item = (v: ReactNode, label: string) => (
     <div className="flex-1">
@@ -295,18 +307,20 @@ function Stats({ state }: { state: State }) {
     <div className="flex gap-2 rounded-xl bg-slate-50 px-3 py-2">
       {item(`${pct}%`, 'checked')}
       {item(findings, 'findings')}
-      {item(`${flying}/${state.drones.length}`, 'flying')}
+      {item(<span className={toAct ? 'text-rose-600' : undefined}>{toAct}</span>, 'to act on')}
       {item(dead, 'dead lines')}
     </div>
   )
 }
 
 const EVENT_STYLE: Partial<Record<SimEvent['type'], string>> = {
-  finding: 'bg-amber-50 text-amber-900 ring-1 ring-amber-200',
-  recommendation: 'bg-rose-50 text-rose-900 ring-1 ring-rose-200 font-medium',
-  line_dead: 'bg-slate-100 text-slate-800',
-  stranded: 'bg-slate-100 text-slate-800',
+  finding: 'bg-amber-50 text-amber-950 ring-1 ring-amber-200',
+  recommendation: 'bg-rose-50 text-rose-950 ring-1 ring-rose-200 font-medium',
+  line_dead: 'bg-slate-100 text-slate-900 font-medium',
+  stranded: 'bg-rose-100 text-rose-900 font-medium',
 }
+/** routine flight events stay quiet so findings and recommendations stand out */
+const ROUTINE = 'text-xs text-slate-400 hover:bg-slate-50'
 
 function coordsOf(f: Feature | undefined): Position[] {
   const g = f?.geometry
@@ -316,7 +330,8 @@ function coordsOf(f: Feature | undefined): Position[] {
   return []
 }
 
-function Log({ state, staticData }: { state: State | null; staticData: Static | null }) {
+/** Fly the map to an event's position (or the bounds of its cell / segment). */
+function useFlyTo(staticData: Static | null) {
   const { [MAP_ID]: map } = useMap()
   const index = useMemo(() => {
     const m = new globalThis.Map<string, Feature>()
@@ -325,16 +340,53 @@ function Log({ state, staticData }: { state: State | null; staticData: Static | 
     return m
   }, [staticData])
 
-  const flyTo = (e: SimEvent) => {
+  return (e: SimEvent) => {
     if (!map) return
-    if (e.position) return map.flyTo({ center: e.position, zoom: Math.max(map.getZoom(), 13) })
+    if (e.position) return map.flyTo({ center: e.position, zoom: Math.max(map.getZoom(), 12.5) })
     const coords = coordsOf(index.get(e.cell_id ?? '') ?? index.get(e.segment_id ?? ''))
     if (!coords.length) return
     const lons = coords.map((c) => c[0])
     const lats = coords.map((c) => c[1])
-    map.fitBounds([Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats)], { padding: 80, maxZoom: 14 })
+    map.fitBounds([Math.min(...lons), Math.min(...lats), Math.max(...lons), Math.max(...lats)], { padding: 80, maxZoom: 13 })
   }
+}
 
+const DRONE_TEXT: Record<DroneState['status'], string> = {
+  flying: 'Flying',
+  landing: 'Landing',
+  charging: 'Charging',
+  stranded: 'Stranded',
+}
+
+/** "What are the drones doing now": one row per drone with its battery. */
+function DroneSummary({ state }: { state: State }) {
+  return (
+    <Section title="Drones now">
+      <ul className="space-y-1">
+        {state.drones.map((d) => {
+          const frac = Math.max(0, Math.min(1, d.battery_min / (d.max_flight_min || 30)))
+          const color = DRONE_COLORS[d.status]
+          return (
+            <li key={d.drone_id} className="flex items-center gap-2 text-[13px]">
+              <span className="w-6 font-semibold text-slate-900">{d.drone_id}</span>
+              <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: color }} />
+              <span className="min-w-0 flex-1 truncate text-slate-700">
+                {DRONE_TEXT[d.status]}
+                {d.segment_id && d.status !== 'flying' && <span className="text-slate-400"> on {d.segment_id}</span>}
+              </span>
+              <span className="h-1.5 w-12 overflow-hidden rounded-full bg-slate-100" title="Battery">
+                <span className="block h-full rounded-full" style={{ width: `${frac * 100}%`, background: color }} />
+              </span>
+              <span className="w-7 text-right text-xs tabular-nums text-slate-400">{Math.round(d.battery_min)}′</span>
+            </li>
+          )
+        })}
+      </ul>
+    </Section>
+  )
+}
+
+function Log({ state, onSelect }: { state: State | null; onSelect: (e: SimEvent) => void }) {
   const events = (state?.events ?? []).slice(-300).reverse()
   return (
     <Section title="Log">
@@ -342,9 +394,9 @@ function Log({ state, staticData }: { state: State | null; staticData: Static | 
         {events.map((e, i) => (
           <li key={events.length - i}>
             <button
-              onClick={() => flyTo(e)}
+              onClick={() => onSelect(e)}
               className={`flex w-full gap-2 rounded-md px-2 py-1 text-left text-[13px] leading-snug transition hover:brightness-95 ${
-                EVENT_STYLE[e.type] ?? 'text-slate-600 hover:bg-slate-50'
+                EVENT_STYLE[e.type] ?? ROUTINE
               }`}
             >
               <span className="w-9 shrink-0 font-mono text-[11px] leading-5 text-slate-400">{formatT(e.t)}</span>
@@ -352,7 +404,13 @@ function Log({ state, staticData }: { state: State | null; staticData: Static | 
             </button>
           </li>
         ))}
-        {!events.length && <li className="px-2 text-sm text-slate-400">No events yet</li>}
+        {!events.length && (
+          <li className="px-1 text-sm text-slate-400">
+            {!state || state.status === 'setup'
+              ? 'Takeoffs, findings and recommendations appear here once the mission runs.'
+              : 'No events yet'}
+          </li>
+        )}
       </ul>
     </Section>
   )
