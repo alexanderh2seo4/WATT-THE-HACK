@@ -17,8 +17,10 @@ Mock mode works even if the mock files are missing (empty data). Play/pause/spee
 
 ## API types
 
-`src/api.ts` holds hand-written types matching PLAN.md §3.2 plus fetch helpers and the `usePolling` hook (GET `/api/state` every 500 ms).
-Once `openapi.json` exists, generate types with `npm run gen:types` (writes `src/api-types.ts`) and switch `api.ts` over to them.
+`src/api-types.ts` is generated from `openapi.json` (`npm run gen:types`; rerun when the backend contract changes).
+`src/api.ts` aliases those types (tightening GeoJSON / `[lon, lat]` fields) and adds fetch helpers and the `usePolling` hook (GET `/api/state` every 500 ms).
+
+If the basemap can't be fetched (offline), the map falls back to a blank background so our layers still render.
 
 ## Layout
 

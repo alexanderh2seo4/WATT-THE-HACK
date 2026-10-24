@@ -1,47 +1,32 @@
 // API types + fetch helpers + polling hook.
-// TODO: swap the hand-written types below for the generated ones
-// (`npm run gen:types` -> src/api-types.ts) once frontend/openapi.json lands.
+// Types are generated from the backend contract (`npm run gen:types` -> src/api-types.ts);
+// below we alias them and tighten the loosely-typed fields (GeoJSON, [lon,lat] tuples).
 
 import { useEffect, useState } from 'react'
 import type { Feature, FeatureCollection, LineString, Point, Polygon } from 'geojson'
+import type { components } from './api-types'
 
-// ---------- types (PLAN.md §3.2) ----------
+// ---------- types (generated, PLAN.md §3.2) ----------
+
+type S = components['schemas']
+type With<T, U> = Omit<T, keyof U> & U
 
 export type LonLat = [number, number]
-export type FaultType = 'vegetation' | 'sag' | 'ice' | 'galloping' | 'hotspot' | 'broken_conductor'
+export type FaultType = S['Fault']['fault_type']
 
-export interface Report {
-  report_id: string
-  polygon: Polygon
-  fault_types: FaultType[]
-  confidence: number
-  text: string
-}
-
-export interface OperatorInputs {
-  reports: Report[]
-  known_dead_segments: string[]
-}
-
-export interface StartPosition {
-  drone_id: string
-  segment_id: string
-  position: LonLat
-  reason: string
-}
-
-export type EventType = 'takeoff' | 'landing' | 'finding' | 'line_dead' | 'recommendation' | 'stranded'
-
-export interface SimEvent {
-  t: number
-  type: EventType | string
-  drone_id?: string | null
-  cell_id?: string | null
-  segment_id?: string | null
-  fault_type?: FaultType | null
-  confidence?: number | null
-  message: string
-}
+export type Report = With<S['Report'], { polygon: Polygon }>
+export type OperatorInputs = With<S['OperatorInputs'], { reports: Report[] }>
+export type StartPosition = With<S['StartPosition'], { position: LonLat }>
+export type EventType = S['Event']['type']
+export type SimEvent = With<S['Event'], { position?: LonLat | null }>
+export type DroneState = With<S['DroneState'], { position: LonLat; route: LonLat[] }>
+export type CellState = S['CellState']
+export type SegmentState = S['SegmentState']
+export type SimStatus = S['State']['status']
+export type Fault = With<S['Fault'], { position: LonLat }>
+export type SensorParams = S['SensorParams']
+export type SimControl = S['SimControl']
+export type SimConfig = With<S['SimConfig'], { faults: Fault[] }>
 
 export interface Static {
   segments: FeatureCollection<LineString>
@@ -52,67 +37,12 @@ export interface Static {
   vegetation?: FeatureCollection | null
 }
 
-export interface DroneState {
-  drone_id: string
-  position: LonLat
-  heading: number
-  status: 'charging' | 'flying' | 'landing' | 'stranded'
-  battery_min: number
-  segment_id: string | null
-  route: LonLat[]
-}
-
-export interface CellState {
-  cell_id: string
-  risk: number
-  inspected: 'none' | 'air' | 'landed'
-  top_fault: FaultType | null
-}
-
-export interface SegmentState {
-  segment_id: string
-  p_live: number
-}
-
-export type SimStatus = 'setup' | 'running' | 'paused'
-
-export interface State {
-  t: number
-  speed: number
-  status: SimStatus
-  drones: DroneState[]
-  cells: CellState[]
-  segments: SegmentState[]
-  inputs: OperatorInputs
-  start_positions: StartPosition[]
-  events: SimEvent[]
-}
-
-export interface SensorParams {
-  p_detect_air: number
-  p_detect_landed: number
-  p_false_positive: number
-}
-
-export interface SimConfig {
-  seed: number
-  dead_segments: string[]
-  faults: { fault_id: string; segment_id: string; position: LonLat; fault_type: FaultType }[]
-  sensors: Record<string, SensorParams>
-  drone: {
-    speed_inspect_mps: number
-    speed_transit_mps: number
-    max_flight_min: number
-    full_charge_min: number
-    landing_min: number
-    start_battery_min: number
-  }
-}
-
-export interface SimControl {
-  action: 'start' | 'pause' | 'resume' | 'reset'
-  speed?: number
-}
+/** t is in sim seconds. drones is empty in setup until POST /plan/start-positions; route is empty unless flying.
+ * Speed change = postSimControl({action: 'resume', speed}) (also resumes if paused). */
+export type State = With<
+  S['State'],
+  { drones: DroneState[]; inputs: OperatorInputs; start_positions: StartPosition[]; events: SimEvent[] }
+>
 
 // ---------- mock mode (VITE_MOCK=1) ----------
 
